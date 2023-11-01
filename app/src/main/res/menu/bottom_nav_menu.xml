@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/navigation_budgetNgoal"
+        android:icon="@drawable/goal"
+        android:title="@string/budgetNgoal"/>
+    <item
+        android:id="@+id/navigation_feature"
+        android:icon="@drawable/application"
+        android:title="@string/feature"/>
+    <item
+        android:id="@+id/navigation_user"
+        android:icon="@drawable/round_person_24"
+        android:title="@string/user"/>
+</menu>
