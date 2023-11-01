@@ -22,24 +22,27 @@
         android:id="@+id/textView3"
         android:layout_width="200dp"
         android:layout_height="49dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="84dp"
         android:fontFamily="@font/manrope_bold"
         android:text="Welcome"
         android:textColor="@color/white"
         android:textSize="34sp"
-        app:layout_constraintTop_toBottomOf="@+id/fabBack"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fabBack" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@color/white"
         android:clickable="true"
         android:src="@drawable/baseline_arrow_back_ios_new_24"
         android:tint="@color/main_color"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -49,40 +52,41 @@
         app:layout_constraintGuide_percent=".35" />
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="411dp"
-        android:layout_height="475dp"
-        tools:layout_editor_absoluteY="256dp">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextText2"
-                android:layout_width="395dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
+                android:id="@+id/tvPassword_SignUp"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/edit_text_border"
-                android:drawableLeft="@drawable/baseline_email_24"
+                android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/main_color"
                 android:ems="10"
-                android:hint="E-mail"
-                android:inputType="text"
+                android:hint="Password"
+                android:inputType="textPassword"
                 android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+                app:layout_constraintEnd_toEndOf="@+id/tvEmail_SignUp"
+                app:layout_constraintStart_toStartOf="@+id/tvEmail_SignUp"
+                app:layout_constraintTop_toBottomOf="@+id/tvEmail_SignUp" />
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/tvName_SignUp"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/edit_text_border"
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
@@ -96,32 +100,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:id="@+id/btnSignUp_SignUp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="132dp"
+                android:backgroundTint="@color/main_color"
+                android:text="SIGN UP"
+                app:layout_constraintEnd_toEndOf="@+id/tvPassword_SignUp"
+                app:layout_constraintStart_toStartOf="@+id/tvPassword_SignUp"
+                app:layout_constraintTop_toBottomOf="@+id/tvPassword_SignUp" />
+
             <EditText
-                android:id="@+id/editTextTextPassword"
-                android:layout_width="395dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="32dp"
+                android:id="@+id/tvEmail_SignUp"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/edit_text_border"
-                android:drawableLeft="@drawable/baseline_lock_24"
+                android:drawableLeft="@drawable/baseline_email_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/main_color"
                 android:ems="10"
-                android:hint="Password"
-                android:inputType="textPassword"
+                android:hint="E-mail"
+                android:inputType="text"
                 android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="395dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
-                android:backgroundTint="@color/main_color"
-                android:text="SIGN UP"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-                tools:layout_editor_absoluteX="8dp" />
+                app:layout_constraintEnd_toEndOf="@+id/tvName_SignUp"
+                app:layout_constraintStart_toStartOf="@+id/tvName_SignUp"
+                app:layout_constraintTop_toBottomOf="@+id/tvName_SignUp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -140,7 +145,7 @@
                     android:text="Already have a account?" />
 
                 <TextView
-                    android:id="@+id/tvSignUp"
+                    android:id="@+id/tvSignIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -148,6 +153,7 @@
                     android:text="Sign In"
                     android:textColor="@color/main_color" />
             </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
