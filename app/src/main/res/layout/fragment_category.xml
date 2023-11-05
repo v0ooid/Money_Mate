@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Expense.ExpenseFragment">
+    tools:context=".Category.CategoryFragment">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:orientation="horizontal"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <imageview
+        android:layout_height="match_parent"
+        android:text="Hello" />
+
 </FrameLayout>
