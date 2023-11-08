@@ -30,6 +30,11 @@ class SignInActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        binding.tvForgotPassword.setOnClickListener{
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.tvSignUp.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)

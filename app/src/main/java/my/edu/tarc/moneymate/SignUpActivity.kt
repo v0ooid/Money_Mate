@@ -29,7 +29,7 @@ class SignUpActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        binding.tvSignIn.setOnClickListener{
+        binding.tvSignInSignUp.setOnClickListener{
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }

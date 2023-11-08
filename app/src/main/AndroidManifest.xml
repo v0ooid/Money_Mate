@@ -15,23 +15,33 @@
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
         <activity
-            android:name=".SignInActivity"
-            android:exported="true" >
+            android:name=".ForgotPasswordActivity"
+            android:exported="false">
 
+        </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.App.SplashScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false">
-        </activity>
 
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+            android:name=".AppLockActivity"
+            android:exported="false">
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

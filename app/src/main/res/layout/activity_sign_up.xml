@@ -145,7 +145,7 @@
                     android:text="Already have a account?" />
 
                 <TextView
-                    android:id="@+id/tvSignIn"
+                    android:id="@+id/tvSignIn_SignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
