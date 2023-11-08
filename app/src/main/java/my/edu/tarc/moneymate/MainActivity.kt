@@ -15,6 +15,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import my.edu.tarc.moneymate.databinding.ActivityMainBinding
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import my.edu.tarc.moneymate.databinding.ActivityAppLock6DigitBinding
+import my.edu.tarc.moneymate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
