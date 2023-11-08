@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "764153595180",
+    "project_id": "moneymate-7a4c5",
+    "storage_bucket": "moneymate-7a4c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764153595180:android:c209080696ecf2db1f1889",
+        "android_client_info": {
+          "package_name": "my.edu.tarc.moneymate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsH70gzU76j4Z32qhVktCoQLFMsSbZQ_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
