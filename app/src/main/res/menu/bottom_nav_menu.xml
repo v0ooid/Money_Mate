@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/transactionFragment"
         android:icon="@drawable/baseline_home_24"
         android:title="@string/home"/>
     <item
-        android:id="@+id/navigation_budgetNgoal"
+        android:id="@+id/transactionFragment2"
         android:icon="@drawable/goal"
         android:title="@string/budgetNgoal"/>
     <item

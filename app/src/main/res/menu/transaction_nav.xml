@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/income"
+    <item android:id="@+id/incomeFragment"
         android:title="@string/income"/>
-    <item android:id="@+id/expense"
+    <item android:id="@+id/expenseFragment"
         android:title="@string/expense"/>
     <item android:id="@+id/transfer"
     android:title="@string/transfer"/>

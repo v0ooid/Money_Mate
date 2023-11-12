@@ -25,6 +25,7 @@
     <string name="minus">-</string>
     <string name="multiply">*</string>
     <string name="divide">/</string>
+    <string name="equal">=</string>
     <string name="dot">.</string>
     <string name="Enter">Enter</string>
     <string name="income">Income</string>

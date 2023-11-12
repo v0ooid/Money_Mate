@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".Expense.ExpenseFragment">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewExpense"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <imageview
 </FrameLayout>

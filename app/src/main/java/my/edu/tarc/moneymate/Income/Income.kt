@@ -1,4 +1,3 @@
 package my.edu.tarc.moneymate.Income
 
-class Income {
-}
+data class Income (var title:String, var image: Int)

@@ -2,7 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation">
-
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/transactionFragment">
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="my.edu.tarc.moneymate.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/transactionFragment"
+        android:name="my.edu.tarc.moneymate.Transaction.TransactionFragment"
+        tools:layout="@layout/fragment_transaction"
+        android:label="TransactionFragment" />
+    <include app:graph="@navigation/transaction_nav" />
 
 </navigation>
