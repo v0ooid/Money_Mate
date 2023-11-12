@@ -5,54 +5,46 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import my.edu.tarc.moneymate.databinding.ActivityMainBinding
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import my.edu.tarc.moneymate.databinding.ActivityAppLock6DigitBinding
+import my.edu.tarc.moneymate.Profile.SignInActivity
 import my.edu.tarc.moneymate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Thread.sleep(3000)
         installSplashScreen()
-        binding =  ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         //Check login state
         if (!isLoggedIn()) {
             // User is not logged in, navigate to the login screen
             navigateToLogin()
+
         } else {
-            val navView: BottomNavigationView = binding.bottomNavView
-            val navController = findNavController(R.id.fragmentContainerViewActivityMain)
-            val appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.navigation_home, R.id.navigation_user
-                )
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
+            binding =  ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
+            val navView: BottomNavigationView = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment_container)
             navView.setupWithNavController(navController)
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (destination.id==R.id.navigation_user){
-                    supportActionBar?.hide()
+                supportActionBar?.setShowHideAnimationEnabled(false)
+                if(destination.id == R.id.monetaryAccountFragment) {
+                    navView.visibility = View.GONE
+                }else{
+                    navView.visibility = View.VISIBLE
                 }
             }
+
         }
     }
 
@@ -71,8 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-
-        val navController = findNavController(R.id.fragmentContainerViewActivityMain)
+        val navController = findNavController(R.id.nav_host_fragment_container)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }

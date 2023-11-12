@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/backbutton_Transaction"
                 android:layout_margin="10dp"
-                app:tabIndicator="0dp"
+
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/white">
 

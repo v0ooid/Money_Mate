@@ -1,4 +1,4 @@
-package my.edu.tarc.moneymate
+package my.edu.tarc.moneymate.AppLock
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import my.edu.tarc.moneymate.MainActivity
+import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.ActivityAppLockBinding
 
 class AppLockActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package my.edu.tarc.moneymate
+package my.edu.tarc.moneymate.Profile
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import my.edu.tarc.moneymate.databinding.ActivityForgotPasswordBinding
-import my.edu.tarc.moneymate.databinding.ActivitySignInBinding
 
 class ForgotPasswordActivity : AppCompatActivity() {
 

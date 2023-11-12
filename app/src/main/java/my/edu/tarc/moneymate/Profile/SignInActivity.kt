@@ -1,4 +1,4 @@
-package my.edu.tarc.moneymate
+package my.edu.tarc.moneymate.Profile
 
 import android.content.Context
 import android.content.Intent
@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import my.edu.tarc.moneymate.MainActivity
+import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.ActivitySignInBinding
 
 class SignInActivity : AppCompatActivity() {
@@ -62,7 +63,9 @@ class SignInActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    saveSharePreference("email", emailInput)
+
+
+                    saveSharePreference()
 
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
@@ -88,12 +91,10 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
-    fun saveSharePreference(key: String, value: String) {
+    fun saveSharePreference() {
         val sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val userId = auth.currentUser?.uid
-        editor.putString(key, value)
-            .apply()
         editor.putString("userId", userId)
             .apply()
     }
