@@ -33,4 +33,9 @@
         android:name="my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccountFragment"
         android:label="MonetaryAccountFragment"
         tools:layout="@layout/fragment_monetary_account"/>
+    <fragment
+        android:id="@+id/budgetFragment"
+        android:name="my.edu.tarc.moneymate.Budget.BudgetFragment"
+        android:label="BudgetFragment"
+        tools:layout="@layout/fragment_budget"/>
 </navigation>
