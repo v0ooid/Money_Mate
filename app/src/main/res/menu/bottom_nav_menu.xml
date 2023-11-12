@@ -5,9 +5,9 @@
         android:icon="@drawable/baseline_home_24"
         android:title="@string/home"/>
     <item
-        android:id="@+id/navigation_budgetNgoal"
+        android:id="@+id/budgetFragment"
         android:icon="@drawable/goal"
-        android:title="@string/budgetNgoal"/>
+        android:title="@string/budget" />
     <item
         android:id="@+id/navigation_feature"
         android:icon="@drawable/application"
