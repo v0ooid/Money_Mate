@@ -25,11 +25,11 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
         repository.addBudget(budget)
     }
 
-    fun updateCategory(budget: Budget) = viewModelScope.launch {
+    fun updateBudget(budget: Budget) = viewModelScope.launch {
         repository.updateBudget(budget)
     }
 
-    fun deleteAccount(budget: Budget) = viewModelScope.launch {
+    fun deleteBudget(budget: Budget) = viewModelScope.launch {
         repository.deleteBudget(budget)
     }
 }

@@ -70,10 +70,10 @@ class MainActivity : AppCompatActivity() {
 
 //        val appBarConfiguration = AppBarConfiguration(
 //            setOf(
-//                R.id.transactionFragment,R.id.navigation_budgetNgoal,R.id.navigation_feature,R.id.navigation_user
+//                R.id.transactionFragment,R.id.budgetFragment,R.id.navigation_feature,R.id.profileFragment
 //            )
 //        )
-//        setupActionBarWithNavController(navController,appBarConfiguration)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
         }
 

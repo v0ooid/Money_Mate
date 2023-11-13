@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import my.edu.tarc.moneymate.Budget.Budget
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 
-@Database(entities = [MonetaryAccount::class], version = 2, exportSchema = false)
+@Database(entities = [MonetaryAccount::class, Budget::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun monetaryAccountDao(): MonetaryAccountDao

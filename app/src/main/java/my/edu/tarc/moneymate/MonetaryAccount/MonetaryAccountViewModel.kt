@@ -23,7 +23,7 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
         repository.addAccount(monetaryAccount)
     }
 
-    fun updateCategory(monetaryAccount: MonetaryAccount) = viewModelScope.launch {
+    fun updateAccount(monetaryAccount: MonetaryAccount) = viewModelScope.launch {
         repository.updateAccount(monetaryAccount)
     }
 

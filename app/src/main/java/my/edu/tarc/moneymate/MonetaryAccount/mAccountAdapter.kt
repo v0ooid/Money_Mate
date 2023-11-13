@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
 import my.edu.tarc.moneymate.CustomSpinner.IconItem
@@ -45,12 +44,12 @@ class mAccountAdapter(
         holder.name.text = item.accountName
         holder.amount.text = item.accountBalance.toString()
 
-        val iconItems = listOf(
-            IconItem(R.drawable.baseline_attach_money_24),
-            IconItem(R.drawable.baseline_credit_card_24),
-            IconItem(R.drawable.baseline_phone_android_24),
-            // Add more items as needed
-        )
+//        val iconItems = listOf(
+//            IconItem(R.drawable.baseline_attach_money_24),
+//            IconItem(R.drawable.baseline_credit_card_24),
+//            IconItem(R.drawable.baseline_phone_android_24),
+//            // Add more items as needed
+//        )
 
         val resourceImage = holder.itemView.context.resources.getIdentifier(
             item.accountIcon,
@@ -175,7 +174,7 @@ class mAccountAdapter(
             updateItem(position, updatedAccount)
 
             // Update the database or perform other actions as needed
-            monetaryAccountViewModel.updateCategory(updatedAccount)
+            monetaryAccountViewModel.updateAccount(updatedAccount)
 
             dialog.dismiss()
         }
