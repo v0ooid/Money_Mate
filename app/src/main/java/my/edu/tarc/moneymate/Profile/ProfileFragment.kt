@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -35,6 +36,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private var ImageUri: Uri? = null
+    private val navController = findNavController()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,14 +47,15 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         //Shared Pref
-        val sharedPreferences = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", "")
 
         //Firebase for show data(name and gmail)
         val db = FirebaseFirestore.getInstance()
         var docRef = db.collection("users").document(userId!!)
         docRef.get().addOnSuccessListener {
-            if (it != null){
+            if (it != null) {
                 val name = it.data?.get("fullname")?.toString()
                 val email = it.data?.get("email")?.toString()
 
@@ -59,7 +63,7 @@ class ProfileFragment : Fragment() {
                 binding.tvMailProfile.text = email
             }
         }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
             }
 
@@ -78,8 +82,7 @@ class ProfileFragment : Fragment() {
             ImageUri = it
             if (ImageUri.toString() != "null") {
                 binding.imageViewProfilepic.setImageURI(it)
-            }else
-            {
+            } else {
                 val firebase = Firebase.storage
                 //Create a reference to the storage
                 val myRef =
@@ -96,9 +99,9 @@ class ProfileFragment : Fragment() {
             val myRefImage = FirebaseStorage.getInstance().getReference("profile_image/$userId")
 
             //Upload File to firebase Storage
-            Log.e("testImageUri",ImageUri.toString())
+            Log.e("testImageUri", ImageUri.toString())
             if (ImageUri.toString() != "null") {
-                Log.e("testImageUriInside",ImageUri.toString())
+                Log.e("testImageUriInside", ImageUri.toString())
                 myRefImage.putFile(ImageUri!!).addOnSuccessListener {
                     Toast.makeText(requireContext(), "Upload Done", Toast.LENGTH_SHORT).show()
                 }.addOnCanceledListener {
@@ -115,19 +118,23 @@ class ProfileFragment : Fragment() {
         }
 
         //Dialog for edit password
-        binding.cardViewEditPassword.setOnClickListener{
+        binding.cardViewEditPassword.setOnClickListener {
             showDialog()
         }
 
         //Monetary Account Card View
-        binding.cardViewMonetaryAccount.setOnClickListener{
-            val navController = findNavController()
+        binding.cardViewMonetaryAccount.setOnClickListener {
             navController.navigate(R.id.action_profileFragment_to_monetaryAccountFragment)
         }
 
+        binding.cardViewAppLock.setOnClickListener{
+            navController.navigate(R.id.action_profileFragment_to_appLockFragment)
+        }
+
         //Logout
-        binding.cardVLogout.setOnClickListener{
-            val sharedPref = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
+        binding.cardVLogout.setOnClickListener {
+            val sharedPref =
+                requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             editor.putString("userId", "")
                 .apply()
@@ -143,10 +150,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.layout_edit_email_dialog, null)
+        val overlayView = layoutInflater.inflate(R.layout.dark_overlay, null)
+
+// Get a reference to the overlay layout
+        val overlayLayout = overlayView.findViewById<FrameLayout>(R.id.overlayLayout)
+
+// Show the dialog
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_edit_email_dialog)
+        dialog.setContentView(dialogView)
 
         val title = dialog.findViewById<TextView>(R.id.dialogTitle)
         title.text = "Edit Password"
@@ -154,32 +168,35 @@ class ProfileFragment : Fragment() {
         val body = dialog.findViewById<TextView>(R.id.textViewEditBody)
         body.text = "An E-mail will be sent for E-mail change"
 
+// Find views and set text or listeners
+
+// Set actions for yesBtn
         val yesBtn = dialog.findViewById<Button>(R.id.btnConfrimDialog)
         yesBtn.setOnClickListener {
-            auth = Firebase.auth
-
-            val user = FirebaseAuth.getInstance().currentUser
-            val userEmail = user?.email
-
-            auth.sendPasswordResetEmail(userEmail!!)
-
+            // Perform actions here
             dialog.dismiss()
+            overlayLayout.visibility = View.GONE
         }
 
+// Set actions for noBtn
         val noBtn = dialog.findViewById<Button>(R.id.btnCancelDialog)
         noBtn.setOnClickListener {
             dialog.dismiss()
+            overlayLayout.visibility = View.GONE
         }
 
+// Add the overlay to the root view of the activity
+        val parentLayout = requireActivity().findViewById<ViewGroup>(android.R.id.content)
+        parentLayout.addView(overlayView)
+
+// Show the dialog
         dialog.show()
+
+// Dismiss the overlay when the dialog is dismissed
+        dialog.setOnDismissListener {
+            parentLayout.removeView(overlayView)
+        }
     }
-
-
-
-
-
-
-
 
 
 }

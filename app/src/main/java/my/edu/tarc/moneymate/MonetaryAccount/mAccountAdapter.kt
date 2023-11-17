@@ -1,30 +1,35 @@
 package my.edu.tarc.moneymate.MonetaryAccount
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import jp.wasabeef.blurry.Blurry
 import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
-import my.edu.tarc.moneymate.CustomSpinner.IconItem
+import my.edu.tarc.moneymate.CustomSpinner.AccountIconItem
 import my.edu.tarc.moneymate.R
 
 class mAccountAdapter(
     private val context: Context,
-    private val monetaryAccountViewModel: MonetaryAccountViewModel
-    ) : RecyclerView.Adapter<mAccountAdapter.MyViewHolder>() {
+    private val monetaryAccountViewModel: MonetaryAccountViewModel,
+    private val fragment: MonetaryAccountFragment
+) : RecyclerView.Adapter<mAccountAdapter.MyViewHolder>() {
 
     private var dataSet = mutableListOf<MonetaryAccount>()
     private var icon = ""
-
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.ivIconAccountItem)
@@ -42,14 +47,8 @@ class mAccountAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = dataSet[position]
         holder.name.text = item.accountName
-        holder.amount.text = item.accountBalance.toString()
-
-//        val iconItems = listOf(
-//            IconItem(R.drawable.baseline_attach_money_24),
-//            IconItem(R.drawable.baseline_credit_card_24),
-//            IconItem(R.drawable.baseline_phone_android_24),
-//            // Add more items as needed
-//        )
+        val formattedNumber = String.format("%.2f", item.accountBalance)
+        holder.amount.text = formattedNumber
 
         val resourceImage = holder.itemView.context.resources.getIdentifier(
             item.accountIcon,
@@ -60,10 +59,32 @@ class mAccountAdapter(
         holder.icon.setImageResource(resourceImage)
 
         holder.menu.setOnClickListener {
-            showPopupMenu(holder.menu, position)
+            val popupMenu = PopupMenu(holder.menu.context, holder.menu)
+            popupMenu.inflate(R.menu.popup_menu_monetary_accounts)
+
+            popupMenu.gravity = Gravity.END
+
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.pmMAccountEdit -> {
+                        // Delete the item from the list
+                        editItem(position)
+                        true
+                    }
+
+                    R.id.pmMAccountDelete -> {
+                        deleteItem(position)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
         }
-        Log.e("Check items", item.toString())
     }
+
 
     override fun getItemCount(): Int {
         return dataSet.size
@@ -72,29 +93,6 @@ class mAccountAdapter(
     internal fun setAccount(account: List<MonetaryAccount>) {
         this.dataSet = account.toMutableList()
         notifyDataSetChanged()
-    }
-
-    private fun showPopupMenu(view: View, position: Int) {
-        val popupMenu = PopupMenu(view.context, view)
-        popupMenu.inflate(R.menu.popup_menu_monetary_accounts)
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.pmMAccountEdit -> {
-                    // Delete the item from the list
-                    editItem(position)
-                    true
-                }
-                R.id.pmMAccountDelete -> {
-                    deleteItem(position)
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        popupMenu.show()
     }
 
     private fun deleteItem(position: Int) {
@@ -110,7 +108,7 @@ class mAccountAdapter(
         val editAccount = dataSet[position]
 
         // Open the dialog for editing
-        showDialogForEdit(position,editAccount)
+        showDialogForEdit(position, editAccount)
     }
 
     private fun updateItem(position: Int, updatedAccount: MonetaryAccount) {
@@ -118,17 +116,22 @@ class mAccountAdapter(
         notifyItemChanged(position)
     }
 
-
-    private fun showDialogForEdit(position: Int,editAccount: MonetaryAccount) {
+    private fun showDialogForEdit(position: Int, editAccount: MonetaryAccount) {
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.layout_add_monetary_account_dialog)
 
+        val window = dialog.window
+        val layoutParams = window?.attributes
+        layoutParams?.width = WindowManager.LayoutParams.MATCH_PARENT
+        layoutParams?.height = WindowManager.LayoutParams.WRAP_CONTENT
+        window?.attributes = layoutParams
+
         val iconItems = listOf(
-            IconItem(R.drawable.baseline_attach_money_24),
-            IconItem(R.drawable.baseline_credit_card_24),
-            IconItem(R.drawable.baseline_phone_android_24),
+            AccountIconItem(R.drawable.baseline_attach_money_24),
+            AccountIconItem(R.drawable.baseline_credit_card_24),
+            AccountIconItem(R.drawable.baseline_phone_android_24),
             // Add more items as needed
         )
 
@@ -142,8 +145,11 @@ class mAccountAdapter(
 
         // Pre-populate the dialog for editing
         nameTextView.text = editAccount.accountName
-        amountTextView.text = editAccount.accountBalance.toString()
+        val formattedNumber = String.format("%.2f", editAccount.accountBalance)
+        amountTextView.text = formattedNumber
 
+        fragment.overlay.visibility = View.VISIBLE
+        fragment.overlay2.visibility = View.VISIBLE
 
         // Add more logic to pre-populate other dialog UI components
 
@@ -151,38 +157,71 @@ class mAccountAdapter(
         yesBtn.setOnClickListener {
             // Handle the edit confirmation logic here
 
-            val name  = nameTextView.text.toString()
-            val amount = amountTextView.text.toString().toDouble()
+            val name = nameTextView.text.toString()
+            val amount = amountTextView.text
 
-            if (spinner.selectedItemPosition == 0){
-                icon = "baseline_attach_money_24"
-            } else if (spinner.selectedItemPosition == 1){
-                icon = "baseline_credit_card_24"
-            } else if (spinner.selectedItemPosition == 2){
-                icon = "baseline_phone_android_24"
+            val decimalRegex = Regex("^\\d+(\\.\\d{2})?\$")
+
+
+            if (name.isEmpty()) {
+                nameTextView.error = "Name cannot be empty"
+            } else if (!name.matches(Regex("^[a-zA-Z ]+\$"))) {
+                nameTextView.error = "Enter a valid name"
+            } else if (amount.toString().toDouble() < 0.1) {
+                amountTextView.error = "Amount cannot be 0"
+            } else if (!amount.matches(decimalRegex))
+                amountTextView.error = "Enter a decimal with two decimal places"
+            else {
+
+                if (spinner.selectedItemPosition == 0) {
+                    icon = "baseline_attach_money_24"
+                } else if (spinner.selectedItemPosition == 1) {
+                    icon = "baseline_credit_card_24"
+                } else if (spinner.selectedItemPosition == 2) {
+                    icon = "baseline_phone_android_24"
+                }
+
+
+                val updatedAccount = MonetaryAccount(
+                    accountId = editAccount.accountId,
+                    accountName = name,
+                    accountBalance = amount.toString().toDouble(),
+                    accountIcon = icon
+                )
+
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Confirmation")
+                builder.setMessage("Are you sure you want to confirm this edit?")
+
+                builder.setPositiveButton("Yes") { _, _ ->
+                    updateItem(position, updatedAccount)
+
+                    // Update the database or perform other actions as needed
+                    monetaryAccountViewModel.updateAccount(updatedAccount)
+
+                    dialog.dismiss()
+                    fragment.overlay.visibility = View.GONE
+                    fragment.overlay2.visibility = View.GONE
+                }
+
+                builder.setNegativeButton("No") { dialog, _ ->
+                    // Handle cancellation of the edit
+                    // This code block will be executed if the user clicks "No"
+                    dialog.dismiss()
+                }
+
+                val dialog = builder.create()
+                dialog.show()
+
             }
-
-
-            val updatedAccount = MonetaryAccount(
-                accountId = editAccount.accountId,
-                accountName = name,
-                accountBalance = amount,
-                accountIcon = icon
-            )
-
-            // Update the dataset in the adapter
-            updateItem(position, updatedAccount)
-
-            // Update the database or perform other actions as needed
-            monetaryAccountViewModel.updateAccount(updatedAccount)
-
-            dialog.dismiss()
         }
 
         val noBtn = dialog.findViewById<Button>(R.id.btnCancelAddAccount)
         noBtn.setOnClickListener {
             // Dismiss the dialog
             dialog.dismiss()
+            fragment.overlay.visibility = View.GONE
+            fragment.overlay2.visibility = View.GONE
         }
 
         dialog.show()

@@ -87,28 +87,28 @@
             app:layout_constraintTop_toTopOf="@+id/tvBudgetLimitLabel" />
 
         <TextView
-            android:id="@+id/tvBudgetIconLabel"
+            android:id="@+id/tvBudgetCategoryLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/manrope_medium"
-            android:text="Icon :"
+            android:text="Category :"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/eTBudgetLimit" />
 
         <Spinner
-            android:id="@+id/sBudgetIcon"
+            android:id="@+id/sBudgetCategory"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/edit_text_border"
-            app:layout_constraintBottom_toBottomOf="@+id/tvBudgetIconLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/tvBudgetCategoryLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline8"
-            app:layout_constraintTop_toTopOf="@+id/tvBudgetIconLabel" />
+            app:layout_constraintTop_toTopOf="@+id/tvBudgetCategoryLabel" />
 
         <Button
             android:id="@+id/btnBudgetConfrim"
@@ -117,10 +117,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Confirm"
+            android:text="CONFIRM"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sBudgetIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/sBudgetCategory" />
 
         <Button
             android:id="@+id/btnBudgetCancel"
@@ -132,7 +132,7 @@
             android:text="CANCEL"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sBudgetIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/sBudgetCategory" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

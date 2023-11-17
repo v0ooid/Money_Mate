@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import my.edu.tarc.moneymate.R
 
-class IconAdapter(context: Context, private val items: List<IconItem>) :
-    ArrayAdapter<IconItem>(context, 0, items) {
+class IconAdapter(context: Context, private val items: List<AccountIconItem>) :
+    ArrayAdapter<AccountIconItem>(context, 0, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createView(position, convertView, parent)

@@ -14,6 +14,9 @@ interface MonetaryAccountDao {
     @Query("SELECT * FROM monetary_accounts")
     fun getAllAccounts(): LiveData<List<MonetaryAccount>>
 
+    @Query("SELECT SUM(accountBalance) FROM monetary_accounts")
+    fun getTotalAmount(): LiveData<Double>
+
     @Insert
     suspend fun insertAccount(monetaryAccount: MonetaryAccount)
 

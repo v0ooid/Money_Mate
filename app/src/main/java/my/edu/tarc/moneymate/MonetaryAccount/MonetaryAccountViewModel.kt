@@ -12,11 +12,13 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
 
     private var repository: MonetaryAccountRepository
     var getAllmAccount: LiveData<List<MonetaryAccount>>
+    var totalAmount: LiveData<Double>
 
     init {
-        val mAccountDao = AppDatabase.getDatabase(application).monetaryAccountDao()
+        val mAccountDao = AppDatabase.getDatabase(application, viewModelScope).monetaryAccountDao()
         repository = MonetaryAccountRepository(mAccountDao)
         getAllmAccount = repository.getAllAccount
+        totalAmount = repository.getTotalAmount()
     }
 
     fun addAccount(monetaryAccount: MonetaryAccount) = viewModelScope.launch {
@@ -30,4 +32,5 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
     fun deleteAccount(monetaryAccount: MonetaryAccount) = viewModelScope.launch {
         repository.deleteAccount(monetaryAccount)
     }
+
 }

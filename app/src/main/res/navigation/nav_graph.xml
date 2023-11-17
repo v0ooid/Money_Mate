@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_profileFragment_to_monetaryAccountFragment"
             app:destination="@id/monetaryAccountFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
     </fragment>
     <activity
         android:id="@+id/signInActivity"
@@ -32,7 +35,11 @@
         android:id="@+id/monetaryAccountFragment"
         android:name="my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccountFragment"
         android:label="MonetaryAccountFragment"
-        tools:layout="@layout/fragment_monetary_account"/>
+        tools:layout="@layout/fragment_monetary_account">
+        <action
+            android:id="@+id/action_monetaryAccountFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/budgetFragment"
         android:name="my.edu.tarc.moneymate.Budget.BudgetFragment"
@@ -43,4 +50,13 @@
         android:name="my.edu.tarc.moneymate.Transaction.TransactionFragment"
         android:label="fragment_transaction"
         tools:layout="@layout/fragment_transaction" />
+    <fragment
+        android:id="@+id/appLockFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockFragment"
+        android:label="fragment_app_lock"
+        tools:layout="@layout/fragment_app_lock" >
+        <action
+            android:id="@+id/action_appLockFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>

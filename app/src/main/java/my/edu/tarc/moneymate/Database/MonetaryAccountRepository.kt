@@ -22,4 +22,8 @@ class MonetaryAccountRepository(private val monetaryAccountDao: MonetaryAccountD
     suspend fun updateAccount(monetaryAccount: MonetaryAccount){
         monetaryAccountDao.updateAccount(monetaryAccount)
     }
+
+    fun getTotalAmount(): LiveData<Double> {
+        return monetaryAccountDao.getTotalAmount()
+    }
 }

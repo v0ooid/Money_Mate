@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/leftIcon"
+            android:id="@+id/btnBackMAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/leftIcon"
+            android:layout_toEndOf="@+id/btnBackMAccount"
             android:fontFamily="@font/manrope_bold"
             android:text="Monetary Account"
             android:textColor="@color/white"
@@ -74,7 +74,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline5"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/layout_monetary_account" />
+        tools:listitem="@layout/layout_monetary_account" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -104,7 +106,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/tvMonetaryAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/manrope_semibold"
@@ -112,8 +114,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:id="@+id/overlay2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="152dp"
+            tools:layout_editor_absoluteY="72dp" />
+
     </androidx.cardview.widget.CardView>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="72dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
