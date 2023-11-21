@@ -15,33 +15,33 @@
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
         <activity
+            android:name=".AppLock.AppLockCustPassActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AppLock.AppLock6Activity"
+            android:exported="false" />
+        <activity
             android:name=".Profile.ForgotPasswordActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".Profile.SignInActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".Profile.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.MoneyMate"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.MoneyMate">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AppLock.AppLockActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

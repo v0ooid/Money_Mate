@@ -2,6 +2,7 @@ package my.edu.tarc.moneymate.MonetaryAccount
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -70,7 +71,13 @@ class MonetaryAccountFragment : Fragment() {
 
         mAccountViewModel.totalAmount.observe(viewLifecycleOwner) { total ->
             val formattedNumber = String.format("%.2f", total)
-            binding.tvMonetaryAccount.text = "RM $formattedNumber"
+            Log.e("Checking", formattedNumber)
+            if (total == null){
+                binding.tvMonetaryAccount.text = "RM 0.00"
+            }
+            else {
+                binding.tvMonetaryAccount.text = "RM $formattedNumber"
+            }
         }
 
         mAccountViewModel.getAllmAccount.observe(viewLifecycleOwner){

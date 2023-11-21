@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +38,19 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val password = findViewById<EditText>(R.id.tvPassword_SignIn)
+        val showPasswordCheckbox = findViewById<CheckBox>(R.id.checkBoxShowPassword2)
+
+        showPasswordCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Show Password
+                password.transformationMethod = null // Set transformationMethod to null
+            } else {
+                // Hide Password
+                password.transformationMethod = PasswordTransformationMethod.getInstance() // Hide password
+            }
+        }
+
         binding.tvSignUp.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
@@ -63,7 +78,6 @@ class SignInActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-
 
                     saveSharePreference()
 

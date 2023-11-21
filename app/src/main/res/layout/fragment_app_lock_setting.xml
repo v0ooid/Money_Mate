@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/btnBackMAccount"
+            android:id="@+id/btnBackPasswordSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/btnBackMAccount"
+            android:layout_toEndOf="@+id/btnBackPasswordSettings"
             android:fontFamily="@font/manrope_bold"
             android:text="Password Settings"
             android:textColor="@color/white"

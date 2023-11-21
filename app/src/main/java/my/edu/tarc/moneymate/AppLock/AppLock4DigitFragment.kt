@@ -4,42 +4,49 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.MainActivity
 import my.edu.tarc.moneymate.R
-import my.edu.tarc.moneymate.databinding.ActivityAppLockBinding
+import my.edu.tarc.moneymate.databinding.FragmentAppLock4DigitBinding
 
-class AppLockActivity : AppCompatActivity() {
+class AppLock4DigitFragment : Fragment() {
 
-    private lateinit var binding: ActivityAppLockBinding
+    private var _binding: FragmentAppLock4DigitBinding? = null
+    private val binding get() = _binding!!
 
     private var enteredPin = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        getSupportActionBar()?.hide()
-
         super.onCreate(savedInstanceState)
-        binding = ActivityAppLockBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentAppLock4DigitBinding.inflate(inflater, container, false)
 
         val digitButtons = mutableListOf<Button>()
         for (i in 0..9) {
-            val buttonId = resources.getIdentifier("buttonLock$i", "id", packageName)
-            val button = findViewById<Button>(buttonId)
+            val buttonId = resources.getIdentifier("buttonLock$i", "id", requireContext().packageName)
+            val button = binding.root.findViewById<Button>(buttonId)
             digitButtons.add(button)
             button.setOnClickListener {
                 onDigitClick(i)
             }
         }
-
-        binding.iVBack.setOnClickListener {
+        binding.iVBack.setOnClickListener{
             onBackspaceClick()
         }
+
+        return binding.root
     }
 
     private fun onDigitClick(digit: Int) {
@@ -50,19 +57,19 @@ class AppLockActivity : AppCompatActivity() {
         }
 
         if (enteredPin.length == 4) {
-            if (verifyEnteredPin(enteredPin)) {
+            if (verifyEnteredPin(enteredPin)){
 
                 handleSuccessfulUnlock()
 
             } else {
                 enteredPin = ""
-                Toast.makeText(this, "Passcode entered is wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Passcode entered is wrong", Toast.LENGTH_SHORT).show()
                 updatePinDisplay()
             }
         }
     }
 
-    private fun onBackspaceClick() {
+    private fun onBackspaceClick(){
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.dropLast(1) // Remove the last character from the entered PIN
             updatePinDisplay() // Update the PIN display after backspace
@@ -87,19 +94,26 @@ class AppLockActivity : AppCompatActivity() {
     }
 
     private fun verifyEnteredPin(enteredPin: String): Boolean {
-        val sharedPreferences = getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
         val storedPIN = sharedPreferences.getString("PIN_KEY", "")
 
         return enteredPin == storedPIN
     }
 
     private fun handleSuccessfulUnlock() {
+        val fragmentLock = requireArguments().getString("FRAGMENT_LOCK")
 
-        val sharedPreferences = getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean("APP_LOCK_UNLOCKED", true).apply()
+        Log.e("arg", fragmentLock.toString())
 
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-
+        when (fragmentLock){
+            "PROFILE_FRAGMENT" -> {
+                val sharedPreferences = requireContext().getSharedPreferences("APP_PROFILE_PREFS", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("Locked", false).apply()
+                val navController = findNavController()
+                navController.navigate(R.id.action_appLock4DigitFragment_to_profileFragment)
+                Log.e("TAG1", "This working")
+            }
+        }
     }
+
 }

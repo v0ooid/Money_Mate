@@ -2,6 +2,7 @@ package my.edu.tarc.moneymate.Profile
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment
+import my.edu.tarc.moneymate.AppLock.AppLock6Activity
+import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
+import my.edu.tarc.moneymate.AppLock.AppLockActivity
+import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentProfileBinding
 
@@ -36,8 +42,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
     private var ImageUri: Uri? = null
-    private val navController = findNavController()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +50,70 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        //Shared Pref
         val sharedPreferences =
-            requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
+            requireContext().getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
+
+        val sectionPreferences =
+            requireContext().getSharedPreferences("APP_PROFILE_PREFS", Context.MODE_PRIVATE)
+
+        val lockEn = sectionPreferences.getBoolean("Enabled", false)
+
+        val lockStatus = sectionPreferences.getBoolean("Locked", false)
+
+        Log.e("Profile frag", lockStatus.toString())
+
+        if (lockEn) {
+            if (lockStatus) {
+                val appLockType = sharedPreferences.getString("SECURITY_TYPE_KEY", "")
+                if (appLockType == "4Digit") {
+                    val fragment = AppLock4DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "PROFILE_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_profileFragment_to_appLock4DigitFragment,
+                        bundle
+                    )
+                } else if (appLockType == "6Digit"){
+                    val fragment = AppLock6DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "PROFILE_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_profileFragment_to_appLock6DigitFragment,
+                        bundle
+                    )
+                } else {
+                    val fragment = AppLock6DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "PROFILE_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_profileFragment_to_appLockCustomPasswordFragment,
+                        bundle
+                    )
+                }
+            } else {
+                runRemainingProfileFragmentLogic()
+            }
+        } else {
+            runRemainingProfileFragmentLogic()
+        }
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun runRemainingProfileFragmentLogic(){
+        val sharedPreferences = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", "")
 
         //Firebase for show data(name and gmail)
@@ -78,39 +143,50 @@ class ProfileFragment : Fragment() {
         }
 
         //Profile picture
-        imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            ImageUri = it
-            if (ImageUri.toString() != "null") {
-                binding.imageViewProfilepic.setImageURI(it)
-            } else {
-                val firebase = Firebase.storage
-                //Create a reference to the storage
-                val myRef =
-                    firebase.reference.child("profile_image").child(userId)
-                val ONE_MEGABYTE: Long = 1024 * 1024 * 1024
-                myRef.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
-                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    binding.imageViewProfilepic.setImageBitmap(bitmap)
+        imagePickerLauncher =
+            registerForActivityResult(ActivityResultContracts.GetContent()) {
+                ImageUri = it
+                if (ImageUri.toString() != "null") {
+                    binding.imageViewProfilepic.setImageURI(it)
+                } else {
+                    val firebase = Firebase.storage
+                    //Create a reference to the storage
+                    val myRef =
+                        firebase.reference.child("profile_image").child(userId)
+                    val ONE_MEGABYTE: Long = 1024 * 1024 * 1024
+                    myRef.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
+                        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        binding.imageViewProfilepic.setImageBitmap(bitmap)
+                    }
+                }
+
+                //Create a reference of a storage
+                //val username = share.getString("userName","").toString()
+                val myRefImage =
+                    FirebaseStorage.getInstance().getReference("profile_image/$userId")
+
+                //Upload File to firebase Storage
+                Log.e("testImageUri", ImageUri.toString())
+                if (ImageUri.toString() != "null") {
+                    Log.e("testImageUriInside", ImageUri.toString())
+                    myRefImage.putFile(ImageUri!!).addOnSuccessListener {
+                        Toast.makeText(requireContext(), "Upload Done", Toast.LENGTH_SHORT)
+                            .show()
+                    }.addOnCanceledListener {
+                        Toast.makeText(
+                            requireContext(),
+                            "Upload Canceled",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }.addOnFailureListener {
+                        Toast.makeText(
+                            requireContext(),
+                            "Upload Failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
-
-            //Create a reference of a storage
-            //val username = share.getString("userName","").toString()
-            val myRefImage = FirebaseStorage.getInstance().getReference("profile_image/$userId")
-
-            //Upload File to firebase Storage
-            Log.e("testImageUri", ImageUri.toString())
-            if (ImageUri.toString() != "null") {
-                Log.e("testImageUriInside", ImageUri.toString())
-                myRefImage.putFile(ImageUri!!).addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Upload Done", Toast.LENGTH_SHORT).show()
-                }.addOnCanceledListener {
-                    Toast.makeText(requireContext(), "Upload Canceled", Toast.LENGTH_SHORT).show()
-                }.addOnFailureListener {
-                    Toast.makeText(requireContext(), "Upload Failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
         binding.addRemoveIcon.setOnClickListener {
             val imageType = "image/*"
@@ -124,29 +200,33 @@ class ProfileFragment : Fragment() {
 
         //Monetary Account Card View
         binding.cardViewMonetaryAccount.setOnClickListener {
+            val navController = findNavController()
             navController.navigate(R.id.action_profileFragment_to_monetaryAccountFragment)
         }
 
-        binding.cardViewAppLock.setOnClickListener{
+        binding.cardViewAppLock.setOnClickListener {
+            val navController = findNavController()
             navController.navigate(R.id.action_profileFragment_to_appLockFragment)
         }
 
         //Logout
         binding.cardVLogout.setOnClickListener {
-            val sharedPref =
+            val userPref =
                 requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
-            val editor = sharedPref.edit()
-            editor.putString("userId", "")
-                .apply()
+            val APP_LOCK_PREFS =
+                requireContext().getSharedPreferences(
+                    "APP_LOCK_PREFS",
+                    Context.MODE_PRIVATE
+                )
+
+            userPref.edit().putString("userId", "").apply()
+
+            val appLockEditor = APP_LOCK_PREFS.edit()
+            appLockEditor.clear().apply()
 
             val navController = findNavController()
             navController.navigate(R.id.action_profileFragment_to_signInActivity)
         }
-        return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     private fun showDialog() {

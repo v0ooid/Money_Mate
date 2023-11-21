@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_color">
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="159dp"
+        android:layout_height="32dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="245dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="141dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4">
+
+        <ImageView
+            android:id="@+id/dot1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/dot2"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="@+id/dot1"
+            app:layout_constraintStart_toEndOf="@+id/dot1"
+            app:layout_constraintTop_toTopOf="@+id/dot1" />
+
+        <ImageView
+            android:id="@+id/dot3"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="@+id/dot4"
+            app:layout_constraintEnd_toStartOf="@+id/dot4"
+            app:layout_constraintTop_toTopOf="@+id/dot4" />
+
+        <ImageView
+            android:id="@+id/dot4"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="303dp"
+        android:layout_height="368dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <Button
+            android:id="@+id/buttonLock1"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/manrope_bold"
+            android:text="1"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonLock3"
+            android:layout_width="65dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/main_color"
+            android:text="3"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonLock0"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="0"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock8"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock8"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock8" />
+
+        <Button
+            android:id="@+id/buttonLock2"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:backgroundTint="@color/main_color"
+            android:text="2"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonLock3"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLock3"
+            app:layout_constraintStart_toEndOf="@+id/buttonLock1"
+            app:layout_constraintTop_toTopOf="@+id/buttonLock1" />
+
+        <Button
+            android:id="@+id/buttonLock4"
+            android:layout_width="65dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="4"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock1"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock1" />
+
+        <Button
+            android:id="@+id/buttonLock8"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="8"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLock9"
+            app:layout_constraintStart_toEndOf="@+id/buttonLock7"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock5" />
+
+        <Button
+            android:id="@+id/buttonLock9"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="9"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock6"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock6"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock6" />
+
+        <Button
+            android:id="@+id/buttonLock7"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="7"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock4"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock4"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock4" />
+
+        <Button
+            android:id="@+id/buttonLock5"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="5"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLock6"
+            app:layout_constraintStart_toEndOf="@+id/buttonLock4"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock2" />
+
+        <Button
+            android:id="@+id/buttonLock6"
+            android:layout_width="65dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="6"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock3"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock3"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock3" />
+
+        <ImageView
+            android:id="@+id/iVBack"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock9"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock9"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock9"
+            app:srcCompat="@drawable/outline_arrow_circle_left_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
