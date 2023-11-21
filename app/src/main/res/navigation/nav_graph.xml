@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/transactionFragment2">
+    app:startDestination="@id/recordFragment">
 
     <activity
         android:id="@+id/mainActivity"
@@ -39,8 +39,17 @@
         android:label="BudgetFragment"
         tools:layout="@layout/fragment_budget"/>
     <fragment
-        android:id="@+id/transactionFragment2"
+        android:id="@+id/transactionFragment"
         android:name="my.edu.tarc.moneymate.Transaction.TransactionFragment"
         android:label="fragment_transaction"
         tools:layout="@layout/fragment_transaction" />
+    <fragment
+        android:id="@+id/recordFragment"
+        android:name="my.edu.tarc.moneymate.Record.RecordFragment"
+        android:label="fragment_record"
+        tools:layout="@layout/fragment_record" >
+        <action
+            android:id="@+id/action_recordFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
+    </fragment>
 </navigation>

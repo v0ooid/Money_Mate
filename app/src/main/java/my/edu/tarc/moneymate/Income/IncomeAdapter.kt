@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Income
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +15,9 @@ import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.Transaction.TransactionViewModel
 
-class IncomeAdapter constructor(private val getFragment: IncomeFragment, private val categoryList_income: MutableList<Income>)
+class IncomeAdapter constructor(private val viewModel: TransactionViewModel, val getFragment: IncomeFragment, private val categoryList_income: MutableList<Category>)
     :RecyclerView.Adapter<IncomeAdapter.ViewHolder>()
 {
-
 
     private var selectedPosition:Int = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IncomeAdapter.ViewHolder {
@@ -28,6 +28,7 @@ class IncomeAdapter constructor(private val getFragment: IncomeFragment, private
     override fun onBindViewHolder(holder: IncomeAdapter.ViewHolder, position: Int) {
         holder.categoryTitle.text = categoryList_income[position].title
         holder.image.setImageResource(categoryList_income[position].image)
+        viewModel.updateTitleData(categoryList_income[selectedPosition].title)
 
         if (position == selectedPosition)
         {
@@ -38,8 +39,11 @@ class IncomeAdapter constructor(private val getFragment: IncomeFragment, private
         holder.itemView.setOnClickListener{
             notifyItemChanged(selectedPosition)
             selectedPosition = holder.adapterPosition
+            viewModel.updateCategoryId(categoryList_income[selectedPosition].categoryId.toString())
+            viewModel.updateTitleData(categoryList_income[selectedPosition].title)
+            viewModel.updateCategoryImage(categoryList_income[selectedPosition].image)
+            Log.d("Title",categoryList_income[selectedPosition].title )
             notifyItemChanged(selectedPosition)
-
 //            Toast.makeText(holder.itemView.context, categoryList_income[position].title, Toast.LENGTH_SHORT).show()
         }
     }
@@ -47,6 +51,8 @@ class IncomeAdapter constructor(private val getFragment: IncomeFragment, private
     override fun getItemCount(): Int {
         return categoryList_income.size
     }
+
+
 
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val categoryTitle: TextView = itemView.findViewById(R.id.category_title)

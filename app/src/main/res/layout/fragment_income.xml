@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Income.IncomeFragment">
-    <FrameLayout
+    android:fillViewport="true"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        tools:context=".Income.IncomeFragment">
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewIncome"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp" />
-        <Button
-            android:id="@+id/testing"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="testing"
-            tools:ignore="MissingConstraints" />
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="100dp"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:stateListAnimator="@drawable/add_new_category_animator"
+            android:padding="20dp"
+            android:text="@string/add_new_category"
+            android:textSize="8pt"
+
+            android:background="@drawable/add_new_category_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewIncome" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

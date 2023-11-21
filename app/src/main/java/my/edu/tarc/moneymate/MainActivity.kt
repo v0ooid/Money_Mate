@@ -54,7 +54,11 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.setShowHideAnimationEnabled(false)
                 if (destination.id == R.id.monetaryAccountFragment) {
                     navView.visibility = View.GONE
-                } else {
+                }
+                else if(destination.id == R.id.transactionFragment){
+                    navView.visibility = View.GONE
+                }
+                else {
                     navView.visibility = View.VISIBLE
                 }
             }
@@ -67,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE
             )
+
 
 //        val appBarConfiguration = AppBarConfiguration(
 //            setOf(

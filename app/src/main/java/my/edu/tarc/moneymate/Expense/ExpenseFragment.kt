@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.Category.Category
+import my.edu.tarc.moneymate.Category.CategoryViewModel
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeAdapter
 import my.edu.tarc.moneymate.R
@@ -27,9 +29,10 @@ class ExpenseFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var ExpenseAdapter: ExpenseAdapter
-    private var categorylist_expense = mutableListOf<Expense>()
+    private var categorylist_expense = mutableListOf<Category>()
     private lateinit var viewModel: ExpenseViewModel
     val transactionViewModel: TransactionViewModel by activityViewModels()
+    val CategoryViewModel: CategoryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,16 +40,23 @@ class ExpenseFragment : Fragment() {
     ): View? {
         _binding = FragmentExpenseBinding.inflate(inflater,container,false)
         recyclerView = binding.recyclerViewExpense
+
         recyclerView.layoutManager = GridLayoutManager(context,4)
-        ExpenseAdapter = ExpenseAdapter(categorylist_expense)
-        recyclerView.itemAnimator = null
-        recyclerView.adapter = ExpenseAdapter
+
+        CategoryViewModel.expenseCategory.observe(viewLifecycleOwner){
+            data-> categorylist_expense = data
+            ExpenseAdapter = ExpenseAdapter(transactionViewModel,this,categorylist_expense)
+            recyclerView.itemAnimator = null
+            recyclerView.adapter = ExpenseAdapter
+        }
+
+
         transactionViewModel.result.observe(viewLifecycleOwner, Observer{ data ->
             Log.w("test",data)
         })
 
 
-        prepareList()
+//        prepareList()
         return binding.root
     }
 
@@ -57,50 +67,45 @@ class ExpenseFragment : Fragment() {
     }
     private fun prepareList()
     {
-        var list = Expense("Salary", R.drawable.baseline_email_24)
+        var list = Category(0, "Salary", R.drawable.baseline_email_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Slave", R.drawable.round_person_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Dairy", R.drawable.round_arrow_back_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Weapon", R.drawable.round_arrow_back_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Promote", R.drawable.round_person_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Shelter", R.drawable.baseline_home_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Dairy", R.drawable.round_arrow_back_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Salary", R.drawable.baseline_email_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Promote", R.drawable.round_person_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Slave", R.drawable.round_person_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Dairy", R.drawable.round_arrow_back_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Weapon", R.drawable.round_arrow_back_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Promote", R.drawable.round_person_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Shelter", R.drawable.baseline_home_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Dairy", R.drawable.round_arrow_back_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Salary", R.drawable.baseline_email_24)
+        CategoryViewModel.addCategoryItem(list)
+        list = Category(0, "Promote", R.drawable.round_person_24, "expense")
         categorylist_expense.add(list)
-        list = Expense("Slave", R.drawable.round_person_24)
-        categorylist_expense.add(list)
-        list = Expense("Weapon", R.drawable.round_arrow_back_24)
-        categorylist_expense.add(list)
-        list = Expense("Shelter", R.drawable.baseline_home_24)
-        categorylist_expense.add(list)
-        list = Expense("Salary", R.drawable.baseline_email_24)
-        categorylist_expense.add(list)
-        list = Expense("Slave", R.drawable.round_person_24)
-        categorylist_expense.add(list)
-        list = Expense("Weapon", R.drawable.round_arrow_back_24)
-        categorylist_expense.add(list)
-        list = Expense("Shelter", R.drawable.baseline_home_24)
-        categorylist_expense.add(list)
-        list = Expense("Salary", R.drawable.baseline_email_24)
-        categorylist_expense.add(list)
-        list = Expense("Slave", R.drawable.round_person_24)
-        categorylist_expense.add(list)
-        list = Expense("Weapon", R.drawable.round_arrow_back_24)
-        categorylist_expense.add(list)
-        list = Expense("Shelter", R.drawable.baseline_home_24)
-        categorylist_expense.add(list)
-
-
+        CategoryViewModel.addCategoryItem(list)
 
         ExpenseAdapter!!.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        transactionViewModel.result.removeObservers(viewLifecycleOwner)
+        transactionViewModel.title.removeObservers(viewLifecycleOwner)
+        transactionViewModel.transactionDescription.removeObservers(viewLifecycleOwner)
+        transactionViewModel.selectedAccount.removeObservers(viewLifecycleOwner)
+        transactionViewModel.transactionType.removeObservers(viewLifecycleOwner)
     }
 
 }

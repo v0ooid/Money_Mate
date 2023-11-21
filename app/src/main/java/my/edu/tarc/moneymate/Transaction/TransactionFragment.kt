@@ -15,8 +15,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
+import my.edu.tarc.moneymate.Expense.Expense
+import my.edu.tarc.moneymate.Expense.ExpenseViewModel
+import my.edu.tarc.moneymate.Income.Income
+import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentTransactionBinding
@@ -33,11 +38,13 @@ class TransactionFragment : Fragment() {
 
     //    private lateinit var viewModel: TransactionViewModel
     val viewModel: TransactionViewModel by activityViewModels()
+    val incomeViewModel: IncomeViewModel by activityViewModels()
+    val expenseViewModel : ExpenseViewModel by activityViewModels()
     private var currentNumber = ""
     private var firstNumber = ""
     private var result = ""
     private var currentOperator = ""
-
+    private var transactionTypeSelected = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,13 +62,37 @@ class TransactionFragment : Fragment() {
         val navHostTransactionFragment =
             childFragmentManager.findFragmentById(R.id.transactionfragmentContainerView) as NavHostFragment
         val navController = navHostTransactionFragment.navController
+
+        binding.expandCal.setOnClickListener {
+            if (binding.cardDesc.visibility == View.GONE)
+                binding.cardDesc.visibility = View.VISIBLE
+            else if (binding.cardDesc.visibility == View.VISIBLE) {
+                binding.cardDesc.visibility = View.GONE
+            }
+        }
+
+
+
+        binding.leftIcon.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
                     when (it.position) {
-                        0 -> navController.navigate(R.id.incomeFragment)
-                        1 -> navController.navigate(R.id.expenseFragment)
+                        0 -> {
+                            Log.d("test Tab 1",it.position.toString())
+                            navController.navigate(R.id.incomeFragment)
+                            viewModel.updateTransactionType("income")
+                        }
+                        1 -> {
+                            Log.d("test Tab 2",it.position.toString())
+                            navController.navigate(R.id.expenseFragment)
+                            viewModel.updateTransactionType("expense")
+                        }
                     }
+
                 }
             }
 
@@ -146,9 +177,6 @@ class TransactionFragment : Fragment() {
                         buttontext == "Enter" -> {
                             Log.w("Outside", result)
                             if (result.isEmpty()) {
-                                //testing part, need to remove
-                                Log.w("currentNumber Outside", currentNumber)
-                                Log.w("firstNumber Outside", firstNumber)
                                 if (currentNumber.isNotEmpty() && currentOperator.isNotEmpty()) {
                                     result =
                                         evaluateExpression(
@@ -166,28 +194,38 @@ class TransactionFragment : Fragment() {
                                     result = abs(result.toInt()).toString()
                                     viewModel.updateData(result)
 
-                                    //testing part, need to remove
-                                    Log.w("testFirstNumber", firstNumber)
-                                    Log.w("testResult", result)
-                                    viewModel.result.observe(viewLifecycleOwner, Observer { data ->
-                                        Log.w("testviewModel", data)
-                                    })
-
+                                    //save description
+                                    val description = binding.transactionDescription.text.toString()
+                                    Log.d("description", description)
+                                    viewModel.updateTransactionDescription(description)
+                                    addRecordIntoDatabase()
                                     result = ""
+
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Added Successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    findNavController().navigateUp()
+
                                 } else if (currentNumber.isEmpty() && firstNumber.isNotEmpty()) {
                                     result = firstNumber
                                     //store result into transaction ViewModel
                                     result = abs(result.toInt()).toString()
                                     viewModel.updateData(result)
+                                    //save description
+                                    val description = binding.transactionDescription.text.toString()
+                                    viewModel.updateTransactionDescription(description)
 
-                                    //testing part, need to remove
-                                    Log.w("firstNumber inside", firstNumber)
-                                    viewModel.result.observe(viewLifecycleOwner, Observer { data ->
-                                        Log.w("testviewModel2", data)
-                                    })
-                                    viewModel.result.removeObservers(viewLifecycleOwner)
+                                    addRecordIntoDatabase()
                                     //rest result after record
                                     result = ""
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Added Successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    findNavController().navigateUp()
                                 } else if (firstNumber.isNullOrEmpty()) {
                                     Toast.makeText(context, "Value cant be 0", Toast.LENGTH_SHORT)
                                         .show()
@@ -195,6 +233,17 @@ class TransactionFragment : Fragment() {
                             } else {
                                 result = abs(result.toInt()).toString()
                                 viewModel.updateData(result)
+                                //Save Description
+                                val description = binding.transactionDescription.text.toString()
+                                viewModel.updateTransactionDescription(description)
+                                addRecordIntoDatabase()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Added Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                findNavController().navigateUp()
                             }
                         }
                     }
@@ -210,6 +259,47 @@ class TransactionFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 //        viewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    private fun addRecordIntoDatabase(){
+        var description = ""
+        var acccount = ""
+        var title = ""
+        var result = ""
+        var transactionTypeSelected = ""
+        var categoryId = ""
+        var categoryImage:Int = 0
+        viewModel.transactionType.observe(viewLifecycleOwner){
+            data -> transactionTypeSelected = data
+        }
+        viewModel.transactionDescription.observe(viewLifecycleOwner) { data ->
+            description = data
+        }
+        viewModel.title.observe(viewLifecycleOwner) { data ->
+            title = data
+        }
+        viewModel.selectedAccount.observe(viewLifecycleOwner) { data ->
+            acccount = data
+        }
+        viewModel.result.observe(viewLifecycleOwner) { data ->
+            result = data
+        }
+        viewModel.categoryId.observe(viewLifecycleOwner){data ->
+            categoryId = data
+        }
+        viewModel.categoryImage.observe(viewLifecycleOwner){data->
+            categoryImage = data
+        }
+        Log.d("transactionTypeSelected", transactionTypeSelected)
+        if (transactionTypeSelected == "income") {
+            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+            incomeViewModel.addIncome(income)
+        }
+        else if (transactionTypeSelected == "expense")
+        {
+            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+            expenseViewModel.addExpense(expense)
+        }
     }
 
 
@@ -231,6 +321,9 @@ class TransactionFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.result.removeObservers(viewLifecycleOwner)
+        viewModel.transactionType.removeObservers(viewLifecycleOwner)
+        viewModel.selectedAccount.removeObservers(viewLifecycleOwner)
+        viewModel.transactionDescription.removeObservers(viewLifecycleOwner)
     }
 
 }

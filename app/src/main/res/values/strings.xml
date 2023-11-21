@@ -32,5 +32,22 @@
     <string name="expense">Expense</string>
     <string name="transfer">Transfer</string>
     <string name="item">Item</string>
+    <string name="transaction_record">Transaction Record</string>
+    <string name="result">Result</string>
+    <string name="title">Title</string>
+    <string name="record_description">Record description</string>
+    <string name="dateseparator">DateSeparator</string>
+    <string name="choose_an_account">Choose an account</string>
+    <string name="add_new_category">Add New Category</string>
+    <string name="description">Description</string>
+    <string-array name="testSpinner">
+        <item>Account</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
 
 </resources>

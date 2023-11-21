@@ -6,10 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.R
+import my.edu.tarc.moneymate.Transaction.TransactionFragment
+import my.edu.tarc.moneymate.Transaction.TransactionViewModel
 
-class ExpenseAdapter(private val categoryExpenseList: MutableList<Expense>):
+class ExpenseAdapter(private val viewModel: TransactionViewModel, val getFragment: ExpenseFragment,private val categoryExpenseList: MutableList<Category>):
     RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
     private var selectedPosition:Int = 0
@@ -30,8 +34,10 @@ class ExpenseAdapter(private val categoryExpenseList: MutableList<Expense>):
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //Set value into the field
-        holder.categoryTitle.text = categoryExpenseList[position].expense_title
-        holder.image.setImageResource(categoryExpenseList[position].expense_icon_image)
+        holder.categoryTitle.text = categoryExpenseList[position].title
+        holder.image.setImageResource(categoryExpenseList[position].image)
+        viewModel.updateTitleData(categoryExpenseList[selectedPosition].title)
+
         if (position == selectedPosition)
         {
             holder.image.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.main_color))
@@ -41,6 +47,9 @@ class ExpenseAdapter(private val categoryExpenseList: MutableList<Expense>):
         holder.itemView.setOnClickListener{
             notifyItemChanged(selectedPosition)
             selectedPosition = holder.adapterPosition
+            viewModel.updateCategoryId(categoryExpenseList[selectedPosition].categoryId.toString())
+            viewModel.updateTitleData(categoryExpenseList[selectedPosition].title)
+            viewModel.updateCategoryImage(categoryExpenseList[selectedPosition].image)
             notifyItemChanged(selectedPosition)
 //            Toast.makeText(holder.itemView.context, categoryList_income[position].title, Toast.LENGTH_SHORT).show()
         }

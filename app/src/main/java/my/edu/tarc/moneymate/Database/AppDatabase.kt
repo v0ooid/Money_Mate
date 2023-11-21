@@ -5,14 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import my.edu.tarc.moneymate.Budget.Budget
+import my.edu.tarc.moneymate.Category.Category
+import my.edu.tarc.moneymate.Expense.Expense
+import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 
-@Database(entities = [MonetaryAccount::class, Budget::class], version = 2, exportSchema = false)
+@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun monetaryAccountDao(): MonetaryAccountDao
     abstract fun budgetDao(): BudgetDao
-
+    abstract fun incomeDao(): IncomeDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun expenseDao():ExpenseDao
     // Singleton pattern to ensure only one instance of the database is created
     companion object {
         @Volatile

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+    <LinearLayout
+        android:id="@+id/income_linear"
+        android:background="@drawable/frame_record"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+
+        android:layout_weight="1"
+
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/record_income_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textSize="8pt"
+            android:layout_margin="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/record_income_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/record_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/record_income_title"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:paddingStart="5dp"
+            android:paddingEnd="10dp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/record_income_result"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="2"
+        android:text="@string/result"
+        android:textSize="8pt"
+        android:gravity="center"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/expense_linear"
+        android:background="@drawable/frame_record"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+
+            android:layout_weight="1"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/record_expense_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title"
+                android:textSize="8pt"
+                android:layout_margin="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/record_expense_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/record_description"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/record_expense_title"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingStart="5dp"
+                android:paddingEnd="10dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/record_expense_result"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:text="@string/result"
+            android:textSize="8pt"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/dateseperator_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dateseparator"
+            android:textSize="5pt"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/transfer_linear"
+        android:background="@drawable/frame_record"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+
+            android:layout_weight="1"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/record_transfer_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title"
+                android:textSize="8pt"
+                android:layout_margin="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/record_transfer_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/record_description"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/record_transfer_title"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingStart="5dp"
+                android:paddingEnd="10dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/record_transfer_result"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:text="@string/result"
+            android:textSize="8pt"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp" />
+    </LinearLayout>
+
+
+</LinearLayout>
