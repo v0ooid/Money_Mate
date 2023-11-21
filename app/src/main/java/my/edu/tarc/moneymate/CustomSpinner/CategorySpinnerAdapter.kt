@@ -34,9 +34,9 @@ class CategorySpinnerAdapter(
         val textTextView: TextView = view.findViewById(R.id.tvSpinnerCategoryName)
 
         item?.let {
-            iconImageView.setImageResource(item.iconResId)
+            iconImageView.setImageResource(item.image)
             textTextView.text = it.title
-            Log.e("Check", item.iconResId.toString())
+            Log.e("Check", item.image.toString())
         }
 
 

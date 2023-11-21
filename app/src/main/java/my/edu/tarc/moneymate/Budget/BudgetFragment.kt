@@ -44,7 +44,7 @@ class BudgetFragment : Fragment() {
     ): View? {
         _binding = FragmentBudgetBinding.inflate(inflater, container, false)
 
-        val appDatabase = AppDatabase.getDatabase(requireContext(),  viewLifecycleOwner.lifecycleScope)
+        val appDatabase = AppDatabase.getDatabase(requireContext())
         budgetDao = appDatabase.budgetDao()
 
         binding.rvBudget.layoutManager = LinearLayoutManager(requireContext())
@@ -126,7 +126,7 @@ class BudgetFragment : Fragment() {
 
 
                 budget = Budget(
-                    budgetIcon = selectedCate.iconResId,
+                    budgetIcon = selectedCate.image,
                     budgetName = name,
                     budgetLimit = limit.toString().toDouble(),
                     budgetSpent = 0.0,

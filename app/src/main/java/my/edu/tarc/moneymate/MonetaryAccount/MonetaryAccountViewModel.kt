@@ -15,7 +15,7 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
     var totalAmount: LiveData<Double>
 
     init {
-        val mAccountDao = AppDatabase.getDatabase(application, viewModelScope).monetaryAccountDao()
+        val mAccountDao = AppDatabase.getDatabase(application).monetaryAccountDao()
         repository = MonetaryAccountRepository(mAccountDao)
         getAllmAccount = repository.getAllAccount
         totalAmount = repository.getTotalAmount()

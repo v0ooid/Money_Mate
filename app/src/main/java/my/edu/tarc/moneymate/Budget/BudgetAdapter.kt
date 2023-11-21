@@ -187,7 +187,7 @@ class BudgetAdapter(
 
                 val updatedBudget = Budget(
                     budgetId = editBudget.budgetId,
-                    budgetIcon = selectedCate.iconResId,
+                    budgetIcon = selectedCate.image,
                     budgetName = name,
                     budgetLimit = limit.toString().toDouble(),
                     budgetSpent = editBudget.budgetSpent,

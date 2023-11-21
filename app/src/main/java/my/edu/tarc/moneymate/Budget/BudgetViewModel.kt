@@ -22,8 +22,8 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
 
 
     init {
-        val budgetDao = AppDatabase.getDatabase(application, viewModelScope).budgetDao()
-        val categoryDao = AppDatabase.getDatabase(application, viewModelScope).categoryDao()
+        val budgetDao = AppDatabase.getDatabase(application).budgetDao()
+        val categoryDao = AppDatabase.getDatabase(application).categoryDao()
 
         repositoryBudget = BudgetRepository(budgetDao)
         repositoryCategory = CategoryRepository(categoryDao)

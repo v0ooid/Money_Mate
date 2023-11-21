@@ -7,6 +7,7 @@ import my.edu.tarc.moneymate.Income.Income
 
 class CategoryRepository (private val categoryDao: CategoryDao){
 
+    val getAllCategory: LiveData<List<Category>> = categoryDao.getAllCategory()
     val getIncomeCategory: LiveData<MutableList<Category>> = categoryDao.getIncomeCategory()
     val getExpenseCategory: LiveData<MutableList<Category>> = categoryDao.getExpenseCategory()
     @WorkerThread

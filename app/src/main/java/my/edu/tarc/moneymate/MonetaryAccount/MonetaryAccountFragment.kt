@@ -54,7 +54,7 @@ class MonetaryAccountFragment : Fragment() {
         overlay = binding.overlay
         overlay2 = binding.overlay2
 
-        val appDatabase = AppDatabase.getDatabase(requireContext(),  viewLifecycleOwner.lifecycleScope)
+        val appDatabase = AppDatabase.getDatabase(requireContext())
         monetaryAccountDao = appDatabase.monetaryAccountDao()
 
         val navController = findNavController()

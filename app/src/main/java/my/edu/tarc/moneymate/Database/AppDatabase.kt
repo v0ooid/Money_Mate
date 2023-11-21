@@ -25,60 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 
     private class DatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    prepopulateDatabase(database.categoryDao())
-                }
-            }
-        }
 
-        suspend fun prepopulateDatabase(categoryDao: CategoryDao) {
-            // Insert your initial data for YourEntity here
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_fastfood_24,
-                    title = "Food"
-                )
-            )
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_directions_bus_24,
-                    title = "Transportation"
-                )
-            )
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_home_24,
-                    title = "Housing"
-                )
-            )
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_gamepad_24,
-                    title = "Entertainment"
-                )
-            )
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_health_and_safety_24,
-                    title = "Health"
-                )
-            )
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_person_24,
-                    title = "Personal Care"
-                )
-            )
-            categoryDao.insertCategory(
-                Category(
-                    iconResId = R.drawable.baseline_collections_bookmark_24,
-                    title = "Education"
-                )
-            )
-        }
     }
 
 
@@ -99,7 +46,6 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "MoneyMate_db"
                 )
-                    .addCallback(DatabaseCallback(scope))
                     .build()
                 INSTANCE = newInstance
                 return newInstance

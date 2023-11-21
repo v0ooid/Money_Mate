@@ -12,6 +12,8 @@ import my.edu.tarc.moneymate.Income.Income
 @Dao
 interface CategoryDao {
 
+    @Query("SELECT * FROM Category")
+    fun getAllCategory(): LiveData<List<Category>>
     @Query("SELECT * FROM Category WHERE type = 'income'")
     fun getIncomeCategory(): LiveData<MutableList<Category>>
     @Query("SELECT * FROM Category WHERE type = 'expense'")
