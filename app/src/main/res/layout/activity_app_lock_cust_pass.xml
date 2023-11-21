@@ -7,12 +7,12 @@
     android:background="@color/main_color">
 
     <EditText
-        android:id="@+id/editTextText6"
+        android:id="@+id/etUnlockPasscode"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="284dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/edit_text_border"
         android:drawableLeft="@drawable/baseline_lock_24"
         android:drawablePadding="8dp"
@@ -28,20 +28,32 @@
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="145dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="104dp"
         android:fontFamily="@font/manrope_bold"
         android:text="@string/app_name"
         android:textColor="@color/white"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="133dp"
-        tools:layout_editor_absoluteY="114dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button26"
+        android:id="@+id/btnFinUnlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unlock"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="402dp" />
+        android:layout_marginTop="76dp"
+        android:text="UNLOCK"
+        app:layout_constraintEnd_toEndOf="@+id/etUnlockPasscode"
+        app:layout_constraintStart_toStartOf="@+id/etUnlockPasscode"
+        app:layout_constraintTop_toBottomOf="@+id/etUnlockPasscode" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

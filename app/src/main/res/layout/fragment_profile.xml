@@ -106,7 +106,7 @@
                     android:background="@drawable/card_view_background">
 
                     <ImageView
-                        android:id="@+id/imageView3"
+                        android:id="@+id/imageViewEditPassword"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="16dp"
@@ -117,19 +117,19 @@
                         app:srcCompat="@drawable/baseline_lock_24" />
 
                     <TextView
-                        android:id="@+id/textView26"
+                        android:id="@+id/tvEditPasswords"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/manrope_medium"
                         android:text="Edit Password"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                        app:layout_constraintStart_toEndOf="@+id/imageView3"
-                        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                        app:layout_constraintBottom_toBottomOf="@+id/imageViewEditPassword"
+                        app:layout_constraintStart_toEndOf="@+id/imageViewEditPassword"
+                        app:layout_constraintTop_toTopOf="@+id/imageViewEditPassword" />
 
                     <ImageView
-                        android:id="@+id/imageView7"
+                        android:id="@+id/imageViewEditPasswordRight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
@@ -171,29 +171,83 @@
                     android:background="@drawable/card_view_background">
 
                     <ImageView
-                        android:id="@+id/imageView2"
+                        android:id="@+id/ivMAccount"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/baseline_money_24" />
+                        app:srcCompat="@drawable/baseline_money_24"
+                        tools:ignore="DuplicateIds" />
 
                     <TextView
-                        android:id="@+id/textView27"
+                        android:id="@+id/tvMAccount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/manrope_medium"
                         android:text="Monetary Accounts"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-                        app:layout_constraintStart_toEndOf="@+id/imageView2"
-                        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+                        app:layout_constraintBottom_toBottomOf="@+id/ivMAccount"
+                        app:layout_constraintStart_toEndOf="@+id/ivMAccount"
+                        app:layout_constraintTop_toTopOf="@+id/ivMAccount" />
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/ivMAccountRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewAppLock"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewMonetaryAccount">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/card_view_background">
+
+                    <ImageView
+                        android:id="@+id/ivAppLock"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="16dp"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/baseline_phonelink_lock_24" />
+
+                    <TextView
+                        android:id="@+id/tvAppLock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/manrope_medium"
+                        android:text="App Lock"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivAppLock"
+                        app:layout_constraintStart_toEndOf="@+id/ivAppLock"
+                        app:layout_constraintTop_toTopOf="@+id/ivAppLock" />
+
+                    <ImageView
+                        android:id="@+id/ivAppLockRight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"

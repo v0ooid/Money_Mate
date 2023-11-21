@@ -3,6 +3,8 @@ package my.edu.tarc.moneymate.Profile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +34,19 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val password = findViewById<EditText>(R.id.tvPassword_SignUp)
+        val showPasswordCheckbox = findViewById<CheckBox>(R.id.checkBoxShowPassword)
+
+        showPasswordCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Show Password
+                password.transformationMethod = null // Set transformationMethod to null
+            } else {
+                // Hide Password
+                password.transformationMethod = PasswordTransformationMethod.getInstance() // Hide password
+            }
+        }
+
         binding.btnSignUpSignUp.setOnClickListener{
             performSignUp()
         }
@@ -43,16 +58,20 @@ class SignUpActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.tvPassword_SignUp)
         val fullname = findViewById<EditText>(R.id.tvName_SignUp)
 
-        if (email.text.isEmpty() || password.text.isEmpty() || fullname.text.isEmpty()){
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT)
-                .show()
-            return
-
-        }
-
         val inputEmail = email.text.toString()
         val inputPassword = password.text.toString()
         val inputName = fullname.text.toString()
+
+
+        if (inputEmail.isEmpty() || inputPassword.isEmpty() || inputName.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()) {
+            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         auth.createUserWithEmailAndPassword(inputEmail, inputPassword)
             .addOnCompleteListener(this) { task ->

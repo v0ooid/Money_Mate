@@ -5,10 +5,14 @@ plugins {
     id("com.google.gms.google-services")
     id ("kotlin-kapt")
 }
+
 buildscript{
-repositories {
-    mavenCentral()
-}}
+    repositories {
+        mavenCentral()
+        maven ( url = "<https://jitpack.io>" )
+    }
+}
+
 android {
     namespace = "my.edu.tarc.moneymate"
     compileSdk = 34
@@ -97,7 +101,7 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
 
-
+    implementation ("jp.wasabeef:blurry:4.0.0")
 
 
 

@@ -22,6 +22,18 @@
         <action
             android:id="@+id/action_profileFragment_to_monetaryAccountFragment"
             app:destination="@id/monetaryAccountFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_appLock4DigitFragment"
+            app:destination="@id/appLock4DigitFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_appLock6DigitFragment"
+            app:destination="@id/appLock6DigitFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_appLockCustomPasswordFragment"
+            app:destination="@id/appLockCustomPasswordFragment" />
     </fragment>
     <activity
         android:id="@+id/signInActivity"
@@ -32,7 +44,11 @@
         android:id="@+id/monetaryAccountFragment"
         android:name="my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccountFragment"
         android:label="MonetaryAccountFragment"
-        tools:layout="@layout/fragment_monetary_account"/>
+        tools:layout="@layout/fragment_monetary_account">
+        <action
+            android:id="@+id/action_monetaryAccountFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/budgetFragment"
         android:name="my.edu.tarc.moneymate.Budget.BudgetFragment"
@@ -43,6 +59,102 @@
         android:name="my.edu.tarc.moneymate.Transaction.TransactionFragment"
         android:label="fragment_transaction"
         tools:layout="@layout/fragment_transaction" />
+    <fragment
+        android:id="@+id/appLockFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockFragment"
+        android:label="fragment_app_lock"
+        tools:layout="@layout/fragment_app_lock" >
+        <action
+            android:id="@+id/action_appLockFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_appLockFragment_to_appLockSetup4DigitFragment"
+            app:destination="@id/appLockSetup4DigitFragment" />
+        <action
+            android:id="@+id/action_appLockFragment_to_appLockSetup6DigitFragment"
+            app:destination="@id/appLockSetup6DigitFragment" />
+        <action
+            android:id="@+id/action_appLockFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_appLockFragment_to_appLockSetupCusPassFragment"
+            app:destination="@id/appLockSetupCusPassFragment" />
+        <action
+            android:id="@+id/action_appLockFragment_to_appLockTypeFragment"
+            app:destination="@id/appLockTypeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLockSetup4DigitFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockSetup4DigitFragment"
+        android:label="AppLockSetup4DigitFragment"
+        tools:layout="@layout/fragment_app_lock_setup4_digit">
+        <action
+            android:id="@+id/action_appLockSetup4DigitFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLockSetup6DigitFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockSetup6DigitFragment"
+        android:label="fragment_app_lock_setup6_digit"
+        tools:layout="@layout/fragment_app_lock_setup6_digit" >
+        <action
+            android:id="@+id/action_appLockSetup6DigitFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLockSetupCusPassFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockSetupCusPassFragment"
+        android:label="fragment_app_lock_setup_cus_pass"
+        tools:layout="@layout/fragment_app_lock_setup_cus_pass" >
+        <action
+            android:id="@+id/action_appLockSetupCusPassFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLockTypeFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockTypeFragment"
+        android:label="fragment_app_lock_type"
+        tools:layout="@layout/fragment_app_lock_type" >
+        <action
+            android:id="@+id/action_appLockTypeFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
+        <action
+            android:id="@+id/action_appLockTypeFragment_to_appLockSetup4DigitFragment"
+            app:destination="@id/appLockSetup4DigitFragment" />
+        <action
+            android:id="@+id/action_appLockTypeFragment_to_appLockSetup6DigitFragment"
+            app:destination="@id/appLockSetup6DigitFragment" />
+        <action
+            android:id="@+id/action_appLockTypeFragment_to_appLockSetupCusPassFragment"
+            app:destination="@id/appLockSetupCusPassFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLock4DigitFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment"
+        android:label="AppLock4DigitFragment"
+        tools:layout="@layout/fragment_app_lock4_digit">
+        <action
+            android:id="@+id/action_appLock4DigitFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLock6DigitFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment"
+        android:label="AppLock6DigitFragment"
+        tools:layout="@layout/fragment_app_lock6_digit">
+        <action
+            android:id="@+id/action_appLock6DigitFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appLockCustomPasswordFragment"
+        android:name="my.edu.tarc.moneymate.AppLock.AppLockCustomPasswordFragment"
+        android:label="AppLockCustomPasswordFragment"
+        tools:layout="@layout/fragment_app_lock_custom_password">
+        <action
+            android:id="@+id/action_appLockCustomPasswordFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/recordFragment"
         android:name="my.edu.tarc.moneymate.Record.RecordFragment"

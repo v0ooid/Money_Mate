@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_color"
+    tools:context=".AppLock.AppLockSetup6DigitFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="303dp"
+        android:layout_height="368dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26">
+
+        <Button
+            android:id="@+id/buttonLock1"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/manrope_bold"
+            android:text="1"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonLock3"
+            android:layout_width="65dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/main_color"
+            android:text="3"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonLock0"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="0"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock8"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock8"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock8" />
+
+        <Button
+            android:id="@+id/buttonLock2"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:backgroundTint="@color/main_color"
+            android:text="2"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonLock3"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLock3"
+            app:layout_constraintStart_toEndOf="@+id/buttonLock1"
+            app:layout_constraintTop_toTopOf="@+id/buttonLock1" />
+
+        <Button
+            android:id="@+id/buttonLock4"
+            android:layout_width="65dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="4"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock1"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock1" />
+
+        <Button
+            android:id="@+id/buttonLock8"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="8"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLock9"
+            app:layout_constraintStart_toEndOf="@+id/buttonLock7"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock5" />
+
+        <Button
+            android:id="@+id/buttonLock9"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="9"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock6"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock6"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock6" />
+
+        <Button
+            android:id="@+id/buttonLock7"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="7"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock4"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock4"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock4" />
+
+        <Button
+            android:id="@+id/buttonLock5"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="5"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLock6"
+            app:layout_constraintStart_toEndOf="@+id/buttonLock4"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock2" />
+
+        <Button
+            android:id="@+id/buttonLock6"
+            android:layout_width="65dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main_color"
+            android:text="6"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock3"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock3"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock3" />
+
+        <ImageView
+            android:id="@+id/iVBack"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLock9"
+            app:layout_constraintStart_toStartOf="@+id/buttonLock9"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLock9"
+            app:srcCompat="@drawable/outline_arrow_circle_left_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Try not to forget your PIN. There is no way to recover it if you do"
+        android:textColor="@color/Red"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="201dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSet6DigitPin">
+
+        <ImageView
+            android:id="@+id/dot4DigitSetup61"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/dot4DigitSetup62"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="@+id/dot4DigitSetup61"
+            app:layout_constraintStart_toEndOf="@+id/dot4DigitSetup61"
+            app:layout_constraintTop_toTopOf="@+id/dot4DigitSetup61" />
+
+        <ImageView
+            android:id="@+id/dot4DigitSetup63"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="@+id/dot4DigitSetup62"
+            app:layout_constraintStart_toEndOf="@+id/dot4DigitSetup62"
+            app:layout_constraintTop_toTopOf="@+id/dot4DigitSetup62"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/dot4DigitSetup65"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="@+id/dot4DigitSetup66"
+            app:layout_constraintEnd_toStartOf="@+id/dot4DigitSetup66"
+            app:layout_constraintTop_toTopOf="@+id/dot4DigitSetup66" />
+
+        <ImageView
+            android:id="@+id/dot4DigitSetup64"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="@+id/dot4DigitSetup65"
+            app:layout_constraintEnd_toStartOf="@+id/dot4DigitSetup65"
+            app:layout_constraintTop_toTopOf="@+id/dot4DigitSetup65" />
+
+        <ImageView
+            android:id="@+id/dot4DigitSetup66"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bd_view_grey_oval"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvSet6DigitPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Set a 4 Digit PIN "
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBackLockSet6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/baseline_arrow_back_ios_new_24"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="32dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/btnBackLockSet6"
+            android:fontFamily="@font/manrope_bold"
+            android:text="Set app lock PIN"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="21dp" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

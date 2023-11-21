@@ -4,58 +4,65 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import my.edu.tarc.moneymate.MainActivity
+import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.ActivityAppLockBinding
 
-class AppLockActivity : AppCompatActivity() {
+class AppLock4DigitFragment : Fragment() {
 
-    private lateinit var binding: ActivityAppLockBinding
+    private var _binding: ActivityAppLockBinding? = null
+    private val binding get() = _binding!!
 
     private var enteredPin = ""
-    private val PIN_KEY = "app_lock_pin"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        getSupportActionBar()?.hide()
-
         super.onCreate(savedInstanceState)
-        binding = ActivityAppLockBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = ActivityAppLockBinding.inflate(inflater, container, false)
 
         val digitButtons = mutableListOf<Button>()
         for (i in 0..9) {
-            val buttonId = resources.getIdentifier("buttonLock$i", "id", packageName)
-            val button = findViewById<Button>(buttonId)
+            val buttonId = resources.getIdentifier("buttonLock$i", "id", requireContext().packageName)
+            val button = binding.root.findViewById<Button>(buttonId)
             digitButtons.add(button)
             button.setOnClickListener {
                 onDigitClick(i)
             }
         }
-
         binding.iVBack.setOnClickListener{
             onBackspaceClick()
         }
+
+        return binding.root
     }
 
     private fun onDigitClick(digit: Int) {
         // Append the pressed digit to the entered PIN
         if (enteredPin.length < 4) {
             enteredPin += digit
-            Log.e("this", "This working")
             updatePinDisplay() // Update the PIN display on the screen
         }
 
         if (enteredPin.length == 4) {
             if (verifyEnteredPin(enteredPin)){
-                Log.e("That", "Working")
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+
+                handleSuccessfulUnlock()
+
             } else {
-                Toast.makeText(this, "Passcode entered is wrong", Toast.LENGTH_SHORT).show()
+                enteredPin = ""
+                Toast.makeText(requireContext(), "Passcode entered is wrong", Toast.LENGTH_SHORT).show()
+                updatePinDisplay()
             }
         }
     }
@@ -85,9 +92,26 @@ class AppLockActivity : AppCompatActivity() {
     }
 
     private fun verifyEnteredPin(enteredPin: String): Boolean {
-        val sharedPreferences = getSharedPreferences("app_lock_prefs", Context.MODE_PRIVATE)
-        val storedPIN = sharedPreferences.getString(PIN_KEY, "0000")
+        val sharedPreferences = requireContext().getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
+        val storedPIN = sharedPreferences.getString("PIN_KEY", "")
 
         return enteredPin == storedPIN
     }
+
+    private fun handleSuccessfulUnlock() {
+        val fragmentLock = requireArguments().getString("FRAGMENT_LOCK")
+
+        Log.e("arg", fragmentLock.toString())
+
+        when (fragmentLock){
+            "PROFILE_FRAGMENT" -> {
+                val sharedPreferences = requireContext().getSharedPreferences("APP_PROFILE_PREFS", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("Locked", false).apply()
+                val navController = findNavController()
+                navController.navigate(R.id.action_appLock4DigitFragment_to_profileFragment)
+                Log.e("TAG1", "This working")
+            }
+        }
+    }
+
 }
