@@ -36,6 +36,7 @@ class AppLockCustPassActivity : AppCompatActivity() {
         }
     }
 
+
     private fun verifyEnteredPass(enteredPin: String): Boolean {
         val sharedPreferences = getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
         val storedPIN = sharedPreferences.getString("PIN_KEY", "")

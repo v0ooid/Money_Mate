@@ -3,7 +3,6 @@ package my.edu.tarc.moneymate.MonetaryAccount
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +14,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import jp.wasabeef.blurry.Blurry
 import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
 import my.edu.tarc.moneymate.CustomSpinner.AccountIconItem
 import my.edu.tarc.moneymate.R
@@ -167,8 +164,10 @@ class mAccountAdapter(
                 nameTextView.error = "Name cannot be empty"
             } else if (!name.matches(Regex("^[a-zA-Z ]+\$"))) {
                 nameTextView.error = "Enter a valid name"
+            } else if (amount.isEmpty()){
+                amountTextView.error = "Amount cannot be empty"
             } else if (amount.toString().toDouble() < 0.1) {
-                amountTextView.error = "Amount cannot be 0"
+                amountTextView.error = "Amount cannot be 0 or less than 0"
             } else if (!amount.matches(decimalRegex))
                 amountTextView.error = "Enter a decimal with two decimal places"
             else {

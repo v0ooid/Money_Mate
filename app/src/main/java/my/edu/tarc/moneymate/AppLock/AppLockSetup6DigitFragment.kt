@@ -40,7 +40,7 @@ class AppLockSetup6DigitFragment : Fragment() {
         val digitButtons = mutableListOf<Button>()
         for (i in 0..9) {
             val buttonId =
-                resources.getIdentifier("buttonDigitSetup6$i", "id", requireContext().packageName)
+                resources.getIdentifier("buttonLock$i", "id", requireContext().packageName)
             val button = binding.root.findViewById<Button>(buttonId)
             digitButtons.add(button)
             button.setOnClickListener {
@@ -48,7 +48,7 @@ class AppLockSetup6DigitFragment : Fragment() {
             }
         }
 
-        binding.iV6DigitSetupBack.setOnClickListener {
+        binding.iVBack.setOnClickListener {
             onBackspaceClick()
         }
 

@@ -3,17 +3,14 @@ package my.edu.tarc.moneymate.AppLock
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import my.edu.tarc.moneymate.MainActivity
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.ActivityAppLockBinding
 
-class AppLockActivity : AppCompatActivity() {
+class AppLock4Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAppLockBinding
 
@@ -40,6 +37,11 @@ class AppLockActivity : AppCompatActivity() {
         binding.iVBack.setOnClickListener {
             onBackspaceClick()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Leave this empty to disable the back button
     }
 
     private fun onDigitClick(digit: Int) {

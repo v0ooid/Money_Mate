@@ -18,7 +18,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.ui.navigateUp
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import my.edu.tarc.moneymate.AppLock.AppLock6Activity
-import my.edu.tarc.moneymate.AppLock.AppLockActivity
+import my.edu.tarc.moneymate.AppLock.AppLock4Activity
 import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
 import my.edu.tarc.moneymate.Profile.SignInActivity
 import my.edu.tarc.moneymate.databinding.ActivityMainBinding
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             if (appLockType != null && appLockType.isNotEmpty() && appLockPIN != null && appLockPIN.isNotEmpty()) {
 
                 if (appLockType == "4Digit"){
-                    val intent = Intent(this, AppLockActivity::class.java)
+                    val intent = Intent(this, AppLock4Activity::class.java)
                     intent.putExtra("FRAGMENT_LOCK", "MAIN_ACTIVITY")
                     startActivity(intent)
 
@@ -181,6 +181,7 @@ class MainActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_container)

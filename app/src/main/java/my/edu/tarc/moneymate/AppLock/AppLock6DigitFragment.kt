@@ -11,12 +11,12 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.R
-import my.edu.tarc.moneymate.databinding.FragmentAppLock6DigitBinding
+import my.edu.tarc.moneymate.databinding.ActivityAppLock6Binding
 
 
 class AppLock6DigitFragment : Fragment() {
 
-    private var _binding: FragmentAppLock6DigitBinding? = null
+    private var _binding: ActivityAppLock6Binding? = null
 
     private val binding get() = _binding!!
 
@@ -30,7 +30,7 @@ class AppLock6DigitFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAppLock6DigitBinding.inflate(inflater, container, false)
+        _binding = ActivityAppLock6Binding.inflate(inflater, container, false)
 
         val digitButtons = mutableListOf<Button>()
         for (i in 0..9) {

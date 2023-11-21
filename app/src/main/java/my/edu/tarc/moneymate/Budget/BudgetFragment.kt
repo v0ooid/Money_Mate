@@ -115,8 +115,10 @@ class BudgetFragment : Fragment() {
                 nameTextView.error = "Name cannot be empty"
             } else if (!name.matches(Regex("^[a-zA-Z ]+\$"))) {
                 nameTextView.error = "Enter a valid name"
+            } else if (limit.isEmpty()) {
+                limitTextView.error = "Amount cannot be empty"
             } else if (limit.toString().toDouble() < 0.1) {
-                limitTextView.error = "Amount cannot be 0"
+                limitTextView.error = "Amount cannot be 0 or less than 0"
             } else if (!limit.matches(decimalRegex))
                 limitTextView.error = "Enter a decimal with two decimal places"
             else {

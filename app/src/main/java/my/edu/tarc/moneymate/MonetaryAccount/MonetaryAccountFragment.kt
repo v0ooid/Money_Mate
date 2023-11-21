@@ -137,8 +137,10 @@ class MonetaryAccountFragment : Fragment() {
                 nameTextView.error = "Name cannot be empty"
             } else if (!name.matches(Regex("^[a-zA-Z ]+\$"))) {
                 nameTextView.error = "Enter a valid name"
+            } else if (amount.isEmpty()){
+                amountTextView.error = "Amount cannot be emtpy"
             } else if (amount.toString().toDouble() < 0.1){
-                amountTextView.error = "Amount cannot be 0"
+                amountTextView.error = "Amount cannot be 0 or less than 0"
             } else if (!amount.matches(decimalRegex))
                 amountTextView.error = "Enter a decimal with two decimal places"
             else {

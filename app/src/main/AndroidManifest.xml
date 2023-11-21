@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AppLock.AppLockActivity"
+            android:name=".AppLock.AppLock4Activity"
             android:exported="false" />
 
         <meta-data

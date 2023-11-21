@@ -40,6 +40,11 @@ class AppLock6Activity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Leave this empty to disable the back button
+    }
+
     private fun onDigitClick(digit: Int) {
         // Append the pressed digit to the entered PIN
         if (enteredPin.length < 6) {

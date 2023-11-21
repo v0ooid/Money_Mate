@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/textView12"
-        android:layout_width="159dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/manrope_bold"
         android:text="@string/app_name"
         android:textColor="@color/white"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="245dp" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -81,6 +81,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="303dp"
         android:layout_height="368dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

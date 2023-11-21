@@ -2,7 +2,6 @@ package my.edu.tarc.moneymate.Profile
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -20,16 +19,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment
-import my.edu.tarc.moneymate.AppLock.AppLock6Activity
 import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
-import my.edu.tarc.moneymate.AppLock.AppLockActivity
-import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentProfileBinding
 

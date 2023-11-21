@@ -96,6 +96,18 @@ class AppLockFragment : Fragment() {
             "APP_LOCK_PREFS",
             Context.MODE_PRIVATE
         )
+        val profilePreferences = requireContext().getSharedPreferences(
+            "APP_PROFILE_PREFS",
+            Context.MODE_PRIVATE
+        )
+        val budgetPreferences = requireContext().getSharedPreferences(
+            "APP_BUDGET_PREFS",
+            Context.MODE_PRIVATE
+        )
+        val forumPreferences = requireContext().getSharedPreferences(
+            "APP_FORUM_PREFS",
+            Context.MODE_PRIVATE
+        )
 
         if (!isEnabled) {
             val builder = AlertDialog.Builder(requireContext())
@@ -104,6 +116,18 @@ class AppLockFragment : Fragment() {
 
             builder.setPositiveButton("Yes") { dialog, which ->
                 sharedPreferences.edit().remove("APP_LOCK_ENABLED_KEY").apply()
+                profilePreferences.edit()
+                    .remove("Enabled")
+                    .remove("Locked")
+                    .apply()
+                budgetPreferences.edit()
+                    .remove("Enabled")
+                    .remove("Locked")
+                    .apply()
+                forumPreferences.edit()
+                    .remove("Enabled")
+                    .remove("Locked")
+                    .apply()
                 val navController = findNavController()
                 navController.navigate(R.id.action_appLockFragment_to_profileFragment)
                 dialog.dismiss()

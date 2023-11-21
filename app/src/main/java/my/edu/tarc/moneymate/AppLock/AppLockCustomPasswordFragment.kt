@@ -10,12 +10,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.R
-import my.edu.tarc.moneymate.databinding.FragmentAppLockCustPassBinding
-import my.edu.tarc.moneymate.databinding.FragmentAppLockCustomPasswordBinding
+import my.edu.tarc.moneymate.databinding.ActivityAppLockCustPassBinding
 
 class AppLockCustomPasswordFragment : Fragment() {
 
-    private var _binding: FragmentAppLockCustomPasswordBinding? = null
+    private var _binding: ActivityAppLockCustPassBinding? = null
 
     private val binding get() = _binding!!
 
@@ -30,7 +29,7 @@ class AppLockCustomPasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentAppLockCustomPasswordBinding.inflate(inflater, container, false)
+        _binding = ActivityAppLockCustPassBinding.inflate(inflater, container, false)
 
         binding.btnFinUnlock.setOnClickListener{
             enteredPass = binding.etUnlockPasscode.text.toString()
