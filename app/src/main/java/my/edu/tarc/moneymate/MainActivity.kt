@@ -24,6 +24,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.storage.FirebaseStorage
 import my.edu.tarc.moneymate.AppLock.AppLock6Activity
 import my.edu.tarc.moneymate.AppLock.AppLock4Activity
 import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
@@ -52,9 +53,6 @@ class MainActivity : AppCompatActivity() {
             // User is not logged in, navigate to the login screen
             navigateToLogin()
         } else {
-            Log.w("Testing2", "mainactivity")
-
-            Log.e("Main activity", appLockUnlock.toString())
 
             if (!appLockUnlock) {
                 checkAppLockStatus()
@@ -69,7 +67,8 @@ class MainActivity : AppCompatActivity() {
                         || destination.id == R.id.appLockSetup4DigitFragment || destination.id == R.id.appLockSetup6DigitFragment
                         || destination.id == R.id.appLockSetupCusPassFragment || destination.id == R.id.appLockFragment
                         || destination.id == R.id.appLockTypeFragment || destination.id == R.id.appLock4DigitFragment
-                        || destination.id == R.id.appLock6DigitFragment || destination.id == R.id.appLockCustomPasswordFragment || destination.id == R.id.transactionFragment ) {
+                        || destination.id == R.id.appLock6DigitFragment || destination.id == R.id.appLockCustomPasswordFragment || destination.id == R.id.transactionFragment
+                        || destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment) {
                         navView.visibility = View.GONE
                     } else {
                         navView.visibility = View.VISIBLE

@@ -13,12 +13,11 @@ import android.widget.Button import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
-import my.edu.tarc.moneymate.CustomSpinner.AccountIconItem
+import my.edu.tarc.moneymate.CustomSpinner.ClasslessSpinnerAdapter
+import my.edu.tarc.moneymate.CustomSpinner.ClasslessItem
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.MonetaryAccountDao
 //import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
@@ -40,7 +39,7 @@ class MonetaryAccountFragment : Fragment() {
 
     private val mAccountViewModel: MonetaryAccountViewModel by activityViewModels()
     private var mAccount: MonetaryAccount? = null
-    private var icon = ""
+    private var icon:Int = 0
     lateinit var overlay: View
     lateinit var overlay2: View
 
@@ -82,6 +81,16 @@ class MonetaryAccountFragment : Fragment() {
 
         mAccountViewModel.getAllmAccount.observe(viewLifecycleOwner){
             adapter.setAccount(it)
+
+            if (adapter.itemCount == 0) {
+                Log.e("itemCount", adapter.itemCount.toString())
+                binding.tvEmptyRecyclerView.visibility = View.VISIBLE
+                binding.cardViewTotal.visibility = View.GONE
+            } else {
+                binding.tvEmptyRecyclerView.visibility = View.GONE
+                binding.cardViewTotal.visibility = View.VISIBLE
+
+            }
         }
 
         binding.fabAddAccount.setOnClickListener{
@@ -97,7 +106,6 @@ class MonetaryAccountFragment : Fragment() {
     }
 
     private fun showDialog() {
-
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -113,13 +121,14 @@ class MonetaryAccountFragment : Fragment() {
         val amountTextView = dialog.findViewById<TextView>(R.id.etvAccountAmount)
 
         val iconItems = listOf(
-            AccountIconItem(R.drawable.baseline_attach_money_24),
-            AccountIconItem(R.drawable.baseline_credit_card_24),
-            AccountIconItem(R.drawable.baseline_phone_android_24),
+            ClasslessItem(R.drawable.malaysian_ringgit_icon, "Cash"),
+            ClasslessItem(R.drawable.bank_svgrepo_com__1_, "Bank"),
+            ClasslessItem(R.drawable.baseline_credit_card_24, "Card"),
+            ClasslessItem(R.drawable.baseline_phone_android_24, "Digital Wallet")
         )
 
         val spinner: Spinner = dialog.findViewById(R.id.spinnerAddAccountIcon)
-        val adapter = IconAdapter(requireContext(), iconItems)
+        val adapter = ClasslessSpinnerAdapter(requireContext(), iconItems)
         spinner.adapter = adapter
 
         binding.overlay.visibility = View.VISIBLE
@@ -144,12 +153,14 @@ class MonetaryAccountFragment : Fragment() {
             } else if (!amount.matches(decimalRegex))
                 amountTextView.error = "Enter a decimal with two decimal places"
             else {
-                if (spinner.selectedItemPosition == 0){
-                    icon = "baseline_attach_money_24"
-                } else if (spinner.selectedItemPosition == 1){
-                    icon = "baseline_credit_card_24"
-                } else if (spinner.selectedItemPosition == 2){
-                    icon = "baseline_phone_android_24"
+                if (spinner.selectedItemPosition == 0) {
+                    icon = R.drawable.malaysian_ringgit_icon
+                } else if (spinner.selectedItemPosition == 1) {
+                    icon = R.drawable.bank_svgrepo_com__1_
+                } else if (spinner.selectedItemPosition == 2) {
+                    icon = R.drawable.baseline_credit_card_24
+                } else if (spinner.selectedItemPosition == 3) {
+                    icon = R.drawable.baseline_phone_android_24
                 }
 
                 mAccount = MonetaryAccount(

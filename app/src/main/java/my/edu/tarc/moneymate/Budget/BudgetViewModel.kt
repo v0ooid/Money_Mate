@@ -18,7 +18,7 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
     private var repositoryCategory: CategoryRepository
 
     var getAllBudget: LiveData<List<Budget>>
-    var getAllCategory: LiveData<List<Category>>
+    var getExpenseCategory: LiveData<MutableList<Category>>
 
 
     init {
@@ -29,7 +29,7 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
         repositoryCategory = CategoryRepository(categoryDao)
 
         getAllBudget = repositoryBudget.getAllBudget
-        getAllCategory = repositoryCategory.getAllCategory
+        getExpenseCategory = repositoryCategory.getExpenseCategory
 
     }
 

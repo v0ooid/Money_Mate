@@ -8,12 +8,28 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Expense.Expense
+import java.util.Date
+
 
 @Dao
 interface ExpenseDao {
 
+    @Query("DELETE FROM Expense")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM Expense")
-    fun getAllExpense(): LiveData<MutableList<Expense>>
+    fun getAllData(): LiveData<MutableList<Expense>>
+
+    @Query("SELECT * FROM Expense")
+    fun getExpenseSync(): List<Expense>
+
+    @Query("SELECT Expense.* FROM Expense " +
+            "INNER JOIN Category ON Expense.categoryId = Category.categoryId " +
+            "INNER JOIN monetary_accounts ON Expense.accountId = monetary_accounts.accountId " +
+            "WHERE Expense.accountId = :accountId " +
+            "AND Expense.categoryId = :categoryId " +
+            "AND Expense.date BETWEEN :startDate AND :endDate")
+    fun getExpenseByCriteria(accountId: Long, categoryId: Long, startDate: Date, endDate: Date): List<Expense>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertExpense(expense: Expense)

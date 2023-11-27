@@ -15,8 +15,8 @@ import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
-import my.edu.tarc.moneymate.CustomSpinner.AccountIconItem
+import my.edu.tarc.moneymate.CustomSpinner.ClasslessSpinnerAdapter
+import my.edu.tarc.moneymate.CustomSpinner.ClasslessItem
 import my.edu.tarc.moneymate.R
 
 class mAccountAdapter(
@@ -26,7 +26,7 @@ class mAccountAdapter(
 ) : RecyclerView.Adapter<mAccountAdapter.MyViewHolder>() {
 
     private var dataSet = mutableListOf<MonetaryAccount>()
-    private var icon = ""
+    private var icon: Int = 0
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.ivIconAccountItem)
@@ -47,13 +47,7 @@ class mAccountAdapter(
         val formattedNumber = String.format("%.2f", item.accountBalance)
         holder.amount.text = formattedNumber
 
-        val resourceImage = holder.itemView.context.resources.getIdentifier(
-            item.accountIcon,
-            "drawable",
-            holder.itemView.context.packageName
-        )
-
-        holder.icon.setImageResource(resourceImage)
+        holder.icon.setImageResource(item.accountIcon)
 
         holder.menu.setOnClickListener {
             val popupMenu = PopupMenu(holder.menu.context, holder.menu)
@@ -113,6 +107,7 @@ class mAccountAdapter(
         notifyItemChanged(position)
     }
 
+
     private fun showDialogForEdit(position: Int, editAccount: MonetaryAccount) {
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -126,16 +121,16 @@ class mAccountAdapter(
         window?.attributes = layoutParams
 
         val iconItems = listOf(
-            AccountIconItem(R.drawable.baseline_attach_money_24),
-            AccountIconItem(R.drawable.baseline_credit_card_24),
-            AccountIconItem(R.drawable.baseline_phone_android_24),
-            // Add more items as needed
+            ClasslessItem(R.drawable.malaysian_ringgit_icon, "Cash"),
+            ClasslessItem(R.drawable.bank_svgrepo_com__1_, "Bank"),
+            ClasslessItem(R.drawable.baseline_credit_card_24, "Card"),
+            ClasslessItem(R.drawable.baseline_phone_android_24, "Digital Wallet")
         )
 
         val nameTextView = dialog.findViewById<TextView>(R.id.etvAccountName)
         val amountTextView = dialog.findViewById<TextView>(R.id.etvAccountAmount)
         val spinner: Spinner = dialog.findViewById(R.id.spinnerAddAccountIcon)
-        val adapter = IconAdapter(context, iconItems)
+        val adapter = ClasslessSpinnerAdapter(context, iconItems)
         spinner.adapter = adapter
 
         // Add more dialog UI components as needed
@@ -173,11 +168,13 @@ class mAccountAdapter(
             else {
 
                 if (spinner.selectedItemPosition == 0) {
-                    icon = "baseline_attach_money_24"
+                    icon = R.drawable.malaysian_ringgit_icon
                 } else if (spinner.selectedItemPosition == 1) {
-                    icon = "baseline_credit_card_24"
+                    icon = R.drawable.bank_svgrepo_com__1_
                 } else if (spinner.selectedItemPosition == 2) {
-                    icon = "baseline_phone_android_24"
+                    icon = R.drawable.baseline_credit_card_24
+                } else if (spinner.selectedItemPosition == 3) {
+                    icon = R.drawable.baseline_phone_android_24
                 }
 
 

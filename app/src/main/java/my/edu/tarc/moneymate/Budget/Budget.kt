@@ -3,12 +3,14 @@ package my.edu.tarc.moneymate.Budget
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.common.math.DoubleMath
 import my.edu.tarc.moneymate.Category.Category
 
 @Entity(
     tableName = "budgets",
+    indices = [Index(value = ["categoryId"])],
     foreignKeys = [
         ForeignKey(
             entity = Category::class,

@@ -40,6 +40,7 @@ class TransactionFragment : Fragment() {
     val viewModel: TransactionViewModel by activityViewModels()
     val incomeViewModel: IncomeViewModel by activityViewModels()
     val expenseViewModel : ExpenseViewModel by activityViewModels()
+
     private var currentNumber = ""
     private var firstNumber = ""
     private var result = ""
@@ -70,8 +71,6 @@ class TransactionFragment : Fragment() {
                 binding.cardDesc.visibility = View.GONE
             }
         }
-
-
 
         binding.leftIcon.setOnClickListener {
             findNavController().navigateUp()
@@ -263,11 +262,11 @@ class TransactionFragment : Fragment() {
 
     private fun addRecordIntoDatabase(){
         var description = ""
-        var acccount = ""
+        var acccount = 0
         var title = ""
         var result = ""
         var transactionTypeSelected = ""
-        var categoryId = ""
+        var categoryId = 0
         var categoryImage:Int = 0
         viewModel.transactionType.observe(viewLifecycleOwner){
             data -> transactionTypeSelected = data
@@ -279,26 +278,28 @@ class TransactionFragment : Fragment() {
             title = data
         }
         viewModel.selectedAccount.observe(viewLifecycleOwner) { data ->
-            acccount = data
+//            acccount = data
         }
         viewModel.result.observe(viewLifecycleOwner) { data ->
             result = data
         }
         viewModel.categoryId.observe(viewLifecycleOwner){data ->
-            categoryId = data
+//            categoryId = data
         }
         viewModel.categoryImage.observe(viewLifecycleOwner){data->
             categoryImage = data
         }
         Log.d("transactionTypeSelected", transactionTypeSelected)
         if (transactionTypeSelected == "income") {
-            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
-            incomeViewModel.addIncome(income)
+//            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+//            incomeViewModel.addIncome(income)
         }
         else if (transactionTypeSelected == "expense")
         {
-            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
-            expenseViewModel.addExpense(expense)
+//            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+//            expenseViewModel.addExpense(expense)
+        } else if (transactionTypeSelected == "transfer"){
+
         }
     }
 

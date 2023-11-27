@@ -2,8 +2,6 @@ package my.edu.tarc.moneymate.Budget
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.CustomSpinner.IconAdapter
-import my.edu.tarc.moneymate.CustomSpinner.AccountIconItem
-import my.edu.tarc.moneymate.CustomSpinner.CategorySpinnerAdapter
+import my.edu.tarc.moneymate.CustomSpinner.ClassSpinnerAdapter
 import my.edu.tarc.moneymate.R
 
 class BudgetAdapter(
@@ -70,7 +66,6 @@ class BudgetAdapter(
 
             popupMenu.gravity = Gravity.END
 
-
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.pmMAccountEdit -> {
@@ -87,7 +82,6 @@ class BudgetAdapter(
                     else -> false
                 }
             }
-
             popupMenu.show()
         }
     }
@@ -150,7 +144,13 @@ class BudgetAdapter(
         val nameTextView = dialog.findViewById<TextView>(R.id.eTBudgetName)
         val limitTextView = dialog.findViewById<TextView>(R.id.eTBudgetLimit)
         val spinner: Spinner = dialog.findViewById(R.id.sBudgetCategory)
-        val adapter = CategorySpinnerAdapter(context, categoryDataSet)
+//        val adapter = ItemSpinnerAdapter(context, categoryDataSet)
+        val adapter = ClassSpinnerAdapter(
+            context,
+            categoryDataSet,
+            {category -> category.image },
+            {category -> category.title}
+        )
         spinner.adapter = adapter
 
         // Add more dialog UI components as needed

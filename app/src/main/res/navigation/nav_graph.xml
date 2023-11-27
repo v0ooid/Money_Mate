@@ -34,6 +34,12 @@
         <action
             android:id="@+id/action_profileFragment_to_appLockCustomPasswordFragment"
             app:destination="@id/appLockCustomPasswordFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_dataExportFragment"
+            app:destination="@id/dataExportFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_dataSyncFragment"
+            app:destination="@id/dataSyncFragment" />
     </fragment>
     <activity
         android:id="@+id/signInActivity"
@@ -132,7 +138,8 @@
         android:id="@+id/appLock4DigitFragment"
         android:name="my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment"
         android:label="AppLock4DigitFragment"
-        tools:layout="@layout/fragment_app_lock4_digit">
+        tools:layout="@layout/activity_app_lock">
+
         <action
             android:id="@+id/action_appLock4DigitFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -141,7 +148,7 @@
         android:id="@+id/appLock6DigitFragment"
         android:name="my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment"
         android:label="AppLock6DigitFragment"
-        tools:layout="@layout/fragment_app_lock6_digit">
+        tools:layout="@layout/activity_app_lock6">
         <action
             android:id="@+id/action_appLock6DigitFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -163,5 +170,23 @@
         <action
             android:id="@+id/action_recordFragment_to_transactionFragment"
             app:destination="@id/transactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dataExportFragment"
+        android:name="my.edu.tarc.moneymate.DataExport.DataExportFragment"
+        android:label="fragment_data_export"
+        tools:layout="@layout/fragment_data_export" >
+        <action
+            android:id="@+id/action_dataExportFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dataSyncFragment"
+        android:name="my.edu.tarc.moneymate.DataSync.DataSyncFragment"
+        android:label="fragment_data_sync"
+        tools:layout="@layout/fragment_data_sync" >
+        <action
+            android:id="@+id/action_dataSyncFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

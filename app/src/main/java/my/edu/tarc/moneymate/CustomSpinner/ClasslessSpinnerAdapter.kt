@@ -1,20 +1,18 @@
 package my.edu.tarc.moneymate.CustomSpinner
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.R
 
-class CategorySpinnerAdapter(
+class ClasslessSpinnerAdapter(
     context: Context,
-    private val categories: List<Category>
-) : ArrayAdapter<Category>(context, 0, categories) {
+    private val items: List<ClasslessItem>
+) : ArrayAdapter<ClasslessItem>(context, 0, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createView(position, convertView, parent)
@@ -26,19 +24,13 @@ class CategorySpinnerAdapter(
 
     private fun createView(position: Int, convertView: View?, parent: ViewGroup): View {
         val item = getItem(position)
-        val view = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.category_spinner_layout, parent, false)
-
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.category_spinner_layout, parent, false)
 
         val iconImageView: ImageView = view.findViewById(R.id.ivSpinnerCategoryIcon)
         val textTextView: TextView = view.findViewById(R.id.tvSpinnerCategoryName)
 
-        item?.let {
-            iconImageView.setImageResource(item.image)
-            textTextView.text = it.title
-            Log.e("Check", item.image.toString())
-        }
-
+        iconImageView.setImageResource(item?.iconResId ?: R.drawable.baseline_attach_money_24)
+        textTextView.text = item?.title
 
         return view
     }

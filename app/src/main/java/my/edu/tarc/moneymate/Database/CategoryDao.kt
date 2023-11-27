@@ -8,16 +8,28 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.Income.Income
+
 @Dao
 interface CategoryDao {
 
+    @Query("DELETE FROM Category")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM Category")
-    fun getAllCategory(): LiveData<List<Category>>
-    @Query("SELECT * FROM Category WHERE type = 'income'")
+    fun getAllCategories(): LiveData<MutableList<Category>>
+
+    @Query("SELECT * FROM Category")
+    fun getCatSync(): List<Category>
+
+    @Query("SELECT * FROM Category WHERE type = 'Income'")
     fun getIncomeCategory(): LiveData<MutableList<Category>>
-    @Query("SELECT * FROM Category WHERE type = 'expense'")
+
+    @Query("SELECT * FROM Category WHERE type = 'Expenses'")
     fun getExpenseCategory(): LiveData<MutableList<Category>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(dataList: List<Category>)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCategory(category: Category)
 
@@ -26,5 +38,7 @@ interface CategoryDao {
 
     @Delete
     suspend fun deleteCategory(category: Category)
+
+
 
 }

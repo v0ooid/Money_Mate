@@ -10,7 +10,9 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import my.edu.tarc.moneymate.Database.FirestoreHelper
 import my.edu.tarc.moneymate.MainActivity
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.ActivitySignInBinding
@@ -88,7 +90,13 @@ class SignInActivity : AppCompatActivity() {
                         baseContext, "Success",
                         Toast.LENGTH_SHORT
                     ).show()
-                    
+
+                    val userId = auth.currentUser?.uid
+                    if (userId != null) {
+                        val firestoreHelper = FirestoreHelper(FirebaseFirestore.getInstance(), this)
+                        firestoreHelper.restoreDataFromFirebase(userId)
+                    }
+
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(
@@ -109,7 +117,9 @@ class SignInActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val userId = auth.currentUser?.uid
+        val email = auth.currentUser?.email
         editor.putString("userId", userId)
+            .putString("email", email)
             .apply()
     }
 
