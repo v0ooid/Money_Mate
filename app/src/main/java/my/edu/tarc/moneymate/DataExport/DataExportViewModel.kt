@@ -48,23 +48,17 @@ class DataExportViewModel(application: Application) : AndroidViewModel(applicati
         getAllMAccount = mAccountDao.getAllData()
     }
 
-    // Function to get account details by ID
-
-    fun getAccountNameById(accountId: String): LiveData<MonetaryAccount> {
-        val mAccountDao = AppDatabase.getDatabase(getApplication()).monetaryAccountDao()// Replace this with your DAO
-
-        return mAccountDao.getAccountById(accountId)
-    }
-
     // Function to fetch income data based on selected criteria
     fun fetchIncomeByCriteria(
         accountId: Long,
-        categoryId: Long,
-        startDate: Date,
-        endDate: Date
+        categoryId: Long
+//        startDate: Date,
+//        endDate: Date
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val incomeList = incomeRepo.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
+//            val incomeList = incomeRepo.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
+            val incomeList = incomeRepo.getIncomeByCriteria(accountId, categoryId)
+
             _incomeLiveData.postValue(incomeList)
         }
     }

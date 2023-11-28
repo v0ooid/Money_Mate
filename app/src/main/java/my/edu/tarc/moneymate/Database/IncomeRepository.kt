@@ -2,6 +2,7 @@ package my.edu.tarc.moneymate.Database
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import my.edu.tarc.moneymate.DataExport.IncomeWithAccountName
 import my.edu.tarc.moneymate.Income.Income
 import java.util.Date
 
@@ -10,11 +11,13 @@ class IncomeRepository (private val incomeDao: IncomeDao) {
 
     suspend fun getIncomeByCriteria(
         accountId: Long,
-        categoryId: Long,
-        startDate: Date,
-        endDate: Date
+        categoryId: Long
+//        startDate: Date,
+//        endDate: Date
     ): List<Income> {
-        return incomeDao.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
+        return incomeDao.getIncomeByCriteria(accountId, categoryId)
+
+//        return incomeDao.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
     }
 
     @WorkerThread

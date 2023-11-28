@@ -77,10 +77,12 @@
 
     <TextView
         android:id="@+id/textView42"
-        android:layout_width="317dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Back up your data to Cloud Database. Your transactions records, monetary account, budget and goals will be backup to Firebase Cloud Database."
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView40"
         app:layout_constraintTop_toBottomOf="@+id/textView40" />
 
@@ -116,10 +118,12 @@
 
     <TextView
         android:id="@+id/textView46"
-        android:layout_width="317dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Data will be restore from cloud database. Data from cloud database will replace "
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView45"
         app:layout_constraintTop_toBottomOf="@+id/textView45" />
 </androidx.constraintlayout.widget.ConstraintLayout>

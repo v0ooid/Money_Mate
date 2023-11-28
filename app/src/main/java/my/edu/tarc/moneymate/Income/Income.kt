@@ -30,7 +30,7 @@ import java.util.Date
 data class Income (
     @PrimaryKey(autoGenerate = true)
     val incomeId: Long = 0,
-    var title:String,
+    var incomeTitle:String,
     var image: Int,
     var description: String,
     var amount: Int,

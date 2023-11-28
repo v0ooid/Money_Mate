@@ -1,6 +1,7 @@
 package my.edu.tarc.moneymate.Database
 
 import android.content.Context
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -56,7 +57,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
 
         // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["incomeId"] = income.incomeId
-        dataMap["title"] = income.title
+        dataMap["title"] = income.incomeTitle
         dataMap["description"] = income.description
         dataMap["amount"] = income.amount
         dataMap["date"] = income.date
@@ -123,7 +124,9 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     }
 
     fun restoreExpenseFromFirebase(userId: String) {
-        val dataList = mutableListOf<Income>()
+        val dataList = mutableListOf<Expense>()
+
+        Log.e("income", "Working")
 
         db.collection("users")
             .document(userId)
@@ -135,22 +138,22 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                     println("Raw data: $data")
 
                     data?.let {
-                        val income = Income(
-                            incomeId = (it["incomeId"] as? Long) ?: 0L,
-                            title = it["title"] as? String ?: "",
-                            image = (it["image"] as? Int) ?: 0,
+                        val expense = Expense(
+                            expenseId  = (it["expenseId"] as? Int) ?: 0,
+                            expense_title = it["expense_title"] as? String ?: "",
+                            expense_icon_image = (it["expense_icon_image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
                             date =  it["date"] as? Date ?: Date(),
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
                         )
-                        dataList.add(income)
+                        dataList.add(expense)
                     }
                 }
 
                 GlobalScope.launch {
-                    AppDatabase.getDatabase(context)
+                    AppDatabase.getDatabase(context).expenseDao().insertAll(dataList)
 
                 }
             }
@@ -163,11 +166,15 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun restoreIncomeFromFirebase(userId: String) {
         val dataList = mutableListOf<Income>()
 
+        Log.e("income", "Working")
+
         db.collection("users")
             .document(userId)
             .collection("Income")
             .get()
             .addOnSuccessListener { querySnapshot ->
+                println("Working income")
+
                 for (document in querySnapshot.documents) {
                     val data = document.data
                     println("Raw data: $data")
@@ -175,7 +182,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                     data?.let {
                         val income = Income(
                             incomeId = (it["incomeId"] as? Long) ?: 0L,
-                            title = it["title"] as? String ?: "",
+                            incomeTitle = it["title"] as? String ?: "",
                             image = (it["image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
@@ -188,7 +195,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                 }
 
                 GlobalScope.launch {
-                    AppDatabase.getDatabase(context)
+                    AppDatabase.getDatabase(context).incomeDao().insertAll(dataList)
 
                 }
             }

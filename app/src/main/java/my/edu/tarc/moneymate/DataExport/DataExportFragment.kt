@@ -188,14 +188,19 @@ class DataExportFragment : Fragment() {
 
             val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
+            Log.e("selectedAccount", selectedAccount.accountId.toString())
             Log.e("selectedTransaction", selectedTransaction.toString())
+            Log.e("selectedCategory", selectedCategory.categoryId.toString())
+            Log.e("startDate", startDate.toString())
+            Log.e("endDate", endDate.toString())
+
 
             if (selectedTransaction.title == "Income") {
                 dataExportViewModel.fetchIncomeByCriteria(
                     selectedAccount.accountId,
-                    selectedCategory.categoryId,
-                    dateFormat.parse(startDate),
-                    dateFormat.parse(endDate),
+                    selectedCategory.categoryId
+//                    dateFormat.parse(startDate),
+//                    dateFormat.parse(endDate),
                 )
                 dataExportViewModel.incomeLiveData.observe(viewLifecycleOwner) { incomeList ->
                     when (selectedFileType.title){
@@ -227,55 +232,6 @@ class DataExportFragment : Fragment() {
     }
 
     //Original
-//    @RequiresApi(Build.VERSION_CODES.Q)
-//    private fun generateIncomeCSVFile(
-//        incomeList: List<Income>
-//    ): Uri? {
-//        val csvHeader =
-//            "ACCOUNT, TRANSACTION TYPE, TITLE, CATEGORY, AMOUNT, DATE\n" // Header of the CSV file
-//
-//        val csvContent = StringBuilder()
-//        csvContent.append(csvHeader)
-//
-//        val allAccounts: MutableMap<Long, String> = mutableMapOf()
-//
-//
-////         Iterate through the income list and append data to the CSV content
-//        for (income in incomeList) {
-//            val accountId = income.accountId
-//            val accountName = allAccounts[accountId] ?: "Unknown Account"
-//
-//
-//            val title = income.title
-//            val amount = income.amount.toString()
-//            val date = income.date.toString()
-//
-//            val row = "$title,$amount,$date\n"
-//            csvContent.append(row)
-//        }
-//
-//        // Write the CSV content to a file
-//        val fileName = "income_data.csv"
-//        val fileContent = csvContent.toString().toByteArray()
-//
-//        val contentValues = ContentValues().apply {
-//            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-//            put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
-//            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-//        }
-//
-//        val resolver = requireContext().contentResolver
-//        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-//
-//        uri?.let { fileUri ->
-//            resolver.openOutputStream(fileUri)?.use { outputStream ->
-//                outputStream.write(fileContent)
-//            }
-//        }
-//
-//        return uri
-//    }
-
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun generateIncomeCSVFile(
         incomeList: List<Income>
@@ -286,34 +242,22 @@ class DataExportFragment : Fragment() {
         val csvContent = StringBuilder()
         csvContent.append(csvHeader)
 
-        val allAccounts: MutableMap<Long, String> = mutableMapOf()
+        Log.e("incomeList", incomeList.toString())
 
 //         Iterate through the income list and append data to the CSV content
         for (income in incomeList) {
-            val accountId = income.accountId
 
-            dataExportViewModel.getAccountNameById(accountId.toString())
-                .observe(viewLifecycleOwner) { account ->
-                    account?.let {
-                        allAccounts[accountId] = it.accountName
+//            val accountName = income.accountName
+            val title = income.incomeTitle
+//            val category = income.title
+            val amount = income.amount.toString()
+            val date = income.date.toString()
 
-                        if (allAccounts.size == incomeList.size) {
-                            for (income in incomeList) {
-                                val accountId = income.accountId
-                                val accountName = allAccounts[accountId] ?: "Unknown Account"
-
-                                val title = income.title
-                                val amount = income.amount.toString()
-                                val date = income.date.toString()
-
-                                val row = "$accountName,Income,$title,$amount,$date\n"
-                                csvContent.append(row)
-                            }
-                        }
-                    }
-                }
+            val row = "Income,$title,$amount,$date\n"
+            csvContent.append(row)
         }
 
+        // Write the CSV content to a file
         val fileName = "income_data.csv"
         val fileContent = csvContent.toString().toByteArray()
 
