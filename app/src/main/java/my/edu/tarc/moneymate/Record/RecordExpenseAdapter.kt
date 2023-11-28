@@ -114,7 +114,7 @@ class RecordExpenseAdapter constructor(
         recordList.removeAt(position)
         notifyDataSetChanged()
         if (type == "expense") {
-            val deleteExpense = Expense(id, title, image, desc, amount, categoryId, accountId, date)
+            val deleteExpense = Expense(id, title, image, desc, amount, categoryId.toLong(), accountId.toLong(), date)
 
             // Call the delete method in the ViewModel to delete from the database
             expenseViewModel.deleteExpense(deleteExpense)
@@ -193,13 +193,13 @@ class RecordExpenseAdapter constructor(
                     type = "Income"
                 )
                 val updateExpense = Expense(
-                    id = editRecord.id,
-                    title = title,
-                    image = editRecord.image,
+                    expenseId = editRecord.id,
+                    expense_title = title,
+                    expense_icon_image = editRecord.image,
                     description = desc.toString(),
                     amount = amount.toString().toInt(),
-                    categoryId = editRecord.categoryId,
-                    accountId = editRecord.accountId,
+                    categoryId = editRecord.categoryId.toLong(),
+                    accountId = editRecord.accountId.toLong(),
                     date = editRecord.date
                 )
 

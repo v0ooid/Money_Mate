@@ -9,8 +9,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import my.edu.tarc.moneymate.Alarm.AlarmNotification
 import my.edu.tarc.moneymate.Budget.Budget
@@ -25,7 +23,7 @@ import my.edu.tarc.moneymate.R
 import java.util.Calendar
 import java.util.Date
 
-@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class], version = 2, exportSchema = false)
+@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class] , version = 3, exportSchema = false)
 @TypeConverters(ListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -49,6 +47,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val monetaryAccountDao = INSTANCE?.monetaryAccountDao()
 
 
+
                 categoryDao?.insertCategory(Category(0, "Salary", R.drawable.baseline_email_24, "income"))
                 categoryDao?.insertCategory(Category(1, "Payment", R.drawable.baseline_email_24, "income"))
                 categoryDao?.insertCategory(Category(2, "Investment", R.drawable.baseline_email_24, "income"))
@@ -61,17 +60,18 @@ abstract class AppDatabase : RoomDatabase() {
                 categoryDao?.insertCategory(Category(8, "Drink", R.drawable.baseline_email_24, "expense"))
                 categoryDao?.insertCategory(Category(9, "Food", R.drawable.baseline_email_24, "expense"))
 
-                incomeDao?.insertIncome(Income(1, "Salary", R.drawable.baseline_email_24, "July Salary",100,"1","1","2023-10-16 11:55"))
-                incomeDao?.insertIncome(Income(2, "Investment", R.drawable.baseline_email_24, "July Investment",200,"2","1","2023-11-16 11:55"))
-                incomeDao?.insertIncome(Income(3, "Payback", R.drawable.baseline_email_24, "July Payback",300,"3","1","2023-9-16 11:55"))
-                incomeDao?.insertIncome(Income(4, "Allowance", R.drawable.baseline_email_24, "July Allowance",400,"4","1","2023-1-16 11:55"))
+                monetaryAccountDao?.insertAccount(MonetaryAccount(1, "Cash", 1000.0,R.drawable.baseline_email_24))
 
-                expenseDao?.insertExpense(Expense(1, "Pay", R.drawable.baseline_email_24, "July Pay",400,"5","1","2023-12-16 11:55"))
-                expenseDao?.insertExpense(Expense(2, "Installment", R.drawable.baseline_email_24, "July Installment",300,"6","1","2023-10-16 11:55"))
-                expenseDao?.insertExpense(Expense(3, "Drink", R.drawable.baseline_email_24, "July Drink",200,"7","1","2023-11-16 11:55"))
-                expenseDao?.insertExpense(Expense(4, "Food", R.drawable.baseline_email_24, "July Food",100,"8","1","2023-12-16 11:55"))
+                incomeDao?.insertIncome(Income(1, "Salary", R.drawable.baseline_email_24, "July Salary",100,1,1,"2023-10-16 11:55"))
+                incomeDao?.insertIncome(Income(2, "Investment", R.drawable.baseline_email_24, "July Investment",200,2,1,"2023-11-16 11:55"))
+                incomeDao?.insertIncome(Income(3, "Payback", R.drawable.baseline_email_24, "July Payback",300,3,1,"2023-9-16 11:55"))
+                incomeDao?.insertIncome(Income(4, "Allowance", R.drawable.baseline_email_24, "July Allowance",400,4,1,"2023-1-16 11:55"))
 
-                monetaryAccountDao?.insertAccount(MonetaryAccount(1, "Cash", 1000.0,"R.drawable.baseline_email_24"))
+                expenseDao?.insertExpense(Expense(1, "Pay", R.drawable.baseline_email_24, "July Pay",400,5,1,"2023-12-16 11:55"))
+                expenseDao?.insertExpense(Expense(2, "Installment", R.drawable.baseline_email_24, "July Installment",300,6,1,"2023-10-16 11:55"))
+                expenseDao?.insertExpense(Expense(3, "Drink", R.drawable.baseline_email_24, "July Drink",200,7,1,"2023-11-16 11:55"))
+                expenseDao?.insertExpense(Expense(4, "Food", R.drawable.baseline_email_24, "July Food",100,8,1,"2023-12-16 11:55"))
+
 
             }
         }

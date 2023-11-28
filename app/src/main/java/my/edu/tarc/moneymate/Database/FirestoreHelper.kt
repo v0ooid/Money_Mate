@@ -139,12 +139,12 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
 
                     data?.let {
                         val expense = Expense(
-                            expenseId  = (it["expenseId"] as? Int) ?: 0,
+                            expenseId  = (it["expenseId"] as? Long) ?: 0,
                             expense_title = it["expense_title"] as? String ?: "",
                             expense_icon_image = (it["expense_icon_image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
-                            date =  it["date"] as? Date ?: Date(),
+                            date =  (it["date"] as? String) ?: "",
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
                         )
@@ -186,7 +186,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                             image = (it["image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
-                            date =  it["date"] as? Date ?: Date(),
+                            date =  (it["date"] as? String) ?: "",
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
                         )

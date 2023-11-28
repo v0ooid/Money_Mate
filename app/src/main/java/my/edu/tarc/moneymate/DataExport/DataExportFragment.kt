@@ -210,12 +210,12 @@ class DataExportFragment : Fragment() {
                     }
                 }
             } else if (selectedTransaction.title == "Expenses") {
-                dataExportViewModel.fetchExpenseByCriteria(
-                    selectedAccount.accountId,
-                    selectedCategory.categoryId,
-                    dateFormat.parse(startDate),
-                    dateFormat.parse(endDate),
-                )
+//                dataExportViewModel.fetchExpenseByCriteria(
+//                    selectedAccount.accountId,
+//                    selectedCategory.categoryId,
+//                    dateFormat.parse(startDate),
+//                    dateFormat.parse(endDate),
+//                )
                 dataExportViewModel.expenseLiveData.observe(viewLifecycleOwner) { expensesList ->
                     // Handle expenses list and export it to CSV or JSON
                     when (selectedFileType.title){

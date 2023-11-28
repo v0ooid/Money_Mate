@@ -12,14 +12,14 @@ class ExpenseRepository (private val expenseDao: ExpenseDao) {
 
 //    val getAllExpense: LiveData<MutableList<Expense>> = expenseDao.getAllData()
 
-    suspend fun getExpenseByCriteria(
-        accountId: Long,
-        categoryId: Long,
-        startDate: Date,
-        endDate: Date
-    ): List<Expense> {
-        return expenseDao.getExpenseByCriteria(accountId, categoryId, startDate, endDate)
-    }
+//    suspend fun getExpenseByCriteria(
+//        accountId: Long,
+//        categoryId: Long,
+//        startDate: Date,
+//        endDate: Date
+//    ): List<Expense> {
+//        return expenseDao.getExpenseByCriteria(accountId, categoryId, startDate, endDate)
+//    }
 
     @WorkerThread
     suspend fun addExpense(expense: Expense){

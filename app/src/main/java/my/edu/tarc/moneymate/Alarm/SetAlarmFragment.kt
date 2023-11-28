@@ -333,16 +333,16 @@ class SetAlarmFragment : Fragment() {
         scheduleAlarm(alarm)
         Log.d("Alarm ID after being set", alarm.id.toString())
 
-        binding.timepicker.setOnTimeChangedListener { view, hourOfDays, minitOfDays ->
-
-            hour = hourOfDays
-            minute = minitOfDays
-
-            val checkAmOrPm = if (hourOfDays < 12) "AM" else "PM"
-            val displayHour = if (hourOfDays > 12) hourOfDays - 12 else hourOfDays
-            Log.d("test hour", hour.toString())
-            Log.d("test hour", minute.toString())
-        }
+//        binding.timepicker.setOnTimeChangedListener { view, hourOfDays, minitOfDays ->
+//
+//            hour = hourOfDays
+//            minute = minitOfDays
+//
+//            val checkAmOrPm = if (hourOfDays < 12) "AM" else "PM"
+//            val displayHour = if (hourOfDays > 12) hourOfDays - 12 else hourOfDays
+//            Log.d("test hour", hour.toString())
+//            Log.d("test hour", minute.toString())
+//        }
         specificAlarm = alarm
     }
 

@@ -119,7 +119,7 @@ class RecordAdapter constructor(
         recordList.removeAt(position)
         notifyDataSetChanged()
         if (type == "income") {
-            val deleteIncome = Income(id, title, image, desc, amount, categoryId, accountId, date)
+            val deleteIncome = Income(id, title, image, desc, amount, categoryId.toLong(), accountId.toLong(), date)
 
             // Call the delete method in the ViewModel to delete from the database
             incomeViewModel.deleteIncome(deleteIncome)
@@ -199,13 +199,13 @@ class RecordAdapter constructor(
                     type = "Income"
                 )
                 val updateIncome = Income(
-                    id = editRecord.id,
-                    title = title,
+                    incomeId = editRecord.id,
+                    incomeTitle = title,
                     image = editRecord.image,
                     description = desc.toString(),
                     amount = amount.toString().toInt(),
-                    categoryId = editRecord.categoryId,
-                    accountId = editRecord.accountId,
+                    categoryId = editRecord.categoryId.toLong(),
+                    accountId = editRecord.accountId.toLong(),
                     date = editRecord.date
                 )
 

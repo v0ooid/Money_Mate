@@ -36,8 +36,8 @@ data class Expense(
     var expense_icon_image: Int,
     var description: String,
     var amount: Int,
-    var categoryId: String,
+    var categoryId: Long,
     @ColumnInfo(index = true) // Creates an index on accountId for performance
-    var accountId: String,
+    var accountId: Long,
     var date: String,
 )

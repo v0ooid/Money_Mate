@@ -63,17 +63,17 @@ class DataExportViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun fetchExpenseByCriteria(
-        accountId: Long,
-        categoryId: Long,
-        startDate: Date,
-        endDate: Date
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val expenseList = expenseRepo.getExpenseByCriteria(accountId, categoryId, startDate, endDate)
-            _expenseLiveData.postValue(expenseList)
-        }
-    }
+//    fun fetchExpenseByCriteria(
+//        accountId: Long,
+//        categoryId: Long,
+//        startDate: Date,
+//        endDate: Date
+//    ) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val expenseList = expenseRepo.getExpenseByCriteria(accountId, categoryId, startDate, endDate)
+//            _expenseLiveData.postValue(expenseList)
+//        }
+//    }
 
     fun getAllIncomeCategories(): LiveData<List<Category>> {
         val mutableIncomeCategories: LiveData<MutableList<Category>> = categoryRepo.getIncomeCategory

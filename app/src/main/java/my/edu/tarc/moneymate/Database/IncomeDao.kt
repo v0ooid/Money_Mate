@@ -32,7 +32,9 @@ interface IncomeDao {
 
     @Query("SELECT * FROM Income WHERE strftime('%Y-%m', date) = :yearMonth")
     suspend fun getIncomeForMonth(yearMonth: String): List<Income>
-    fun getAllData(): LiveData<MutableList<Income>>
+
+//
+//    fun getAllData(): LiveData<MutableList<Income>>
 
     @Query("SELECT * FROM INCOME")
     fun getIncomeSync(): List<Income>

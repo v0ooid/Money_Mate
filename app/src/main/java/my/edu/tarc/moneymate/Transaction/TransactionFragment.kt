@@ -310,14 +310,14 @@ class TransactionFragment : Fragment() {
         viewModel.categoryImage.observe(viewLifecycleOwner){data->
             categoryImage = data
         }
-        Log.d("transactionTypeSelected", transactionTypeSelected)
+
         if (transactionTypeSelected == "income") {
-            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
             incomeViewModel.addIncome(income)
         }
         else if (transactionTypeSelected == "expense")
         {
-            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
             expenseViewModel.addExpense(expense)
         }
     }

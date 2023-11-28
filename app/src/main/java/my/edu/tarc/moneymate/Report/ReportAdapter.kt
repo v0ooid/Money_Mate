@@ -85,9 +85,9 @@ class ReportAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // Define ViewHolders for each type
     class IncomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(income: Income) {
-            itemView.findViewById<TextView>(R.id.report_income_source).text = income.title
+            itemView.findViewById<TextView>(R.id.report_income_source).text = income.incomeTitle
             itemView.findViewById<TextView>(R.id.report_income_date).text = income.date
-            itemView.findViewById<TextView>(R.id.report_income_category).text = income.title
+            itemView.findViewById<TextView>(R.id.report_income_category).text = income.incomeTitle
             itemView.findViewById<TextView>(R.id.report_income_amount).text = "RM " + income.amount.toString()
         }
     }
@@ -103,9 +103,9 @@ class ReportAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ExpenseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(expense: Expense) {
-            itemView.findViewById<TextView>(R.id.report_expense_source).text = expense.title
+            itemView.findViewById<TextView>(R.id.report_expense_source).text = expense.expense_title
             itemView.findViewById<TextView>(R.id.report_expense_date).text = expense.date
-            itemView.findViewById<TextView>(R.id.report_expense_category).text = expense.title
+            itemView.findViewById<TextView>(R.id.report_expense_category).text = expense.expense_title
             itemView.findViewById<TextView>(R.id.report_expense_amount).text = "RM " + expense.amount.toString()
         }
     }

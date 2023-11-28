@@ -330,7 +330,7 @@ class ReportFragment : Fragment() {
         val entries = ArrayList<PieEntry>()
 
         // Assuming each Income has a category or type that you want to display
-        val incomeByCategory = data.groupBy { it.title } // Replace 'category' with the actual field
+        val incomeByCategory = data.groupBy { it.incomeTitle } // Replace 'category' with the actual field
         for ((category, incomes) in incomeByCategory) {
             val totalAmount = incomes.sumOf { it.amount }
             entries.add(PieEntry(totalAmount.toFloat(), category))
@@ -350,7 +350,7 @@ class ReportFragment : Fragment() {
         val entries = ArrayList<PieEntry>()
 
         // Assuming each Income has a category or type that you want to display
-        val expenseByCategory = data.groupBy { it.title } // Replace 'category' with the actual field
+        val expenseByCategory = data.groupBy { it.expense_title } // Replace 'category' with the actual field
         for ((category, incomes) in expenseByCategory) {
             val totalAmount = incomes.sumOf { it.amount }
             entries.add(PieEntry(totalAmount.toFloat(), category))
