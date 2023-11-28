@@ -2,6 +2,7 @@ package my.edu.tarc.moneymate.Record
 
 import android.app.Dialog
 import android.content.Context
+import android.text.InputType
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -154,6 +155,8 @@ class RecordExpenseAdapter constructor(
         val editTextRecordTitle = dialog.findViewById<TextView>(R.id.etRecordTitle)
         val editTextRecordAmount = dialog.findViewById<TextView>(R.id.etRecordAmount)
         val editTextDesc = dialog.findViewById<TextView>(R.id.etRecordDesc)
+
+        editTextRecordAmount.inputType = InputType.TYPE_CLASS_NUMBER
 
         // Add more dialog UI components as needed
 

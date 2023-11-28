@@ -2,6 +2,7 @@ package my.edu.tarc.moneymate.Record
 
 import android.app.Dialog
 import android.content.Context
+import android.text.InputType
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -161,6 +162,7 @@ class RecordAdapter constructor(
         val editTextRecordAmount = dialog.findViewById<TextView>(R.id.etRecordAmount)
         val editTextDesc = dialog.findViewById<TextView>(R.id.etRecordDesc)
 
+        editTextRecordAmount.inputType = InputType.TYPE_CLASS_NUMBER
         // Add more dialog UI components as needed
 
         // Pre-populate the dialog for editing
@@ -174,7 +176,7 @@ class RecordAdapter constructor(
             // Handle the edit confirmation logic here
 
             val title = editTextRecordTitle.text.toString()
-            val amount = editTextRecordAmount.text
+            val amount = editTextRecordAmount.text.toString()
             val desc = editTextDesc.text
             val decimalRegex = Regex("^\\d+(\\.\\d{2})?\$")
 

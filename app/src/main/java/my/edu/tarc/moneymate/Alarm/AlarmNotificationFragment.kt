@@ -179,6 +179,8 @@ class AlarmNotificationFragment : Fragment(), AlarmNotificationAdapter.AlarmNoti
         if (!hasNotificationPermission(context)) {
             // If the app does not have notification permission, request it
             requestNotificationPermission(context)
+        }else{
+            Log.d("NotificationPermission", "Already granted.")
         }
     }
 
