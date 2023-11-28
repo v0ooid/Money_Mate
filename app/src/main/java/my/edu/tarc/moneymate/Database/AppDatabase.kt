@@ -9,6 +9,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import my.edu.tarc.moneymate.Alarm.AlarmNotification
 import my.edu.tarc.moneymate.Budget.Budget
@@ -20,6 +22,8 @@ import my.edu.tarc.moneymate.ListStringConverter
 import my.edu.tarc.moneymate.Record.Record
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 import my.edu.tarc.moneymate.R
+import java.util.Calendar
+import java.util.Date
 
 @Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class], version = 2, exportSchema = false)
 @TypeConverters(ListStringConverter::class)
@@ -97,6 +101,26 @@ abstract class AppDatabase : RoomDatabase() {
                     .build()
                 INSTANCE = newInstance
                 return newInstance
+            }
+
+        }
+
+        fun clearDataForUser(context: Context, userId: String) {
+            val database = getDatabase(context)
+
+            val monetaryAccountDao = database.monetaryAccountDao()
+            val budgetDao = database.budgetDao()
+            val incomeDao = database.incomeDao()
+            val categoryDao = database.categoryDao()
+            val expenseDao = database.expenseDao()
+
+            // Delete data related to the provided userId from each table
+            GlobalScope.launch(Dispatchers.IO) {
+                incomeDao.deleteAll()
+                expenseDao.deleteAll()
+                budgetDao.deleteAll()
+                categoryDao.deleteAll()
+                monetaryAccountDao.deleteAll()
             }
         }
     }

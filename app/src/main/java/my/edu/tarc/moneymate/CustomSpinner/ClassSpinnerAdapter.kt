@@ -6,10 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import my.edu.tarc.moneymate.R
 
-class IconAdapter(context: Context, private val items: List<AccountIconItem>) :
-    ArrayAdapter<AccountIconItem>(context, 0, items) {
+class ClassSpinnerAdapter<T>(
+    context: Context,
+    private val itemList: List<T>,
+    private val iconCallback: (T) -> Int,
+    private val textCallback: (T) -> String
+) : ArrayAdapter<T>(context, 0, itemList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createView(position, convertView, parent)
@@ -21,11 +26,17 @@ class IconAdapter(context: Context, private val items: List<AccountIconItem>) :
 
     private fun createView(position: Int, convertView: View?, parent: ViewGroup): View {
         val item = getItem(position)
-        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.custom_spinner_layout, parent, false)
+        val view = convertView ?: LayoutInflater.from(context)
+            .inflate(R.layout.category_spinner_layout, parent, false)
 
-        val iconImageView: ImageView = view.findViewById(R.id.iVSpinnerIcon)
 
-        iconImageView.setImageResource(item?.iconResId ?: R.drawable.baseline_attach_money_24)
+        val iconImageView: ImageView = view.findViewById(R.id.ivSpinnerCategoryIcon)
+        val textTextView: TextView = view.findViewById(R.id.tvSpinnerCategoryName)
+
+        item?.let {
+            iconImageView.setImageResource(iconCallback(it))
+            textTextView.text = textCallback(it)
+        }
 
         return view
     }

@@ -2,6 +2,7 @@ package my.edu.tarc.moneymate.Budget
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.CustomSpinner.CategorySpinnerAdapter
+import my.edu.tarc.moneymate.CustomSpinner.ClassSpinnerAdapter
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.BudgetDao
 import my.edu.tarc.moneymate.R
@@ -56,11 +56,20 @@ class BudgetFragment : Fragment() {
 
         budgetViewModel.getAllBudget.observe(viewLifecycleOwner){
             adapter.setBudget(it)
+
+            if (adapter.itemCount == 0) {
+                Log.e("itemCount", adapter.itemCount.toString())
+                binding.tvEmptyRecyclerView.visibility = View.VISIBLE
+            } else {
+                binding.tvEmptyRecyclerView.visibility = View.GONE
+            }
         }
 
-        budgetViewModel.getAllCategory.observe(viewLifecycleOwner){
+        budgetViewModel.getExpenseCategory.observe(viewLifecycleOwner){
             adapter.setCategory(it)
         }
+
+
 
         binding.fabBudgetAdd.setOnClickListener{
             showDialog()
@@ -97,8 +106,11 @@ class BudgetFragment : Fragment() {
 
         val spinner: Spinner = dialog.findViewById(R.id.sBudgetCategory)
 
-        budgetViewModel.getAllCategory.observe(viewLifecycleOwner){
-            val adapter = CategorySpinnerAdapter(requireContext(), it)
+        budgetViewModel.getExpenseCategory.observe(viewLifecycleOwner) { categories ->
+            val adapter = ClassSpinnerAdapter(requireContext(), categories,
+                { category -> category.image },
+                { category -> category.title }
+            )
             spinner.adapter = adapter
         }
 
@@ -122,8 +134,6 @@ class BudgetFragment : Fragment() {
             } else if (!limit.matches(decimalRegex))
                 limitTextView.error = "Enter a decimal with two decimal places"
             else {
-
-
 
                 budget = Budget(
                     budgetIcon = selectedCate.image,

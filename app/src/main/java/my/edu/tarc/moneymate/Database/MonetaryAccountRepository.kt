@@ -6,7 +6,7 @@ import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 
 class MonetaryAccountRepository(private val monetaryAccountDao: MonetaryAccountDao) {
 
-    val getAllAccount: LiveData<List<MonetaryAccount>> = monetaryAccountDao.getAllAccounts()
+    val getAllAccount: LiveData<List<MonetaryAccount>> = monetaryAccountDao.getAllData()
 
     @WorkerThread
     suspend fun addAccount(monetaryAccount: MonetaryAccount){

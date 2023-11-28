@@ -37,6 +37,15 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/btnCancelDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#2A000000"
+            android:text="Cancel" />
+
+        <Button
             android:id="@+id/btnConfrimDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,14 +54,6 @@
             android:backgroundTint="@color/main_color"
             android:text="Confrim" />
 
-        <Button
-            android:id="@+id/btnCancelDialog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="#2A000000"
-            android:text="Cancel" />
     </LinearLayout>
 </LinearLayout>
 

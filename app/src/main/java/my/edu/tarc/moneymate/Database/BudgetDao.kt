@@ -7,14 +7,19 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Budget.Budget
-import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 
 
 @Dao
 interface BudgetDao {
 
+    @Query("DELETE FROM budgets")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM budgets")
-    fun getAllBudget(): LiveData<List<Budget>>
+    fun getAllData(): LiveData<List<Budget>>
+
+    @Query("SELECT * FROM budgets")
+    fun getBudgetsSync(): List<Budget>
 
     @Insert
     suspend fun insertBudget(budget: Budget)

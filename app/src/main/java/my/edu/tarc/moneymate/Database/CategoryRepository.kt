@@ -3,13 +3,13 @@ package my.edu.tarc.moneymate.Database
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.Income.Income
 
 class CategoryRepository (private val categoryDao: CategoryDao){
 
-    val getAllCategory: LiveData<List<Category>> = categoryDao.getAllCategory()
+    val getAllCategory: LiveData<MutableList<Category>> = categoryDao.getAllCategories()
     val getIncomeCategory: LiveData<MutableList<Category>> = categoryDao.getIncomeCategory()
     val getExpenseCategory: LiveData<MutableList<Category>> = categoryDao.getExpenseCategory()
+
     @WorkerThread
     suspend fun addCategory(category: Category){
         categoryDao.insertCategory(category)
@@ -24,10 +24,7 @@ class CategoryRepository (private val categoryDao: CategoryDao){
     suspend fun updateCategory(category: Category){
         categoryDao.updateCategory(category)
     }
-//    @WorkerThread
-//    suspend fun getCategoryList():LiveData<MutableList<Category>>
-//    {
-//        return categoryDao.getIncomeCategory()
-//    }
+
+
 
 }

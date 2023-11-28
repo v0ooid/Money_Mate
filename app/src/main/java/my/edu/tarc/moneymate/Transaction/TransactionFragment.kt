@@ -45,6 +45,7 @@ class TransactionFragment : Fragment() {
     val viewModel: TransactionViewModel by activityViewModels()
     val incomeViewModel: IncomeViewModel by activityViewModels()
     val expenseViewModel : ExpenseViewModel by activityViewModels()
+
     private var currentNumber = ""
     private var firstNumber = ""
     private var result = ""
@@ -276,11 +277,13 @@ class TransactionFragment : Fragment() {
 
     private fun addRecordIntoDatabase(){
         var description = ""
-        var account = ""
+        var acccount = ""
+//        var acccount = 0
         var title = ""
         var result = ""
         var transactionTypeSelected = ""
         var categoryId = ""
+//        var categoryId = 0
         var categoryImage:Int = 0
         val date = getCurrentTime()
         viewModel.transactionType.observe(viewLifecycleOwner){
@@ -293,7 +296,7 @@ class TransactionFragment : Fragment() {
             title = data
         }
         viewModel.selectedAccount.observe(viewLifecycleOwner) { data ->
-            account = data
+            acccount = data
         }
 //        account = arguments?.getLong("selectedAccountId").toString()
 //        val selectedAccountId = arguments?.getLong("selectedAccountId")
@@ -309,12 +312,12 @@ class TransactionFragment : Fragment() {
         }
         Log.d("transactionTypeSelected", transactionTypeSelected)
         if (transactionTypeSelected == "income") {
-            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,account, date.toString())
+            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
             incomeViewModel.addIncome(income)
         }
         else if (transactionTypeSelected == "expense")
         {
-            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,account, date.toString())
+            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
             expenseViewModel.addExpense(expense)
         }
     }

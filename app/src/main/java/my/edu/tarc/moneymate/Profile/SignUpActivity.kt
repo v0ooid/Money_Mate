@@ -73,44 +73,56 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
 
-        auth.createUserWithEmailAndPassword(inputEmail, inputPassword)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
+        auth.fetchSignInMethodsForEmail(inputEmail)
+            .addOnSuccessListener{ task ->
+                val signInMethods = task?.signInMethods ?: emptyList<String>()
 
-                    val currentUser = FirebaseAuth.getInstance().currentUser
-                    val userID = currentUser?.uid
-                    val db = FirebaseFirestore.getInstance()
-                    val usersCollection = db.collection("users")
-
-                    if (userID != null) {
-                        usersCollection.document(userID).set(
-                            hashMapOf(
-                                "fullname" to inputName,
-                                "email" to inputEmail,
-                                "password" to inputPassword
-                            )
-                        )
-                    }
-
-                    val intent = Intent(this, SignInActivity::class.java)
-                    startActivity(intent)
-
-                    Toast.makeText(
-                        baseContext, "Successful.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                if (signInMethods.isNotEmpty()) {
+                    Toast.makeText(this, "Email already exists", Toast.LENGTH_SHORT).show()
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(
-                        baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-            }
-            .addOnFailureListener{
-                Toast.makeText(this, "Error occurred ${it.localizedMessage}", Toast.LENGTH_SHORT)
-                    .show()
+                    auth.createUserWithEmailAndPassword(inputEmail, inputPassword)
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+
+                                val currentUser = FirebaseAuth.getInstance().currentUser
+                                val userID = currentUser?.uid
+                                val db = FirebaseFirestore.getInstance()
+                                val usersCollection = db.collection("users")
+
+                                if (userID != null) {
+                                    usersCollection.document(userID).set(
+                                        hashMapOf(
+                                            "fullname" to inputName,
+                                            "email" to inputEmail,
+                                            "password" to inputPassword
+                                        )
+                                    )
+                                }
+
+                                val intent = Intent(this, SignInActivity::class.java)
+                                startActivity(intent)
+
+                                Toast.makeText(
+                                    baseContext, "Successful.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(
+                                    baseContext, "Sign Up failed.",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }
+                        }
+                        .addOnFailureListener{
+                            Toast.makeText(this, "Error occurred ${it.localizedMessage}", Toast.LENGTH_SHORT)
+                                .show()
+                        }                }
+
+            }.addOnFailureListener { exception ->
+                // Handle failure in fetching sign-in methods
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }

@@ -31,7 +31,9 @@ class AppLockTypeFragment : Fragment() {
         val storedSecurityType = sharedPreferences.getString("SECURITY_TYPE_KEY", "")
 
         when (storedSecurityType){
-            "4Digit" -> binding.rb4Digit.isChecked
+            "4Digit" -> binding.rb4Digit.isChecked = true
+            "6Digit" -> binding.rb6Digit.isChecked = true
+            "CustomPassword" -> binding.rbCustomPassword.isChecked = true
         }
 
         binding.btnBackPasswordType.setOnClickListener{

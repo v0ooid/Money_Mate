@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "monetary_accounts")
-data class MonetaryAccount (
+data class MonetaryAccount(
     @PrimaryKey(autoGenerate = true) val accountId: Long = 0,
     val accountName: String,
     val accountBalance: Double,
-    val accountIcon: String
+    val accountIcon: Int
 )

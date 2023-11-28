@@ -26,6 +26,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment
 import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
+import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentProfileBinding
 
@@ -133,8 +134,19 @@ class ProfileFragment : Fragment() {
             firebase.reference.child("profile_image").child(userId)
         val ONE_MEGABYTE: Long = 1024 * 1024 * 1024
         myRef.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
-            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
 
+            // Define your desired image width and height
+            val reqWidth = 100 // Set your desired width
+            val reqHeight = 100 // Set your desired height
+
+            // Calculate the sample size to reduce the image size while preserving aspect ratio
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+            options.inJustDecodeBounds = false
+
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
             binding.imageViewProfilepic.setImageBitmap(bitmap)
         }
 
@@ -194,6 +206,16 @@ class ProfileFragment : Fragment() {
             showDialog()
         }
 
+        binding.dataExportCard.setOnClickListener{
+            val navController = findNavController()
+            navController.navigate(R.id.action_profileFragment_to_dataExportFragment)
+        }
+
+        binding.dataBackup.setOnClickListener{
+            val navController = findNavController()
+            navController.navigate(R.id.action_profileFragment_to_dataSyncFragment)
+        }
+
         //Monetary Account Card View
         binding.cardViewMonetaryAccount.setOnClickListener {
             val navController = findNavController()
@@ -226,13 +248,21 @@ class ProfileFragment : Fragment() {
         binding.cardVLogout.setOnClickListener {
             val userPref =
                 requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
+
+            val userId = userPref.getString("userId", "")
+
             val APP_LOCK_PREFS =
                 requireContext().getSharedPreferences(
                     "APP_LOCK_PREFS",
                     Context.MODE_PRIVATE
                 )
 
+            if (userId != null) {
+                clearUserData(userId)
+            }
+
             userPref.edit().putString("userId", "").apply()
+
 
             val appLockEditor = APP_LOCK_PREFS.edit()
             appLockEditor.clear().apply()
@@ -240,6 +270,31 @@ class ProfileFragment : Fragment() {
             val navController = findNavController()
             navController.navigate(R.id.action_profileFragment_to_signInActivity)
         }
+    }
+
+    private fun clearUserData(userId: String) {
+        val context = requireContext()
+        // Call the clearDataForUser function from AppDatabase
+        AppDatabase.clearDataForUser(context, userId)
+    }
+
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int
+    ): Int {
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+            while ((halfHeight / inSampleSize) >= reqHeight &&
+                (halfWidth / inSampleSize) >= reqWidth
+            ) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
     }
 
     private fun showDialog() {

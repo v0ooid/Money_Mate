@@ -25,6 +25,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.storage.FirebaseStorage
 import my.edu.tarc.moneymate.AppLock.AppLock6Activity
 import my.edu.tarc.moneymate.AppLock.AppLock4Activity
 import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                         || destination.id == R.id.appLockTypeFragment || destination.id == R.id.appLock4DigitFragment
                         || destination.id == R.id.appLock6DigitFragment || destination.id == R.id.appLockCustomPasswordFragment || destination.id == R.id.transactionFragment
                         ||destination.id == R.id.setAlarmFragment ||destination.id == R.id.alarmNotificationFragment||destination.id == R.id.goalFragment||destination.id == R.id.goalCreateFragment
-                        ||destination.id == R.id.reportFragment || destination.id == R.id.financialAdvisorFragment2
+                        ||destination.id == R.id.reportFragment || destination.id == R.id.financialAdvisorFragment2|| destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment
                         ) {
                         navView.visibility = View.GONE
                     } else {
