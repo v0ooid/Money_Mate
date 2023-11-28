@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/background_account_item"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -9,25 +11,39 @@
         android:id="@+id/textViewAccountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Account Name"
-        android:textStyle="bold"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textViewAccountBalance"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Balance: $0.00"/>
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textViewFinancialStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: Healthy"/>
+        <TextView
+            android:id="@+id/textViewAccountBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Balance: $0.00" />
+
+        <TextView
+            android:id="@+id/textViewFinancialStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/status_background_healthy"
+            android:padding="6dp"
+            android:text="Status: Healthy"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textViewFinancialTips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tips: Keep saving!"/>
+        android:textStyle="italic"
+        android:text="Tip: Keep saving!" />
 
 </LinearLayout>

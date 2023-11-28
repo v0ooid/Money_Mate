@@ -29,11 +29,18 @@ class FinancialAdvisorAdapter : RecyclerView.Adapter<FinancialAdvisorAdapter.You
 
     inner class YourViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(accountFinancialHealth: AccountFinancialHealth) {
-            // Bind data to your item view
-            itemView.findViewById<TextView>(R.id.textViewAccountName).text = accountFinancialHealth.accountName.toString()
-            itemView.findViewById<TextView>(R.id.textViewAccountBalance).text = "Balance: ${accountFinancialHealth.netBalance}"
-            itemView.findViewById<TextView>(R.id.textViewFinancialStatus).text = "Status: ${accountFinancialHealth.status}"
-            itemView.findViewById<TextView>(R.id.textViewFinancialTips).text = "Tips: ${accountFinancialHealth.financialTips.joinToString(", ")}"
+            itemView.findViewById<TextView>(R.id.textViewAccountName).text = accountFinancialHealth.accountName
+            itemView.findViewById<TextView>(R.id.textViewAccountBalance).text = "Balance: RM ${accountFinancialHealth.netBalance}"
+            itemView.findViewById<TextView>(R.id.textViewFinancialTips).text = "Tip: ${accountFinancialHealth.financialTips.first()}"
+
+            val statusView = itemView.findViewById<TextView>(R.id.textViewFinancialStatus)
+            statusView.text = "Status: ${accountFinancialHealth.status}"
+
+            when (accountFinancialHealth.status) {
+                FinancialHealthStatus.HEALTHY -> statusView.setBackgroundResource(R.drawable.status_background_healthy)
+                FinancialHealthStatus.ATTENTION -> statusView.setBackgroundResource(R.drawable.status_background_attention)
+                FinancialHealthStatus.DANGER -> statusView.setBackgroundResource(R.drawable.status_background_danger)
+            }
         }
     }
 }

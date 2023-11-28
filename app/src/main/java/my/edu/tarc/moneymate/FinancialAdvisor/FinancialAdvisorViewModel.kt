@@ -108,14 +108,15 @@ class FinancialAdvisorViewModel(
 
     private fun fetchAndAnalyzeFinancialData() {
         repository.getAllMonetaryAccounts().observeForever { accounts ->
+            val healthList = mutableListOf<AccountFinancialHealth>() // Create a mutable list to accumulate results
             accounts.forEach { account ->
                 viewModelScope.launch {
                     repository.getIncomesForAccount(account.accountId).observeForever { incomes ->
                         Log.d("IncomeData", incomes.toString())
                         repository.getExpensesForAccount(account.accountId).observeForever { expenses ->
                             val accountHealth = financialAnalyzer.analyzeAccountFinancialHealth(account, incomes, expenses)
-                            // Update the LiveData with the new list
-                            _accountsFinancialHealth.postValue(listOf(accountHealth)) // This needs to be adjusted to accumulate results properly
+                            healthList.add(accountHealth) // Add the result to the list
+                            _accountsFinancialHealth.postValue(healthList) // Post the entire list
                         }
                     }
                 }
