@@ -8,14 +8,15 @@
     android:padding="5dp">
     <LinearLayout
         android:id="@+id/income_linear"
-        android:background="@drawable/frame_record"
+        android:background="@drawable/frame_income_record"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         >
     <ImageView
+        android:id="@+id/record_income_icon"
         android:layout_width="0dp"
         android:layout_height="50dp"
 
@@ -30,14 +31,29 @@
 
         <TextView
             android:id="@+id/record_income_title"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/title"
-            android:textSize="8pt"
             android:layout_margin="5dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/title"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="20sp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toStartOf="@id/record_income_dateTime"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/record_income_dateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/datetime"
+            android:textSize="11sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/record_income_description"/>
         <TextView
             android:id="@+id/record_income_description"
             android:layout_width="wrap_content"
@@ -66,17 +82,17 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/expense_linear"
-        android:background="@drawable/frame_record"
+        android:background="@drawable/frame_expense_record"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="invisible"
         >
         <ImageView
+            android:id="@+id/record_expense_icon"
             android:layout_width="0dp"
             android:layout_height="50dp"
-
             android:layout_weight="1"
             />
 
@@ -87,13 +103,29 @@
 
             <TextView
                 android:id="@+id/record_expense_title"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="@string/title"
-                android:textSize="8pt"
                 android:layout_margin="5dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/title"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="20sp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toStartOf="@+id/record_expense_dateTime"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/record_expense_dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/datetime"
+                android:textSize="11sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/record_expense_description"/>
 
             <TextView
                 android:id="@+id/record_expense_description"
@@ -163,11 +195,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title"
-                android:textSize="8pt"
+                android:textSize="20sp"
                 android:layout_margin="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
+            <TextView
+                android:id="@+id/record_transfer_dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/datetime"
+                android:textSize="15sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/record_transfer_description"/>
             <TextView
                 android:id="@+id/record_transfer_description"
                 android:layout_width="wrap_content"

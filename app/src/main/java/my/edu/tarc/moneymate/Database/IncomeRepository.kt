@@ -7,6 +7,7 @@ import my.edu.tarc.moneymate.Income.Income
 
 class IncomeRepository (private val incomeDao: IncomeDao) {
     val getAllIncome: LiveData<MutableList<Income>> = incomeDao.getAllIncome()
+    val getAllIncomeRecord: LiveData<List<Income>> = incomeDao.getAllIncomeRecord()
     @WorkerThread
     suspend fun addIncome(income: Income){
         incomeDao.insertIncome(income)
@@ -21,5 +22,7 @@ class IncomeRepository (private val incomeDao: IncomeDao) {
     suspend fun updateIncome(income: Income){
         incomeDao.updateIncome(income)
     }
-
+    fun getIncomeInRange(startDate: String, endDate: String): LiveData<List<Income>> {
+        return incomeDao.getIncomeInRange(startDate, endDate)
+    }
 }

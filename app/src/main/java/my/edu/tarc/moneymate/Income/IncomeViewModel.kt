@@ -17,6 +17,7 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
     private val _title = MutableLiveData<String>()
     val _selectedAccount = MutableLiveData<String>()
     private val readAllData : LiveData<MutableList<Income>>
+    val incomeInRange: LiveData<List<Income>>
 
     val result: LiveData<String> get() = _result
     val title: LiveData<String> get() = _title
@@ -38,11 +39,24 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
         val incomeDao = AppDatabase.getDatabase(application).incomeDao()
         repository = IncomeRepository(incomeDao)
         readAllData = repository.getAllIncome
+        incomeInRange = MutableLiveData()
     }
     fun addIncome(income: Income)
     {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addIncome(income)
         }
+    }
+
+    fun deleteIncome(income:Income) = viewModelScope.launch {
+        repository.deleteIncome(income)
+    }
+
+    fun updateIncome(income: Income) = viewModelScope.launch {
+        repository.updateIncome(income)
+    }
+
+    fun getIncomeForDateRange(startDate: String, endDate: String) {
+        (incomeInRange as MutableLiveData<List<Income>>).value = repository.getIncomeInRange(startDate, endDate).value
     }
 }

@@ -153,111 +153,339 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewEditPassword" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewMonetaryAccount"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:cardElevation="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintBottom_toTopOf="@id/cardVLogout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view2">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/card_view_background">
+                    android:layout_height="0dp">
 
-                    <ImageView
-                        android:id="@+id/ivMAccount"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewMonetaryAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
                         android:layout_marginStart="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/baseline_money_24"
-                        tools:ignore="DuplicateIds" />
-
-                    <TextView
-                        android:id="@+id/tvMAccount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:fontFamily="@font/manrope_medium"
-                        android:text="Monetary Accounts"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@+id/ivMAccount"
-                        app:layout_constraintStart_toEndOf="@+id/ivMAccount"
-                        app:layout_constraintTop_toTopOf="@+id/ivMAccount" />
-
-                    <ImageView
-                        android:id="@+id/ivMAccountRight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:tint="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewAppLock"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewMonetaryAccount">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/card_view_background">
+                            <ImageView
+                                android:id="@+id/ivMAccount"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_money_24"
+                                tools:ignore="DuplicateIds" />
 
-                    <ImageView
-                        android:id="@+id/ivAppLock"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                            <TextView
+                                android:id="@+id/tvMAccount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="Monetary Accounts"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivMAccount"
+                                app:layout_constraintStart_toEndOf="@+id/ivMAccount"
+                                app:layout_constraintTop_toTopOf="@+id/ivMAccount" />
+
+                            <ImageView
+                                android:id="@+id/ivMAccountRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAppLock"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
                         android:layout_marginStart="16dp"
-                        android:tint="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/baseline_phonelink_lock_24" />
-
-                    <TextView
-                        android:id="@+id/tvAppLock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:fontFamily="@font/manrope_medium"
-                        android:text="App Lock"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@+id/ivAppLock"
-                        app:layout_constraintStart_toEndOf="@+id/ivAppLock"
-                        app:layout_constraintTop_toTopOf="@+id/ivAppLock" />
-
-                    <ImageView
-                        android:id="@+id/ivAppLockRight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:tint="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardViewMonetaryAccount">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
+
+                            <ImageView
+                                android:id="@+id/ivAppLock"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_phonelink_lock_24" />
+
+                            <TextView
+                                android:id="@+id/tvAppLock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="App Lock"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivAppLock"
+                                app:layout_constraintStart_toEndOf="@+id/ivAppLock"
+                                app:layout_constraintTop_toTopOf="@+id/ivAppLock" />
+
+                            <ImageView
+                                android:id="@+id/ivAppLockRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAlarmNotification"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardViewAppLock">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
+
+                            <ImageView
+                                android:id="@+id/ivAlarmNotification"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/round_alarm_24"
+                                app:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/tvAlarmNotification"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="Alarm Notification"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivAlarmNotification"
+                                app:layout_constraintStart_toEndOf="@+id/ivAlarmNotification"
+                                app:layout_constraintTop_toTopOf="@+id/ivAlarmNotification" />
+
+                            <ImageView
+                                android:id="@+id/ivAlarmNotificationRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewGoal"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardViewAlarmNotification">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
+
+                            <ImageView
+                                android:id="@+id/ivGoal"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/goal"
+                                app:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/tvGoal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="Goal"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivGoal"
+                                app:layout_constraintStart_toEndOf="@+id/ivGoal"
+                                app:layout_constraintTop_toTopOf="@+id/ivGoal" />
+
+                            <ImageView
+                                android:id="@+id/ivGoalRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewReport"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardViewGoal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
+
+                            <ImageView
+                                android:id="@+id/ivReport"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_auto_graph_24"
+                                app:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/tvReport"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="Report"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivReport"
+                                app:layout_constraintStart_toEndOf="@+id/ivReport"
+                                app:layout_constraintTop_toTopOf="@+id/ivReport" />
+
+                            <ImageView
+                                android:id="@+id/ivReportRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewFinancial"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardViewReport">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
+
+                            <ImageView
+                                android:id="@+id/ivFinancial"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/advise"
+                                app:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/tvFinancial"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="Financial Advisor"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivFinancial"
+                                app:layout_constraintStart_toEndOf="@+id/ivFinancial"
+                                app:layout_constraintTop_toTopOf="@+id/ivFinancial" />
+
+                            <ImageView
+                                android:id="@+id/ivFinancialRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+            </androidx.core.widget.NestedScrollView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardVLogout"

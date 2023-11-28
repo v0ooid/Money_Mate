@@ -25,6 +25,11 @@ import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentTransactionBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 
 class TransactionFragment : Fragment() {
@@ -261,14 +266,23 @@ class TransactionFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    private fun getCurrentTime():String
+    {
+        val currentDateTime= ZonedDateTime.now(ZoneId.of("GMT+8"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        return currentDateTime.format(formatter)
+    }
+
+
     private fun addRecordIntoDatabase(){
         var description = ""
-        var acccount = ""
+        var account = ""
         var title = ""
         var result = ""
         var transactionTypeSelected = ""
         var categoryId = ""
         var categoryImage:Int = 0
+        val date = getCurrentTime()
         viewModel.transactionType.observe(viewLifecycleOwner){
             data -> transactionTypeSelected = data
         }
@@ -279,8 +293,11 @@ class TransactionFragment : Fragment() {
             title = data
         }
         viewModel.selectedAccount.observe(viewLifecycleOwner) { data ->
-            acccount = data
+            account = data
         }
+//        account = arguments?.getLong("selectedAccountId").toString()
+//        val selectedAccountId = arguments?.getLong("selectedAccountId")
+//        Log.d("testing bundle", selectedAccountId.toString())
         viewModel.result.observe(viewLifecycleOwner) { data ->
             result = data
         }
@@ -292,12 +309,12 @@ class TransactionFragment : Fragment() {
         }
         Log.d("transactionTypeSelected", transactionTypeSelected)
         if (transactionTypeSelected == "income") {
-            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,account, date.toString())
             incomeViewModel.addIncome(income)
         }
         else if (transactionTypeSelected == "expense")
         {
-            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
+            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,account, date.toString())
             expenseViewModel.addExpense(expense)
         }
     }

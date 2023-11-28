@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -203,6 +204,23 @@ class ProfileFragment : Fragment() {
             val navController = findNavController()
             navController.navigate(R.id.action_profileFragment_to_appLockFragment)
         }
+        binding.cardViewAlarmNotification.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_alarmNotificationFragment)
+        }
+
+        binding.ivAlarmNotificationRight.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_alarmNotificationFragment)
+        }
+        binding.cardViewGoal.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_goalFragment)
+        }
+        binding.cardViewReport.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_reportFragment)
+        }
+        binding.cardViewFinancial.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_financialAdvisorFragment2)
+        }
+
 
         //Logout
         binding.cardVLogout.setOnClickListener {

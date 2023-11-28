@@ -14,6 +14,14 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM Expense")
     fun getAllExpense(): LiveData<MutableList<Expense>>
+    @Query("SELECT * FROM Expense")
+    fun getAllExpenseRecord(): LiveData<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE accountId = :accountId")
+    fun getExpensesForAccount(accountId: Long): LiveData<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE strftime('%Y-%m', date) = :yearMonth")
+    suspend fun getExpensesForMonth(yearMonth: String): List<Expense>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertExpense(expense: Expense)

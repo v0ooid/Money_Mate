@@ -40,6 +40,9 @@
     <string name="choose_an_account">Choose an account</string>
     <string name="add_new_category">Add New Category</string>
     <string name="description">Description</string>
+    <string name="datetime">DateTime</string>
+    <string name="edit_record">Edit Record</string>
+    <string name="titleRecord">Title :</string>
     <string-array name="testSpinner">
         <item>Account</item>
         <item>1</item>

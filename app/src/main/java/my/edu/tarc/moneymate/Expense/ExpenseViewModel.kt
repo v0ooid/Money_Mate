@@ -12,6 +12,7 @@ import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.ExpenseRepository
 import my.edu.tarc.moneymate.Database.IncomeRepository
 import my.edu.tarc.moneymate.Income.Income
+import kotlin.math.exp
 
 class ExpenseViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -49,5 +50,11 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch(Dispatchers.IO) {
             repository.addExpense(expense)
         }
+    }
+    fun deleteExpense(expense:Expense) = viewModelScope.launch {
+        repository.deleteExpense(expense)
+    }
+    fun updateExpense(expense: Expense) = viewModelScope.launch {
+        repository.updateExpense(expense)
     }
 }

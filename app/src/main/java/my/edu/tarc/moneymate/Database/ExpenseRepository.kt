@@ -7,6 +7,8 @@ import my.edu.tarc.moneymate.Income.Income
 
 class ExpenseRepository (private val expenseDao: ExpenseDao) {
     val getAllExpense: LiveData<MutableList<Expense>> = expenseDao.getAllExpense()
+    val getAllExpenseRecord: LiveData<List<Expense>> = expenseDao.getAllExpenseRecord()
+
     @WorkerThread
     suspend fun addExpense(expense: Expense){
         expenseDao.insertExpense(expense)
