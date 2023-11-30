@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Budget.Budget
+import my.edu.tarc.moneymate.Income.Income
 
 
 @Dao
@@ -20,6 +22,9 @@ interface BudgetDao {
 
     @Query("SELECT * FROM budgets")
     fun getBudgetsSync(): List<Budget>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(dataList: List<Budget>)
 
     @Insert
     suspend fun insertBudget(budget: Budget)

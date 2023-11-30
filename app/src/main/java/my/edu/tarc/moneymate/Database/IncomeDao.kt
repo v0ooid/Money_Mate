@@ -9,7 +9,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.DataExport.IncomeWithAccountName
 import my.edu.tarc.moneymate.Income.Income
 import java.util.Date
 
@@ -25,13 +24,13 @@ interface IncomeDao {
     @Query("SELECT * FROM INCOME")
     fun getIncomeSync(): List<Income>
 
-    @Query("SELECT Income.*" +
-            "FROM Income " +
+    @Query("SELECT Income.* FROM Income " +
             "INNER JOIN Category ON Income.categoryId = Category.categoryId " +
             "INNER JOIN monetary_accounts ON Income.accountId = monetary_accounts.accountId " +
             "WHERE Income.accountId = :accountId " +
-            "AND Income.categoryId = :categoryId ")
-    fun getIncomeByCriteria(accountId: Long, categoryId: Long): List<Income>
+            "AND Income.categoryId = :categoryId " +
+            "AND Income.date BETWEEN :startDate AND :endDate")
+    fun getIncomeByCriteria(accountId: Long, categoryId: Long, startDate: Date, endDate: Date): List<Income>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(dataList: List<Income>)

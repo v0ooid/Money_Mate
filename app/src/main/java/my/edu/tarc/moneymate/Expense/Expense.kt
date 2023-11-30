@@ -30,7 +30,7 @@ import java.util.Date
 
 data class Expense(
     @PrimaryKey(autoGenerate = true)
-    val expenseId: Int = 0,
+    val expenseId: Long = 0,
     var expense_title: String,
     var expense_icon_image: Int,
     var description: String,

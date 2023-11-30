@@ -57,7 +57,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
 
         // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["incomeId"] = income.incomeId
-        dataMap["title"] = income.incomeTitle
+        dataMap["title"] = income.title
         dataMap["description"] = income.description
         dataMap["amount"] = income.amount
         dataMap["date"] = income.date
@@ -126,8 +126,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun restoreExpenseFromFirebase(userId: String) {
         val dataList = mutableListOf<Expense>()
 
-        Log.e("income", "Working")
-
         db.collection("users")
             .document(userId)
             .collection("Expense")
@@ -135,11 +133,11 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     val data = document.data
-                    println("Raw data: $data")
+                    println("Expense: $data")
 
                     data?.let {
                         val expense = Expense(
-                            expenseId  = (it["expenseId"] as? Int) ?: 0,
+                            expenseId = (it["expenseId"] as? Long) ?: 0L,
                             expense_title = it["expense_title"] as? String ?: "",
                             expense_icon_image = (it["expense_icon_image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
@@ -166,23 +164,19 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun restoreIncomeFromFirebase(userId: String) {
         val dataList = mutableListOf<Income>()
 
-        Log.e("income", "Working")
-
         db.collection("users")
             .document(userId)
             .collection("Income")
             .get()
             .addOnSuccessListener { querySnapshot ->
-                println("Working income")
-
                 for (document in querySnapshot.documents) {
                     val data = document.data
-                    println("Raw data: $data")
+                    println("Income data: $data")
 
                     data?.let {
                         val income = Income(
                             incomeId = (it["incomeId"] as? Long) ?: 0L,
-                            incomeTitle = it["title"] as? String ?: "",
+                            title = it["title"] as? String ?: "",
                             image = (it["image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
@@ -215,7 +209,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     val data = document.data
-                    println("Raw data: $data")
+                    println("Budget: $data")
 
                     data?.let {
                         val budget = Budget(
@@ -231,7 +225,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                 }
 
                 GlobalScope.launch {
-                    AppDatabase.getDatabase(context)
+                    AppDatabase.getDatabase(context).budgetDao().insertAll(dataList)
 
                 }
             }
@@ -251,7 +245,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     val data = document.data
-                    println("Raw data: $data")
+                    println("Category: $data")
 
                     data?.let {
                         val category = Category(
@@ -286,7 +280,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     val data = document.data
-                    println("Raw data: $data")
+                    println("account data: $data")
 
                     data?.let {
                         val monetaryAccount = MonetaryAccount(

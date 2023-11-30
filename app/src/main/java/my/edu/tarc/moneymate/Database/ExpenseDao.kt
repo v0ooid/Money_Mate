@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.Expense.Expense
+import my.edu.tarc.moneymate.Income.Income
 import java.util.Date
 
 
