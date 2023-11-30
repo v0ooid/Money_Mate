@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/report_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Report.ReportFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/report_upperPart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/backbutton_Transaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/leftIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:src="@drawable/round_arrow_back_24" />
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/leftIcon"
+                        android:text="Report"
+                        android:textSize="25sp" />
+
+                    <ImageView
+                        android:id="@+id/ivReportShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/round_share_24" />
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/transactiontab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/bot_nav_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/backbutton_Transaction"
+                app:tabIndicator="@color/black"
+                app:tabSelectedTextColor="@color/white">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/income" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/expense" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Goal" />
+
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:padding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transactiontab">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/report_upperPart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/report_bottomPart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/report_upperPart">
+
+
+            <TextView
+                android:id="@+id/tvAppsName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Money Mate"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Report Title"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAppsName" />
+
+            <TextView
+                android:id="@+id/From"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="From: "
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@id/tvReportYearFrom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReportTitle" />
+
+            <Spinner
+                android:id="@+id/tvReportYearFrom"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                android:text="2020 JAN"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/From"
+                app:layout_constraintEnd_toStartOf="@id/tvReportMonthFrom"
+                app:layout_constraintStart_toEndOf="@id/From"
+                app:layout_constraintTop_toTopOf="@id/From" />
+
+            <Spinner
+                android:id="@+id/tvReportMonthFrom"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                android:text="2020 JAN"
+                android:textSize="15sp"
+                android:textStyle="bold"
+
+                app:layout_constraintBottom_toBottomOf="@id/tvReportYearFrom"
+                app:layout_constraintEnd_toStartOf="@id/to"
+                app:layout_constraintStart_toEndOf="@id/tvReportYearFrom"
+                app:layout_constraintTop_toTopOf="@id/tvReportYearFrom" />
+
+            <TextView
+                android:id="@+id/to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To: "
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvReportMonthFrom"
+                app:layout_constraintEnd_toStartOf="@id/tvReportYearTo"
+                app:layout_constraintStart_toEndOf="@id/tvReportMonthFrom"
+                app:layout_constraintTop_toTopOf="@id/tvReportMonthFrom" />
+
+            <Spinner
+                android:id="@+id/tvReportYearTo"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                android:text="2020 JAN"
+                android:textSize="15sp"
+                android:textStyle="bold"
+
+                app:layout_constraintBottom_toBottomOf="@id/to"
+                app:layout_constraintEnd_toStartOf="@id/tvReportMonthTo"
+                app:layout_constraintStart_toEndOf="@id/to"
+                app:layout_constraintTop_toTopOf="@id/to" />
+
+            <Spinner
+                android:id="@+id/tvReportMonthTo"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                android:text="2020 JAN"
+                android:textSize="15sp"
+                android:textStyle="bold"
+
+                app:layout_constraintBottom_toBottomOf="@id/tvReportYearTo"
+                app:layout_constraintEnd_toStartOf="@+id/report_search"
+                app:layout_constraintStart_toEndOf="@id/tvReportYearTo"
+                app:layout_constraintTop_toTopOf="@id/tvReportYearTo" />
+
+            <ImageView
+                android:id="@+id/report_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_search_24"
+                app:layout_constraintBottom_toBottomOf="@id/tvReportMonthTo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvReportMonthTo"
+                app:layout_constraintTop_toTopOf="@id/tvReportMonthTo" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/From">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/edittext_textbox"
+                    android:padding="10dp"
+
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Source Title: " />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Date: " />
+
+                    <TextView
+                        android:id="@+id/tvReportTitleCategory"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Category: " />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Amount: "
+                        android:textAlignment="textEnd" />
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="40dp"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>

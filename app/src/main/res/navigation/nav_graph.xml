@@ -35,6 +35,19 @@
             android:id="@+id/action_profileFragment_to_appLockCustomPasswordFragment"
             app:destination="@id/appLockCustomPasswordFragment" />
         <action
+            android:id="@+id/action_profileFragment_to_alarmNotificationFragment"
+            app:destination="@id/alarmNotificationFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_goalFragment"
+            app:destination="@id/goalFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_financialAdvisorFragment2"
+            app:destination="@id/financialAdvisorFragment2" />
+
+        <action
             android:id="@+id/action_profileFragment_to_dataExportFragment"
             app:destination="@id/dataExportFragment" />
         <action
@@ -189,4 +202,51 @@
             android:id="@+id/action_dataSyncFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/alarmNotificationFragment"
+        android:name="my.edu.tarc.moneymate.Alarm.AlarmNotificationFragment"
+        android:label="fragment_alarm_notification"
+        tools:layout="@layout/fragment_alarm_notification" >
+        <action
+            android:id="@+id/action_alarmNotificationFragment_to_setAlarmFragment"
+            app:destination="@id/setAlarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setAlarmFragment"
+        android:name="my.edu.tarc.moneymate.Alarm.SetAlarmFragment"
+        android:label="fragment_set_alarm"
+        tools:layout="@layout/fragment_set_alarm" >
+        <argument
+            android:name="alarmId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/goalFragment"
+        android:name="my.edu.tarc.moneymate.Goal.GoalFragment"
+        android:label="fragment_show_goal"
+        tools:layout="@layout/fragment_show_goal" >
+        <action
+            android:id="@+id/action_goalFragment_to_goalCreateFragment"
+            app:destination="@id/goalCreateFragment" >
+            <argument
+                android:name="goalId"
+                app:argType="long" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/goalCreateFragment"
+        android:name="my.edu.tarc.moneymate.Goal.GoalCreateFragment"
+        android:label="fragment_goal_create"
+        tools:layout="@layout/fragment_goal_create" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="my.edu.tarc.moneymate.Report.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/financialAdvisorFragment2"
+        android:name="my.edu.tarc.moneymate.FinancialAdvisor.FinancialAdvisorFragment"
+        android:label="fragment_financial_advisor2"
+        tools:layout="@layout/fragment_financial_advisor2" />
+
 </navigation>

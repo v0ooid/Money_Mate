@@ -57,6 +57,8 @@ class IncomeFragment : Fragment() {
 
         CategoryViewModel.incomeCategory.observe(viewLifecycleOwner) { data ->
             categorylist_income = data
+            Log.d("test outside data", data.toString())
+
             IncomeAdapter = IncomeAdapter(transactionViewModel, this, categorylist_income)
             recyclerView.itemAnimator = null
             recyclerView.adapter = IncomeAdapter

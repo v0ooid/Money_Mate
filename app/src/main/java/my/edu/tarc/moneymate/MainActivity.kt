@@ -23,6 +23,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.storage.FirebaseStorage
 import my.edu.tarc.moneymate.AppLock.AppLock6Activity
@@ -34,7 +35,8 @@ import my.edu.tarc.moneymate.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
+    private lateinit var incomerecyclerView: RecyclerView
+    private lateinit var expenserecyclerView: RecyclerView
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +52,14 @@ class MainActivity : AppCompatActivity() {
         Log.e("status",appLockUnlock.toString())
 
         if (!isLoggedIn()) {
+
             // User is not logged in, navigate to the login screen
             navigateToLogin()
+
         } else {
+            Log.w("Testing2", "mainactivity")
+
+            Log.e("Main activity", appLockUnlock.toString())
 
             if (!appLockUnlock) {
                 checkAppLockStatus()
@@ -68,7 +75,9 @@ class MainActivity : AppCompatActivity() {
                         || destination.id == R.id.appLockSetupCusPassFragment || destination.id == R.id.appLockFragment
                         || destination.id == R.id.appLockTypeFragment || destination.id == R.id.appLock4DigitFragment
                         || destination.id == R.id.appLock6DigitFragment || destination.id == R.id.appLockCustomPasswordFragment || destination.id == R.id.transactionFragment
-                        || destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment) {
+                        ||destination.id == R.id.setAlarmFragment ||destination.id == R.id.alarmNotificationFragment||destination.id == R.id.goalFragment||destination.id == R.id.goalCreateFragment
+                        ||destination.id == R.id.reportFragment || destination.id == R.id.financialAdvisorFragment2|| destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment
+                        ) {
                         navView.visibility = View.GONE
                     } else {
                         navView.visibility = View.VISIBLE
@@ -94,6 +103,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        // Disable the back button functionality
+        // Remove the line below to re-enable the back button
+        // super.onBackPressed()
     }
 
     override fun onDestroy() {
@@ -194,4 +210,6 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }

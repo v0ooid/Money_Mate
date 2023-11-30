@@ -19,7 +19,21 @@ interface IncomeDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM INCOME")
-    fun getAllData(): LiveData<MutableList<Income>>
+    fun getAllIncome(): LiveData<MutableList<Income>>
+    @Query("SELECT * FROM INCOME")
+    fun getAllIncomeRecord(): LiveData<List<Income>>
+
+    @Query("SELECT * FROM Income WHERE accountId = :accountId")
+    fun getIncomesForAccount(accountId: Long): LiveData<List<Income>>
+
+    @Query("SELECT * FROM Income WHERE date BETWEEN :startDate AND :endDate")
+    fun getIncomeInRange(startDate: String, endDate: String): LiveData<List<Income>>
+
+    @Query("SELECT * FROM Income WHERE strftime('%Y-%m', date) = :yearMonth")
+    suspend fun getIncomeForMonth(yearMonth: String): List<Income>
+
+//
+//    fun getAllData(): LiveData<MutableList<Income>>
 
     @Query("SELECT * FROM INCOME")
     fun getIncomeSync(): List<Income>

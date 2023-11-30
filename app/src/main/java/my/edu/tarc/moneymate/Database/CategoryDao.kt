@@ -1,3 +1,5 @@
+
+
 package my.edu.tarc.moneymate.Database
 
 import androidx.lifecycle.LiveData
@@ -21,10 +23,9 @@ interface CategoryDao {
     @Query("SELECT * FROM Category")
     fun getCatSync(): List<Category>
 
-    @Query("SELECT * FROM Category WHERE type = 'Income'")
+    @Query("SELECT * FROM Category WHERE type = 'income'")
     fun getIncomeCategory(): LiveData<MutableList<Category>>
-
-    @Query("SELECT * FROM Category WHERE type = 'Expenses'")
+    @Query("SELECT * FROM Category WHERE type = 'expense'")
     fun getExpenseCategory(): LiveData<MutableList<Category>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

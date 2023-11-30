@@ -1,8 +1,11 @@
 package my.edu.tarc.moneymate.MonetaryAccount
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import my.edu.tarc.moneymate.Database.AppDatabase
@@ -31,6 +34,25 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
 
     fun deleteAccount(monetaryAccount: MonetaryAccount) = viewModelScope.launch {
         repository.deleteAccount(monetaryAccount)
+    }
+
+    val accountIdsandName:LiveData<List<Pair<Long,String>>>  = getAllmAccount.map{accountList->
+        accountList.map {
+            account->
+            Pair(account.accountId,account.accountName)
+        }
+    }
+    val accountName:LiveData<List<String>>  = getAllmAccount.map{accountList->
+        accountList.map {
+                account->
+            account.accountName
+        }
+    }
+    val accountIds:LiveData<List<Long>>  = getAllmAccount.map{accountList->
+        accountList.map {
+                account->
+            account.accountId
+        }
     }
 
 }

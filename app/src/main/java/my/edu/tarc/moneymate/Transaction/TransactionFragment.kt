@@ -25,6 +25,11 @@ import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentTransactionBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 
 class TransactionFragment : Fragment() {
@@ -71,6 +76,8 @@ class TransactionFragment : Fragment() {
                 binding.cardDesc.visibility = View.GONE
             }
         }
+
+
 
         binding.leftIcon.setOnClickListener {
             findNavController().navigateUp()
@@ -260,14 +267,25 @@ class TransactionFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    private fun getCurrentTime():String
+    {
+        val currentDateTime= ZonedDateTime.now(ZoneId.of("GMT+8"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        return currentDateTime.format(formatter)
+    }
+
+
     private fun addRecordIntoDatabase(){
         var description = ""
-        var acccount = 0
+        var acccount = ""
+//        var acccount = 0
         var title = ""
         var result = ""
         var transactionTypeSelected = ""
-        var categoryId = 0
+        var categoryId = ""
+//        var categoryId = 0
         var categoryImage:Int = 0
+        val date = getCurrentTime()
         viewModel.transactionType.observe(viewLifecycleOwner){
             data -> transactionTypeSelected = data
         }
@@ -278,28 +296,29 @@ class TransactionFragment : Fragment() {
             title = data
         }
         viewModel.selectedAccount.observe(viewLifecycleOwner) { data ->
-//            acccount = data
+            acccount = data
         }
+//        account = arguments?.getLong("selectedAccountId").toString()
+//        val selectedAccountId = arguments?.getLong("selectedAccountId")
+//        Log.d("testing bundle", selectedAccountId.toString())
         viewModel.result.observe(viewLifecycleOwner) { data ->
             result = data
         }
         viewModel.categoryId.observe(viewLifecycleOwner){data ->
-//            categoryId = data
+            categoryId = data
         }
         viewModel.categoryImage.observe(viewLifecycleOwner){data->
             categoryImage = data
         }
-        Log.d("transactionTypeSelected", transactionTypeSelected)
+
         if (transactionTypeSelected == "income") {
-//            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
-//            incomeViewModel.addIncome(income)
+            val income = Income(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
+            incomeViewModel.addIncome(income)
         }
         else if (transactionTypeSelected == "expense")
         {
-//            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId,acccount)
-//            expenseViewModel.addExpense(expense)
-        } else if (transactionTypeSelected == "transfer"){
-
+            val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
+            expenseViewModel.addExpense(expense)
         }
     }
 

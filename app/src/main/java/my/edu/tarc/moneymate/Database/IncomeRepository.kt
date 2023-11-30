@@ -2,12 +2,15 @@ package my.edu.tarc.moneymate.Database
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import my.edu.tarc.moneymate.Budget.Budget
 import my.edu.tarc.moneymate.DataExport.IncomeWithAccountName
 import my.edu.tarc.moneymate.Income.Income
 import java.util.Date
 
 class IncomeRepository (private val incomeDao: IncomeDao) {
-    val getAllIncome: LiveData<MutableList<Income>> = incomeDao.getAllData()
+    val getAllIncome: LiveData<MutableList<Income>> = incomeDao.getAllIncome()
+    val getAllIncomeRecord: LiveData<List<Income>> = incomeDao.getAllIncomeRecord()
+//    val getAllIncome: LiveData<MutableList<Income>> = incomeDao.getAllData()
 
     suspend fun getIncomeByCriteria(
         accountId: Long,
@@ -34,5 +37,7 @@ class IncomeRepository (private val incomeDao: IncomeDao) {
     suspend fun updateIncome(income: Income){
         incomeDao.updateIncome(income)
     }
-
+    fun getIncomeInRange(startDate: String, endDate: String): LiveData<List<Income>> {
+        return incomeDao.getIncomeInRange(startDate, endDate)
+    }
 }

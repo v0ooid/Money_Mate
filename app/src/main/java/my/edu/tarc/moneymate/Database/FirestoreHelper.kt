@@ -57,7 +57,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
 
         // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["incomeId"] = income.incomeId
-        dataMap["title"] = income.title
+        dataMap["title"] = income.incomeTitle
         dataMap["description"] = income.description
         dataMap["amount"] = income.amount
         dataMap["date"] = income.date
@@ -126,6 +126,8 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun restoreExpenseFromFirebase(userId: String) {
         val dataList = mutableListOf<Expense>()
 
+        Log.e("income", "Working")
+
         db.collection("users")
             .document(userId)
             .collection("Expense")
@@ -142,7 +144,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                             expense_icon_image = (it["expense_icon_image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
-                            date =  it["date"] as? Date ?: Date(),
+                            date =  (it["date"] as? String) ?: "",
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
                         )
@@ -164,11 +166,15 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun restoreIncomeFromFirebase(userId: String) {
         val dataList = mutableListOf<Income>()
 
+        Log.e("income", "Working")
+
         db.collection("users")
             .document(userId)
             .collection("Income")
             .get()
             .addOnSuccessListener { querySnapshot ->
+                println("Working income")
+
                 for (document in querySnapshot.documents) {
                     val data = document.data
                     println("Income data: $data")
@@ -176,11 +182,11 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                     data?.let {
                         val income = Income(
                             incomeId = (it["incomeId"] as? Long) ?: 0L,
-                            title = it["title"] as? String ?: "",
+                            incomeTitle = it["title"] as? String ?: "",
                             image = (it["image"] as? Int) ?: 0,
                             description = it["description"] as? String ?: "",
                             amount = (it["amount"] as? Int) ?: 0,
-                            date =  it["date"] as? Date ?: Date(),
+                            date =  (it["date"] as? String) ?: "",
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
                         )

@@ -1,6 +1,7 @@
 package my.edu.tarc.moneymate.Expense
 
 import android.accounts.Account
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -35,8 +36,8 @@ data class Expense(
     var expense_icon_image: Int,
     var description: String,
     var amount: Int,
-    val date: Date,
-
     var categoryId: Long,
-    var accountId: Long
+    @ColumnInfo(index = true) // Creates an index on accountId for performance
+    var accountId: Long,
+    var date: String,
 )
