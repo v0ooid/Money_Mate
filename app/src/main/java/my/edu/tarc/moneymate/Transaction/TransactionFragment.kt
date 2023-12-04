@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Transaction
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -18,11 +20,15 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
+import my.edu.tarc.moneymate.Budget.BudgetViewModel
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
+import my.edu.tarc.moneymate.Gamification.GamificationHelper
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
+import my.edu.tarc.moneymate.Transfer.Transfer
+import my.edu.tarc.moneymate.Transfer.TransferViewModel
 import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentTransactionBinding
 import java.time.LocalDate
@@ -45,6 +51,8 @@ class TransactionFragment : Fragment() {
     val viewModel: TransactionViewModel by activityViewModels()
     val incomeViewModel: IncomeViewModel by activityViewModels()
     val expenseViewModel : ExpenseViewModel by activityViewModels()
+    val transferViewModel : TransferViewModel by activityViewModels()
+    val budgetViewModel : BudgetViewModel by activityViewModels()
 
     private var currentNumber = ""
     private var firstNumber = ""
@@ -78,7 +86,6 @@ class TransactionFragment : Fragment() {
         }
 
 
-
         binding.leftIcon.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -96,6 +103,10 @@ class TransactionFragment : Fragment() {
                             Log.d("test Tab 2",it.position.toString())
                             navController.navigate(R.id.expenseFragment)
                             viewModel.updateTransactionType("expense")
+                        }
+                        2 -> {
+                            navController.navigate(R.id.transferFragment)
+                            viewModel.updateTransactionType("transfer")
                         }
                     }
 
@@ -278,6 +289,7 @@ class TransactionFragment : Fragment() {
     private fun addRecordIntoDatabase(){
         var description = ""
         var acccount = ""
+        var toAccount = ""
 //        var acccount = 0
         var title = ""
         var result = ""
@@ -298,6 +310,9 @@ class TransactionFragment : Fragment() {
         viewModel.selectedAccount.observe(viewLifecycleOwner) { data ->
             acccount = data
         }
+        viewModel.toAccount.observe(viewLifecycleOwner){ data ->
+            toAccount = data
+        }
 //        account = arguments?.getLong("selectedAccountId").toString()
 //        val selectedAccountId = arguments?.getLong("selectedAccountId")
 //        Log.d("testing bundle", selectedAccountId.toString())
@@ -314,14 +329,66 @@ class TransactionFragment : Fragment() {
         if (transactionTypeSelected == "income") {
             val income = Income(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
             incomeViewModel.addIncome(income)
+            onIncomeRecorded()
+
+
         }
         else if (transactionTypeSelected == "expense")
         {
             val expense = Expense(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
             expenseViewModel.addExpense(expense)
+            budgetViewModel.updateBudgetWithExpense(expense)
+            onExpenseRecorded()
+        }
+        else if (transactionTypeSelected == "transfer")
+        {
+            val transfer = Transfer(0, title, description, result.toInt(), acccount.toLong(), toAccount.toLong(), date.toString())
+            transferViewModel.addTransfer(transfer, acccount.toLong(), toAccount.toLong(), result.toInt())
+
         }
     }
 
+    fun onIncomeRecorded() {
+        val sharedPreferences = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
+        val recordedIncomes = sharedPreferences.getInt("RecordedIncomes", 0)
+
+        if (recordedIncomes < 5){
+            // Increment the count of recorded incomes
+            sharedPreferences.edit {
+                putInt("RecordedIncomes", recordedIncomes + 1)
+            }
+
+            // Check if the user has recorded 5 incomes
+            val updatedRecordedIncomes = sharedPreferences.getInt("RecordedIncomes", 0)
+            if (updatedRecordedIncomes >= 5) {
+                GamificationHelper.checkTasksAndLevelUp(sharedPreferences)
+            }
+        }
+    }
+
+    fun onExpenseRecorded() {
+        val sharedPreferences = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
+        val recordedExpenses = sharedPreferences.getInt("RecordedExpenses", 0)
+
+        Log.e("recordedExpenses", recordedExpenses.toString())
+
+        if (recordedExpenses < 5){
+            // Increment the count of recorded expenses
+            sharedPreferences.edit {
+                putInt("RecordedExpenses", recordedExpenses + 1)
+            }
+
+            val twoExpenses = sharedPreferences.getInt("RecordedExpenses", 0)
+
+            Log.e("RecordedExpenses", twoExpenses.toString())
+
+            // Check if the user has recorded 5 expenses
+            val updatedRecordedExpenses = sharedPreferences.getInt("RecordedExpenses", 0)
+            if (updatedRecordedExpenses >= 5) {
+                GamificationHelper.checkTasksAndLevelUp(sharedPreferences)
+            }
+        }
+    }
 
     private fun evaluateExpression(
         firstNumber: String,

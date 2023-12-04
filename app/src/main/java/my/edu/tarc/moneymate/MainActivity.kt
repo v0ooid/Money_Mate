@@ -19,6 +19,7 @@ import androidx.navigation.ui.setupWithNavController
 
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.ui.navigateUp
@@ -31,6 +32,7 @@ import my.edu.tarc.moneymate.AppLock.AppLock4Activity
 import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
 import my.edu.tarc.moneymate.Profile.SignInActivity
 import my.edu.tarc.moneymate.databinding.ActivityMainBinding
+import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -64,6 +66,8 @@ class MainActivity : AppCompatActivity() {
             if (!appLockUnlock) {
                 checkAppLockStatus()
             } else {
+                onUserLogin()
+
                 val navView: BottomNavigationView = binding.navView
                 val navHostFragment =
                     supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
@@ -210,6 +214,44 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    fun onUserLogin() {
+        val sharedPreferences = getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
+        val currentDay = LocalDate.now().toString()
+
+        val lastLoginDate = sharedPreferences.getString("LastLoginDate", "")
+        val loggedInDays = sharedPreferences.getInt("LoggedInDays", 0)
+        val consecutiveLogins = sharedPreferences.getInt("ConsecutiveLogins", 0)
+
+        Log.e("LastLoginDate", lastLoginDate.toString())
+        Log.e("LoggedInDays", loggedInDays.toString())
+        Log.e("ConsecutiveLogins", consecutiveLogins.toString())
+
+        if (loggedInDays < 5){
+            if (currentDay != lastLoginDate) {
+                // New login for the day
+                sharedPreferences.edit {
+                    putString("LastLoginDate", currentDay)
+                    putInt("LoggedInDays", loggedInDays + 1)
+                    putInt("ConsecutiveLogins", consecutiveLogins + 1)
+
+                }
+            } else {
+                // Same day login, check for consecutive logins
+                sharedPreferences.edit {
+                    putInt("ConsecutiveLogins", consecutiveLogins.coerceAtLeast(1)) // Keep at least 1 for today
+                }
+            }
+
+            // Check for consecutive logins reaching the goal
+            val updatedConsecutiveLogins = sharedPreferences.getInt("ConsecutiveLogins", 0)
+            if (updatedConsecutiveLogins >= 5) {
+                // Award the badge or level up the user
+            }
+        }
+
+    }
+
 
 
 }

@@ -1,9 +1,7 @@
 package my.edu.tarc.moneymate.DataExport
 
-import java.util.Date
-
-data class IncomeWithAccountName(
-    val incomeTitle: String,
+data class ExpenseWithAccountName(
+    val expense_title: String,
     val description: String,
     val amount: Int,
     val date: String,

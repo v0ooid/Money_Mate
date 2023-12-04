@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.IncomeRepository
+import my.edu.tarc.moneymate.Database.MonetaryAccountRepository
+import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 
 class IncomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _result = MutableLiveData<String>()
@@ -35,9 +37,14 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
         _selectedAccount.value = newData
     }
     private val repository: IncomeRepository
+    private val accountRepo: MonetaryAccountRepository
     init{
         val incomeDao = AppDatabase.getDatabase(application).incomeDao()
+        val mAccountDao = AppDatabase.getDatabase(application).monetaryAccountDao()
+
         repository = IncomeRepository(incomeDao)
+        accountRepo = MonetaryAccountRepository(mAccountDao)
+
         readAllData = repository.getAllIncome
         incomeInRange = MutableLiveData()
     }
@@ -45,6 +52,18 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
     {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addIncome(income)
+
+            val accountId = income.accountId
+
+            val account : MonetaryAccount = accountRepo.getAccountbyId2(accountId.toString())
+
+            if (account != null) {
+                // Increase the account balance by the income amount
+                account.accountBalance += income.amount
+
+                // Update the account balance in the repository
+                accountRepo.updateAccount(account)
+            }
         }
     }
 
@@ -53,7 +72,28 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun updateIncome(income: Income) = viewModelScope.launch {
+        // Get the old income record
+        val oldIncome = repository.getIncomeById(income.incomeId)
+
+        // Update the income record
         repository.updateIncome(income)
+
+        // Calculate the difference in income amounts
+        val incomeDifference = income.amount - oldIncome.amount
+
+        // Update the monetary account balance
+        updateMonetaryAccountBalance(income.accountId, incomeDifference)
+    }
+
+    private suspend fun updateMonetaryAccountBalance(accountId: Long, amountDifference: Int) {
+        viewModelScope.launch {
+            val account = accountRepo.getAccountbyId2(accountId.toString())
+            account?.let {
+                it.accountBalance += amountDifference
+                // Update the account in the repository or database
+                accountRepo.updateAccount(it)
+            }
+        }
     }
 
     fun getIncomeForDateRange(startDate: String, endDate: String) {

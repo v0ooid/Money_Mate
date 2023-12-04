@@ -17,6 +17,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.Budget.BudgetViewModel
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
 import my.edu.tarc.moneymate.Income.Income
@@ -24,9 +25,9 @@ import my.edu.tarc.moneymate.R
 
 class RecordExpenseAdapter constructor(
     private val context: Context,
-
     private val expenseViewModel: ExpenseViewModel,
     private val recordViewModel: RecordViewModel,
+    private val budgetViewModel: BudgetViewModel,
     val getFragment: RecordFragment,
     private val recordList: MutableList<Record>
 ) : RecyclerView.Adapter<RecordExpenseAdapter.RecordViewHolder>() {
@@ -41,8 +42,8 @@ class RecordExpenseAdapter constructor(
         val expenseDate: TextView = itemView.findViewById(R.id.record_expense_dateTime)
         val incomeLayout: View = itemView.findViewById(R.id.income_linear)
         val expenseLayout: View = itemView.findViewById(R.id.expense_linear)
+        val transferLayout: View = itemView.findViewById(R.id.transfer_linear)
         val expenseIcon : ImageView = itemView.findViewById(R.id.record_expense_icon)
-
     }
 
     override fun onCreateViewHolder(
@@ -57,7 +58,9 @@ class RecordExpenseAdapter constructor(
     override fun onBindViewHolder(holder: RecordViewHolder, position: Int) {
         if (recordList[position].type == "expense") {
             holder.incomeLayout.visibility = View.GONE
+            holder.transferLayout.visibility = View.GONE
             holder.expenseLayout.visibility = View.VISIBLE
+
             holder.expenseTitle.text = recordList[position].title
             holder.expenseResult.text = "RM" + recordList[position].amount.toString()
             holder.expenseDate.text = recordList[position].date
@@ -67,6 +70,11 @@ class RecordExpenseAdapter constructor(
         } else if (recordList[position].type == "income") {
             holder.expenseLayout.visibility = View.GONE
             holder.incomeLayout.visibility = View.GONE
+            holder.transferLayout.visibility = View.GONE
+        } else if (recordList[position].type == "transfer"){
+            holder.expenseLayout.visibility = View.GONE
+            holder.incomeLayout.visibility = View.GONE
+            holder.transferLayout.visibility = View.GONE
         }
         holder.itemView.setOnClickListener {
             val popupMenu = PopupMenu(holder.itemView.context, holder.itemView)
@@ -212,6 +220,7 @@ class RecordExpenseAdapter constructor(
 
                 // Update the database or perform other actions as needed
                 expenseViewModel.updateExpense(updateExpense)
+                budgetViewModel.updateBudgetWithExpense(updateExpense)
 
                 dialog.dismiss()
                 overlayLayout.visibility = View.GONE

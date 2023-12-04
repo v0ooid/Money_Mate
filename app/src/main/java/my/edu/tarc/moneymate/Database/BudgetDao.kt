@@ -6,13 +6,22 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import my.edu.tarc.moneymate.Budget.Budget
+import my.edu.tarc.moneymate.Budget.BudgetWithExpenses
 import my.edu.tarc.moneymate.Income.Income
 
 
 @Dao
 interface BudgetDao {
+
+    @Query("SELECT * FROM budgets WHERE categoryId = :categoryId")
+    suspend fun getBudgetByCategory(categoryId: Long): Budget?
+
+    @Transaction
+    @Query("SELECT * FROM budgets WHERE categoryId = :categoryId")
+    suspend fun getBudgetWithExpenses(categoryId: Long): BudgetWithExpenses?
 
     @Query("DELETE FROM budgets")
     suspend fun deleteAll()

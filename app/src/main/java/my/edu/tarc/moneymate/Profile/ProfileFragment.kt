@@ -112,6 +112,19 @@ class ProfileFragment : Fragment() {
     private fun runRemainingProfileFragmentLogic(){
         val sharedPreferences = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", "")
+        val gamePref = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
+
+        var level = gamePref.getInt("Level", 0)
+
+        binding.tvLevel.text = "LV $level"
+
+        var badge = gamePref.getInt("BadgeEquiped", 0)
+
+        if (badge != null){
+            val badgeIcon= binding.ivBadgeIcon
+            badgeIcon.visibility = View.VISIBLE
+            badgeIcon.setImageResource(badge)
+        }
 
         //Firebase for show data(name and gmail)
         val db = FirebaseFirestore.getInstance()
@@ -204,6 +217,11 @@ class ProfileFragment : Fragment() {
         //Dialog for edit password
         binding.cardViewEditPassword.setOnClickListener {
             showDialog()
+        }
+
+        binding.cardViewBadge.setOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.action_profileFragment_to_badgeFragment)
         }
 
         binding.dataExportCard.setOnClickListener{

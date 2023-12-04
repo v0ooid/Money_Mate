@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class MonetaryAccount(
     @PrimaryKey(autoGenerate = true) val accountId: Long = 0,
     val accountName: String,
-    val accountBalance: Double,
+    var accountBalance: Double,
     val accountIcon: Int
 )

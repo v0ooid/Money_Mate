@@ -16,6 +16,11 @@
         android:name="my.edu.tarc.moneymate.Expense.ExpenseFragment"
         android:label="fragment_expense"
         tools:layout="@layout/fragment_expense" />
+    <fragment
+        android:id="@+id/transferFragment"
+        android:name="my.edu.tarc.moneymate.Transfer.TransferFragment"
+        android:label="TransferFragment"
+        tools:layout="@layout/fragment_transfer"/>
 
 
 </navigation>

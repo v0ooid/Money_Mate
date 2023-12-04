@@ -13,7 +13,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tvLevel">
 
         <ImageView
             android:id="@+id/imageViewProfilepic"
@@ -326,7 +326,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardViewAppLock"
+                        android:id="@+id/cardViewBadge"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginStart="16dp"
@@ -336,6 +336,61 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cardViewMonetaryAccount">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/card_view_background">
+
+                            <ImageView
+                                android:id="@+id/ivBadge"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="16dp"
+                                android:tint="@android:color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/badge_svgrepo_com"
+                                tools:ignore="DuplicateIds" />
+
+                            <TextView
+                                android:id="@+id/tvBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:fontFamily="@font/manrope_medium"
+                                android:text="Badges"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="@+id/ivBadge"
+                                app:layout_constraintStart_toEndOf="@+id/ivBadge"
+                                app:layout_constraintTop_toTopOf="@+id/ivBadge"
+                                app:layout_constraintVertical_bias="0.4" />
+
+                            <ImageView
+                                android:id="@+id/ivBadgeRight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:tint="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewAppLock"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardViewBadge">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -665,4 +720,27 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="LV 0"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBadgeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/tvLevel"
+        app:layout_constraintStart_toEndOf="@+id/tvLevel"
+        app:layout_constraintTop_toTopOf="@+id/tvLevel"
+        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

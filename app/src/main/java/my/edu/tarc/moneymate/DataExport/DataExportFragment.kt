@@ -1,6 +1,9 @@
 package my.edu.tarc.moneymate.DataExport
 
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Context
@@ -19,8 +22,11 @@ import android.widget.AdapterView
 import android.widget.DatePicker
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -74,8 +80,7 @@ class DataExportFragment : Fragment() {
 
         val transactionType = listOf(
             ClasslessItem(R.drawable.baseline_arrow_upward_24, "Income"),
-            ClasslessItem(R.drawable.baseline_arrow_downward_24, "Expenses"),
-            ClasslessItem(R.drawable.baseline_compare_arrows_24, "Transfer"),
+            ClasslessItem(R.drawable.baseline_arrow_downward_24, "Expenses")
         )
 
         val spinnerCategory: Spinner = binding.sDECategory
@@ -90,12 +95,14 @@ class DataExportFragment : Fragment() {
                 id: Long
             ) {
                 val selectedItem = parent?.getItemAtPosition(position) as? ClasslessItem
+                Log.e("selectedItem", selectedItem.toString())
                 if (selectedItem != null) {
                     if (selectedItem.title == "Income") {
                         dataExportViewModel.getAllIncomeCategories()
                             .observe(viewLifecycleOwner) { categories ->
                                 // Ensure categories is not null and not empty before setting the adapter
                                 if (categories != null && categories.isNotEmpty()) {
+                                    Log.e("income categories", categories.toString())
                                     val adapter = ClassSpinnerAdapter(
                                         requireContext(),
                                         categories,
@@ -109,11 +116,13 @@ class DataExportFragment : Fragment() {
                                     Log.e("Adapter2", "Categories list is empty or null")
                                 }
                             }
-                    } else if (selectedItem.title == "Expense"){
+                    } else if (selectedItem.title == "Expenses"){
                         dataExportViewModel.getAllExpensesCategories()
                             .observe(viewLifecycleOwner) { categories ->
                                 // Ensure categories is not null and not empty before setting the adapter
                                 if (categories != null && categories.isNotEmpty()) {
+                                    Log.e("expense categories", categories.toString())
+
                                     val adapter = ClassSpinnerAdapter(
                                         requireContext(),
                                         categories,
@@ -198,9 +207,9 @@ class DataExportFragment : Fragment() {
             if (selectedTransaction.title == "Income") {
                 dataExportViewModel.fetchIncomeByCriteria(
                     selectedAccount.accountId,
-                    selectedCategory.categoryId
-//                    dateFormat.parse(startDate),
-//                    dateFormat.parse(endDate),
+                    selectedCategory.categoryId,
+                    startDate,
+                    endDate
                 )
                 dataExportViewModel.incomeLiveData.observe(viewLifecycleOwner) { incomeList ->
                     when (selectedFileType.title){
@@ -210,16 +219,16 @@ class DataExportFragment : Fragment() {
                     }
                 }
             } else if (selectedTransaction.title == "Expenses") {
-//                dataExportViewModel.fetchExpenseByCriteria(
-//                    selectedAccount.accountId,
-//                    selectedCategory.categoryId,
-//                    dateFormat.parse(startDate),
-//                    dateFormat.parse(endDate),
-//                )
+                dataExportViewModel.fetchExpenseByCriteria(
+                    selectedAccount.accountId,
+                    selectedCategory.categoryId,
+                    startDate,
+                    endDate
+                )
                 dataExportViewModel.expenseLiveData.observe(viewLifecycleOwner) { expensesList ->
                     // Handle expenses list and export it to CSV or JSON
                     when (selectedFileType.title){
-//                        "CSV" -> generateExpenseCSVFile(expensesList)
+                        "CSV" -> generateExpenseCSVFile(expensesList)
 //                        "JSON" -> generateExpenseJSONFile(expensesList)
                         else -> null
                     }
@@ -231,93 +240,114 @@ class DataExportFragment : Fragment() {
         return binding.root
     }
 
-    //Original
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun generateIncomeCSVFile(
-        incomeList: List<Income>
-    ): Uri? {
-        val csvHeader =
-            "ACCOUNT, TRANSACTION TYPE, TITLE, CATEGORY, AMOUNT, DATE\n" // Header of the CSV file
-
-        val csvContent = StringBuilder()
-        csvContent.append(csvHeader)
-
-        Log.e("incomeList", incomeList.toString())
-
-//         Iterate through the income list and append data to the CSV content
-        for (income in incomeList) {
-
-//            val accountName = income.accountName
-            val title = income.incomeTitle
-//            val category = income.title
-            val amount = income.amount.toString()
-            val date = income.date.toString()
-
-            val row = "Income,$title,$amount,$date\n"
-            csvContent.append(row)
-        }
-
-        // Write the CSV content to a file
-        val fileName = "income_data.csv"
-        val fileContent = csvContent.toString().toByteArray()
-
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-        }
-
-        val resolver = requireContext().contentResolver
-        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-
-        uri?.let { fileUri ->
-            resolver.openOutputStream(fileUri)?.use { outputStream ->
-                outputStream.write(fileContent)
-            }
-        }
-
-        return uri
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-//    @RequiresApi(Build.VERSION_CODES.Q)
-//    private fun generateExpenseCSVFile(expenseList: List<Expense>): Uri? {
-//        val csvHeader =
-//            "ACCOUNT, TRANSACTION TYPE, TITLE, CATEGORY, AMOUNT, DATE\n" // Header of the CSV file
-//
-//        val csvContent = StringBuilder()
-//        csvContent.append(csvHeader)
-//
-//        // Iterate through the income list and append data to the CSV content
-//        for (expense in expenseList) {
-//            val title = expense.title
-//            val amount = expense.amount.toString()
-//            val date = expense.date.toString()
-//
-//            val row = "$title,$amount,$date\n"
-//            csvContent.append(row)
-//        }
-//
-//        // Write the CSV content to a file
-//        val fileName = "expense_data.csv"
-//        val fileContent = csvContent.toString().toByteArray()
-//
-//        val contentValues = ContentValues().apply {
-//            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-//            put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
-//            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-//        }
-//
-//        val resolver = requireContext().contentResolver
-//        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-//
-//        uri?.let { fileUri ->
-//            resolver.openOutputStream(fileUri)?.use { outputStream ->
-//                outputStream.write(fileContent)
-//            }
-//        }
-//
-//        return uri
-//    }
+
+    //Original
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun generateIncomeCSVFile(incomeList: List<IncomeWithAccountName>): Uri? {
+
+        if (incomeList.isEmpty()) {
+            showToast("No income records to export")
+            return null
+        } else {
+            val csvHeader =
+                "ACCOUNT, TRANSACTION TYPE, TITLE, CATEGORY, AMOUNT, DATE\n" // Header of the CSV file
+
+            val csvContent = StringBuilder()
+            csvContent.append(csvHeader)
+
+            Log.e("incomeList", incomeList.toString())
+
+//         Iterate through the income list and append data to the CSV content
+            for (income in incomeList) {
+                val account = income.accountName
+                val title = income.incomeTitle
+                val category = income.categoryName
+                val amount = income.amount
+                val date = income.date
+
+                val row = "$account,Income,$title,$category,$amount,$date\n"
+                csvContent.append(row)
+            }
+
+            // Write the CSV content to a file
+            val fileName = "income_data.csv"
+            val fileContent = csvContent.toString().toByteArray()
+
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+
+            val resolver = requireContext().contentResolver
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+            uri?.let { fileUri ->
+                resolver.openOutputStream(fileUri)?.use { outputStream ->
+                    outputStream.write(fileContent)
+                }
+            }
+
+            showToast("Data Export successful, check your download folder")
+
+            return uri
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun generateExpenseCSVFile(expenseList: List<ExpenseWithAccountName>): Uri? {
+
+        if (expenseList.isEmpty()) {
+            showToast("No income records to export")
+            return null
+        } else {
+            val csvHeader =
+                "ACCOUNT, TRANSACTION TYPE, TITLE, CATEGORY, AMOUNT, DATE\n" // Header of the CSV file
+
+            val csvContent = StringBuilder()
+            csvContent.append(csvHeader)
+
+            // Iterate through the income list and append data to the CSV content
+            for (expense in expenseList) {
+                val account = expense.accountName
+                val title = expense.expense_title
+                val category = expense.categoryName
+                val amount = expense.amount
+                val date = expense.date
+
+                val row = "$account,Income,$title,$category,$amount,$date\n"
+                csvContent.append(row)
+            }
+
+            // Write the CSV content to a file
+            val fileName = "expense_data.csv"
+            val fileContent = csvContent.toString().toByteArray()
+
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+
+            val resolver = requireContext().contentResolver
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+            uri?.let { fileUri ->
+                resolver.openOutputStream(fileUri)?.use { outputStream ->
+                    outputStream.write(fileContent)
+                }
+            }
+
+            showToast("Data Export successful, check your download folder")
+
+            return uri
+        }
+    }
 
 //    @RequiresApi(Build.VERSION_CODES.Q)
 //    private fun generateIncomeJSONFile(incomeList: List<Income>): Uri? {

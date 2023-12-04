@@ -10,12 +10,19 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
+import my.edu.tarc.moneymate.Transfer.MonetaryAccountDetails
 
 @Dao
 interface MonetaryAccountDao {
 
     @Query("SELECT * FROM monetary_accounts WHERE accountId = :accountId")
     fun getAccountById(accountId: String): LiveData<MonetaryAccount>
+
+    @Query("SELECT * FROM monetary_accounts WHERE accountId = :accountId")
+    suspend fun getAccountbyId2(accountId: String): MonetaryAccount
+
+    @Query("SELECT accountName, accountIcon FROM monetary_accounts WHERE accountId = :accountId")
+    fun getAccountDetailsById(accountId: Long): LiveData<MonetaryAccountDetails>
 
     @Query("DELETE FROM monetary_accounts")
     suspend fun deleteAll()

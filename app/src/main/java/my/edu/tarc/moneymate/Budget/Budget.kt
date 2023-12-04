@@ -24,7 +24,7 @@ data class Budget(
     @PrimaryKey(autoGenerate = true) val budgetId: Long = 0,
     val budgetName: String,
     val budgetLimit: Double,
-    val budgetSpent: Double,
+    var budgetSpent: Double,
     val budgetIcon: Int,
 
     val  categoryId: Long

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout9"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Gamification.BadgeFragment" >
+
+    <TextView
+        android:id="@+id/tvEmptyBadge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Looks like you don't have any badges unlocked yet. Level up to unlock badges to equip."
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar7" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBackMAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/baseline_arrow_back_ios_new_24"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="32dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/btnBackMAccount"
+            android:fontFamily="@font/manrope_bold"
+            android:text="Badges"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="15dp" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/levelBadgeContraint"
+        android:layout_width="377dp"
+        android:layout_height="178dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/card_view_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar7">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contraintLevel2"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_border"
+            app:layout_constraintEnd_toEndOf="@+id/ivLevel2"
+            app:layout_constraintStart_toStartOf="@+id/ivLevel2"
+            app:layout_constraintTop_toBottomOf="@+id/ivLevel1">
+
+            <TextView
+                android:id="@+id/tvLevel2Equip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Equip"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contraintLevel3"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_border"
+            app:layout_constraintEnd_toEndOf="@+id/ivLevel3"
+            app:layout_constraintStart_toStartOf="@+id/ivLevel3"
+            app:layout_constraintTop_toBottomOf="@+id/ivLevel1">
+
+            <TextView
+                android:id="@+id/tvLevel3Equip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Equip"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/ivLevel1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/_958382471556281944"
+            android:tint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/tvLevel1"
+            app:layout_constraintStart_toStartOf="@+id/tvLevel1"
+            app:layout_constraintTop_toBottomOf="@+id/tvLevel1" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contraintLevel1"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_border"
+            app:layout_constraintEnd_toEndOf="@+id/ivLevel1"
+            app:layout_constraintStart_toStartOf="@+id/ivLevel1"
+            app:layout_constraintTop_toBottomOf="@+id/ivLevel1">
+
+            <TextView
+                android:id="@+id/tvLevel1Equip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Equip"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/ivLevel3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/lv3"
+            android:tint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/tvLevel3"
+            app:layout_constraintStart_toStartOf="@+id/tvLevel3"
+            app:layout_constraintTop_toBottomOf="@+id/tvLevel3" />
+
+        <ImageView
+            android:id="@+id/ivLevel2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/lv2"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/ivLevel3"
+            app:layout_constraintStart_toEndOf="@+id/ivLevel1"
+            app:layout_constraintTop_toBottomOf="@+id/tvLevel2" />
+
+        <TextView
+            android:id="@+id/tvLevel1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="Level 1"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView53" />
+
+        <TextView
+            android:id="@+id/tvLevel2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Level 2"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toStartOf="@+id/tvLevel3"
+            app:layout_constraintStart_toEndOf="@+id/tvLevel1"
+            app:layout_constraintTop_toTopOf="@+id/tvLevel1" />
+
+        <TextView
+            android:id="@+id/tvLevel3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:text="Level 3"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView53" />
+
+        <TextView
+            android:id="@+id/textView53"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="8dp"
+            android:text="Level up badges"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

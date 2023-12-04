@@ -28,11 +28,11 @@ class DataExportViewModel(application: Application) : AndroidViewModel(applicati
 
     var getAllMAccount: LiveData<List<MonetaryAccount>>
 
-    private val _incomeLiveData: MutableLiveData<List<Income>> = MutableLiveData()
-    val incomeLiveData: LiveData<List<Income>> = _incomeLiveData
+    private val _incomeLiveData: MutableLiveData<List<IncomeWithAccountName>> = MutableLiveData()
+    val incomeLiveData: LiveData<List<IncomeWithAccountName>> = _incomeLiveData
 
-    private val _expenseLiveData: MutableLiveData<List<Expense>> = MutableLiveData()
-    val expenseLiveData: LiveData<List<Expense>> = _expenseLiveData
+    private val _expenseLiveData: MutableLiveData<List<ExpenseWithAccountName>> = MutableLiveData()
+    val expenseLiveData: LiveData<List<ExpenseWithAccountName>> = _expenseLiveData
 
     init {
         val mAccountDao = AppDatabase.getDatabase(application).monetaryAccountDao()
@@ -51,29 +51,27 @@ class DataExportViewModel(application: Application) : AndroidViewModel(applicati
     // Function to fetch income data based on selected criteria
     fun fetchIncomeByCriteria(
         accountId: Long,
-        categoryId: Long
-//        startDate: Date,
-//        endDate: Date
+        categoryId: Long,
+        startDate: String,
+        endDate: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-//            val incomeList = incomeRepo.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
-            val incomeList = incomeRepo.getIncomeByCriteria(accountId, categoryId)
-
+            val incomeList = incomeRepo.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
             _incomeLiveData.postValue(incomeList)
         }
     }
 
-//    fun fetchExpenseByCriteria(
-//        accountId: Long,
-//        categoryId: Long,
-//        startDate: Date,
-//        endDate: Date
-//    ) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val expenseList = expenseRepo.getExpenseByCriteria(accountId, categoryId, startDate, endDate)
-//            _expenseLiveData.postValue(expenseList)
-//        }
-//    }
+    fun fetchExpenseByCriteria(
+        accountId: Long,
+        categoryId: Long,
+        startDate: String,
+        endDate: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val expenseList = expenseRepo.getExpenseByCriteria(accountId, categoryId, startDate, endDate)
+            _expenseLiveData.postValue(expenseList)
+        }
+    }
 
     fun getAllIncomeCategories(): LiveData<List<Category>> {
         val mutableIncomeCategories: LiveData<MutableList<Category>> = categoryRepo.getIncomeCategory

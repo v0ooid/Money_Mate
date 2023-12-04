@@ -3,6 +3,8 @@ package my.edu.tarc.moneymate.Transaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import my.edu.tarc.moneymate.Database.AppDatabase
+import my.edu.tarc.moneymate.Database.MonetaryAccountRepository
 import my.edu.tarc.moneymate.Income.Income
 import java.util.function.LongFunction
 
@@ -14,6 +16,7 @@ class TransactionViewModel : ViewModel() {
      private val _transactionType = MutableLiveData<String>()
      private val _categoryId = MutableLiveData<String>()
      private val _categoryImage = MutableLiveData<Int>()
+     private val _toAccount = MutableLiveData<String>()
 
      val result:LiveData<String> get() = _result
      val title:LiveData<String> get() = _title
@@ -22,8 +25,11 @@ class TransactionViewModel : ViewModel() {
      val transactionType:LiveData<String> get() = _transactionType
      val categoryId:LiveData<String> get() = _categoryId
      val categoryImage:LiveData<Int> get() = _categoryImage
+     val toAccount: LiveData<String> get() = _toAccount
+
      init {
          _transactionType.value = "income"
+
      }
 
      fun updateData(newData: String)
@@ -54,4 +60,10 @@ class TransactionViewModel : ViewModel() {
      {
           _categoryImage.value = newData
      }
+
+     fun updateToAccountData(newData: String)
+     {
+          _toAccount.value = newData
+     }
+
 }

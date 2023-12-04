@@ -39,10 +39,10 @@ class RecordAdapter constructor(
         val expenseDate: TextView = itemView.findViewById(R.id.record_expense_dateTime)
         val incomeLayout: View = itemView.findViewById(R.id.income_linear)
         val expenseLayout: View = itemView.findViewById(R.id.expense_linear)
+        val transferLayout: View = itemView.findViewById(R.id.transfer_linear)
         val incomeIcon : ImageView = itemView.findViewById(R.id.record_income_icon)
 
     }
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -63,6 +63,7 @@ class RecordAdapter constructor(
         if (recordList[position].type == "income") {
             holder.expenseLayout.visibility = View.GONE
             holder.incomeLayout.visibility = View.VISIBLE
+            holder.transferLayout.visibility = View.GONE
             holder.incometitle.text = recordList[position].title
             holder.incomeDate.text = recordList[position].date
             holder.incomeResult.text = "RM" + recordList[position].amount.toString()
@@ -72,6 +73,11 @@ class RecordAdapter constructor(
         } else if (recordList[position].type == "expense") {
             holder.incomeLayout.visibility = View.GONE
             holder.expenseLayout.visibility = View.GONE
+            holder.transferLayout.visibility = View.GONE
+        } else if (recordList[position].type == "transfer"){
+            holder.incomeLayout.visibility = View.GONE
+            holder.expenseLayout.visibility = View.GONE
+            holder.transferLayout.visibility = View.GONE
         }
         holder.itemView.setOnClickListener {
             val popupMenu = PopupMenu(holder.itemView.context, holder.itemView)
@@ -143,7 +149,6 @@ class RecordAdapter constructor(
         val dialogView = inflater.inflate(R.layout.layout_edit_record, null)
         val overlayView = inflater.inflate(R.layout.dark_overlay, null)
 
-
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -210,7 +215,6 @@ class RecordAdapter constructor(
                     accountId = editRecord.accountId.toLong(),
                     date = editRecord.date
                 )
-
 
                 // Update the dataset in the adapter
                 updateItem(position, updateRecord)

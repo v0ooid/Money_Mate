@@ -22,4 +22,15 @@ class BudgetRepository(private val budgetDao: BudgetDao) {
     suspend fun updateBudget(budget: Budget){
         budgetDao.updateBudget(budget)
     }
+
+
+
+    suspend fun getBudgetByCategory(categoryId: Long): Budget? {
+        return budgetDao.getBudgetByCategory(categoryId)
+    }
+
+
+
+
+
 }

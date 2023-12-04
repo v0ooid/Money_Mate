@@ -24,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.Budget.BudgetViewModel
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.ExpenseRepository
@@ -38,6 +39,7 @@ import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccountViewModel
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.Transaction.TransactionFragment
 import my.edu.tarc.moneymate.Transaction.TransactionViewModel
+import my.edu.tarc.moneymate.Transfer.TransferViewModel
 import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentRecordBinding
 
@@ -47,15 +49,21 @@ class RecordFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var incomerecyclerView: RecyclerView
     private lateinit var expenserecyclerView: RecyclerView
+    private lateinit var transferRecyclerView: RecyclerView
 
     private lateinit var RecordAdapter: RecordAdapter
     private lateinit var RecordExpenseAdapter: RecordExpenseAdapter
+    private lateinit var RecordTransferAdapter: RecordTransferAdapter
+
     private var categorylist_income = mutableListOf<Income>()
     val transactionViewModel: TransactionViewModel by activityViewModels()
     val monetaryAccountViewModel: MonetaryAccountViewModel by activityViewModels()
     val incomeViewModel: IncomeViewModel by activityViewModels()
     val expenseViewModel: ExpenseViewModel by activityViewModels()
+    val transferViewModel: TransferViewModel by activityViewModels()
     val recordViewModel: RecordViewModel by activityViewModels()
+    val budgetViewModel: BudgetViewModel by activityViewModels()
+
     private var monetaryAccountList: List<MonetaryAccount>? = null
     private var accountId: List<Long>? = null
     private var accountName: List<String>? = null
@@ -79,6 +87,7 @@ class RecordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         incomerecyclerView = binding.recordIncomeTransaction
         expenserecyclerView = binding.recordExpenseTransaction
+        transferRecyclerView = binding.recordTransferTransaction
 //        incomerecyclerView = binding.recordIncomeTransaction
 //        incomerecyclerView.layoutManager = LinearLayoutManager(requireContext())
 //        RecordAdapter = RecordAdapter(requireContext(),incomeViewModel, recordViewModel,this, recordList2)
@@ -110,6 +119,12 @@ class RecordFragment : Fragment() {
 
         setupRecyclerViews()
         observeRecordData()
+
+        val navController = findNavController()
+        binding.ivTask.setOnClickListener{
+            navController.navigate(
+                R.id.action_recordFragment_to_dailyTaskFragment)
+        }
         binding.fabTransactionAdd.setOnClickListener {
             // findNavController().navigate(R.id.action_recordFragment_to_transactionFragment)
             showCustomDialog()
@@ -123,8 +138,17 @@ class RecordFragment : Fragment() {
         incomerecyclerView.adapter = RecordAdapter
 
         expenserecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        RecordExpenseAdapter = RecordExpenseAdapter(requireContext(), expenseViewModel, recordViewModel, this, mutableListOf())
+        RecordExpenseAdapter = RecordExpenseAdapter(requireContext(), expenseViewModel, recordViewModel, budgetViewModel,this, mutableListOf())
         expenserecyclerView.adapter = RecordExpenseAdapter
+
+        transferRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        RecordTransferAdapter = RecordTransferAdapter(requireContext(), transferViewModel, mutableListOf())
+        transferRecyclerView.adapter = RecordTransferAdapter
+
+        transferViewModel.getAllMAccount.observe(viewLifecycleOwner){
+            RecordTransferAdapter.setAccount(it)
+        }
+
     }
 
     private fun observeRecordData() {
@@ -133,9 +157,10 @@ class RecordFragment : Fragment() {
             RecordAdapter.updateList(data)
             RecordExpenseAdapter.updateList(data)
         }
+        transferViewModel.getAllTransfer.observe(viewLifecycleOwner){
+            RecordTransferAdapter.updateList(it)
+        }
     }
-
-
 
     fun showCustomDialog() {
         // Inflate the custom layout

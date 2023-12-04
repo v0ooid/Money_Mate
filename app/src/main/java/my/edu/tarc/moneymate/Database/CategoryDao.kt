@@ -25,6 +25,7 @@ interface CategoryDao {
 
     @Query("SELECT * FROM Category WHERE type = 'income'")
     fun getIncomeCategory(): LiveData<MutableList<Category>>
+
     @Query("SELECT * FROM Category WHERE type = 'expense'")
     fun getExpenseCategory(): LiveData<MutableList<Category>>
 

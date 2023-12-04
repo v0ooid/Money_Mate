@@ -26,4 +26,8 @@ class MonetaryAccountRepository(private val monetaryAccountDao: MonetaryAccountD
     fun getTotalAmount(): LiveData<Double> {
         return monetaryAccountDao.getTotalAmount()
     }
+
+    suspend fun getAccountbyId2(accountId: String): MonetaryAccount{
+        return monetaryAccountDao.getAccountbyId2(accountId)
+    }
 }

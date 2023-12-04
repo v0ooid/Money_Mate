@@ -126,7 +126,6 @@ class BudgetAdapter(
         val dialogView = inflater.inflate(R.layout.layout_add_budget_dialog, null)
         val overlayView = inflater.inflate(R.layout.dark_overlay, null)
 
-
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -139,7 +138,6 @@ class BudgetAdapter(
         layoutParams?.width = WindowManager.LayoutParams.MATCH_PARENT
         layoutParams?.height = WindowManager.LayoutParams.WRAP_CONTENT
         window?.attributes = layoutParams
-
 
         val nameTextView = dialog.findViewById<TextView>(R.id.eTBudgetName)
         val limitTextView = dialog.findViewById<TextView>(R.id.eTBudgetLimit)
@@ -159,6 +157,13 @@ class BudgetAdapter(
         nameTextView.text = editBudget.budgetName
         val formattedNumber = String.format("%.2f", editBudget.budgetLimit)
         limitTextView.text = formattedNumber
+
+        val categoryIndex = categoryDataSet.indexOfFirst { it.categoryId == editBudget.categoryId }
+
+        // Set the selected category in the spinner
+        if (categoryIndex != -1) {
+            spinner.setSelection(categoryIndex)
+        }
 
         // Add more logic to pre-populate other dialog UI components
 

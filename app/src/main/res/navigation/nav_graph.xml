@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_profileFragment_to_dataSyncFragment"
             app:destination="@id/dataSyncFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_badgeFragment"
+            app:destination="@id/badgeFragment" />
     </fragment>
     <activity
         android:id="@+id/signInActivity"
@@ -183,6 +186,9 @@
         <action
             android:id="@+id/action_recordFragment_to_transactionFragment"
             app:destination="@id/transactionFragment" />
+        <action
+            android:id="@+id/action_recordFragment_to_dailyTaskFragment"
+            app:destination="@id/dailyTaskFragment" />
     </fragment>
     <fragment
         android:id="@+id/dataExportFragment"
@@ -248,5 +254,15 @@
         android:name="my.edu.tarc.moneymate.FinancialAdvisor.FinancialAdvisorFragment"
         android:label="fragment_financial_advisor2"
         tools:layout="@layout/fragment_financial_advisor2" />
+    <fragment
+        android:id="@+id/dailyTaskFragment"
+        android:name="my.edu.tarc.moneymate.Gamification.DailyTaskFragment"
+        android:label="fragment_daily_task"
+        tools:layout="@layout/fragment_daily_task" />
+    <fragment
+        android:id="@+id/badgeFragment"
+        android:name="my.edu.tarc.moneymate.Gamification.BadgeFragment"
+        android:label="fragment_badge"
+        tools:layout="@layout/fragment_badge" />
 
 </navigation>

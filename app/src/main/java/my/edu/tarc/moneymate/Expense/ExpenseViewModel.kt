@@ -8,10 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import my.edu.tarc.moneymate.Budget.BudgetViewModel
 import my.edu.tarc.moneymate.Database.AppDatabase
+import my.edu.tarc.moneymate.Database.BudgetRepository
 import my.edu.tarc.moneymate.Database.ExpenseRepository
 import my.edu.tarc.moneymate.Database.IncomeRepository
+import my.edu.tarc.moneymate.Database.MonetaryAccountRepository
 import my.edu.tarc.moneymate.Income.Income
+import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 import kotlin.math.exp
 
 class ExpenseViewModel(application: Application) : AndroidViewModel(application) {
@@ -40,21 +44,66 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
 
 
     private val repository: ExpenseRepository
+    private val accountRepo: MonetaryAccountRepository
+    private val repositoryBudget: BudgetRepository
+
     init{
         val expenseDao = AppDatabase.getDatabase(application).expenseDao()
+        val mAccountDao = AppDatabase.getDatabase(application).monetaryAccountDao()
+        val budgetDao = AppDatabase.getDatabase(application).budgetDao()
+
+
         repository = ExpenseRepository(expenseDao)
+        accountRepo = MonetaryAccountRepository(mAccountDao)
+        repositoryBudget = BudgetRepository(budgetDao)
+
+
         readAllData = repository.getAllExpense
     }
+
+
     fun addExpense(expense: Expense)
     {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addExpense(expense)
+
+            val accountId = expense.accountId
+
+            val account : MonetaryAccount = accountRepo.getAccountbyId2(accountId.toString())
+
+            if (account != null){
+                account.accountBalance -= expense.amount
+
+                // Update the account balance in the repository
+                accountRepo.updateAccount(account)
+            }
         }
     }
+
+
+
     fun deleteExpense(expense:Expense) = viewModelScope.launch {
         repository.deleteExpense(expense)
     }
+
     fun updateExpense(expense: Expense) = viewModelScope.launch {
+        val oldIncome = repository.getExpenseById(expense.expenseId)
+
         repository.updateExpense(expense)
+
+        val expenseDifference = expense.amount - oldIncome.amount
+
+        updateMonetaryAccountBalance(expense.accountId, expenseDifference)
+    }
+
+    private suspend fun updateMonetaryAccountBalance(accountId: Long, amountDifference: Int) {
+        viewModelScope.launch {
+            val account = accountRepo.getAccountbyId2(accountId.toString())
+            account?.let {
+                it.accountBalance -= amountDifference
+                // Update the account in the repository or database
+                accountRepo.updateAccount(it)
+            }
+        }
     }
 }

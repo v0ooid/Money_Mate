@@ -151,11 +151,14 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                         dataList.add(expense)
                     }
                 }
+                Log.e("dataList expense", dataList.toString())
 
                 GlobalScope.launch {
-                    AppDatabase.getDatabase(context).expenseDao().insertAll(dataList)
-
-                }
+                    try {
+                        AppDatabase.getDatabase(context).expenseDao().insertAll(dataList)
+                    } catch (e: Exception) {
+                        Log.e("InsertionError", "Error inserting expenses: ${e.message}")
+                    } }
             }
 
             .addOnFailureListener { e ->
@@ -193,13 +196,12 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                         dataList.add(income)
                     }
                 }
+                Log.e("dataList income", dataList.toString())
 
                 GlobalScope.launch {
                     AppDatabase.getDatabase(context).incomeDao().insertAll(dataList)
-
                 }
             }
-
             .addOnFailureListener { e ->
                 println("Error fetching MonetaryAccount data: ${e.message}")
             }
