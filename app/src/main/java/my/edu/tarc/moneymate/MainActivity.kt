@@ -3,6 +3,7 @@ package my.edu.tarc.moneymate
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.navigation.ui.setupWithNavController
 
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var incomerecyclerView: RecyclerView
     private lateinit var expenserecyclerView: RecyclerView
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -215,6 +218,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onUserLogin() {
         val sharedPreferences = getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
         val currentDay = LocalDate.now().toString()

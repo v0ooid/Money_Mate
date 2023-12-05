@@ -188,33 +188,34 @@ class DataExportFragment : Fragment() {
         spinnerFileType.adapter = adapterFileType
 
         binding.btnExport.setOnClickListener {
+
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
             val selectedAccount = binding.sDEMAccount.selectedItem as MonetaryAccount
             val selectedTransaction = binding.sDETransactionType.selectedItem as ClasslessItem
             val selectedCategory = binding.sDECategory.selectedItem as Category
-            val startDate = binding.tvStartDate.text.toString()
-            val endDate = binding.tvEndDate.text.toString()
+            val startDateString = binding.tvStartDate.text.toString()
+            val endDateString = binding.tvEndDate.text.toString()
             val selectedFileType = binding.sDEFileType.selectedItem as ClasslessItem
-
-            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
             Log.e("selectedAccount", selectedAccount.accountId.toString())
             Log.e("selectedTransaction", selectedTransaction.toString())
             Log.e("selectedCategory", selectedCategory.categoryId.toString())
-            Log.e("startDate", startDate.toString())
-            Log.e("endDate", endDate.toString())
-
+            Log.e("startDate", startDateString.toString())
+            Log.e("endDate", endDateString.toString())
 
             if (selectedTransaction.title == "Income") {
                 dataExportViewModel.fetchIncomeByCriteria(
                     selectedAccount.accountId,
                     selectedCategory.categoryId,
-                    startDate,
-                    endDate
+                    startDateString,
+                    endDateString
                 )
                 dataExportViewModel.incomeLiveData.observe(viewLifecycleOwner) { incomeList ->
+                    Log.e("incomeList", incomeList.toString())
                     when (selectedFileType.title){
                         "CSV" -> generateIncomeCSVFile(incomeList)
-//                        "JSON" -> generateIncomeJSONFile(incomeList)
+                        "JSON" -> generateIncomeJSONFile(incomeList)
                         else -> null
                     }
                 }
@@ -222,14 +223,14 @@ class DataExportFragment : Fragment() {
                 dataExportViewModel.fetchExpenseByCriteria(
                     selectedAccount.accountId,
                     selectedCategory.categoryId,
-                    startDate,
-                    endDate
+                    startDateString,
+                    endDateString
                 )
                 dataExportViewModel.expenseLiveData.observe(viewLifecycleOwner) { expensesList ->
                     // Handle expenses list and export it to CSV or JSON
                     when (selectedFileType.title){
                         "CSV" -> generateExpenseCSVFile(expensesList)
-//                        "JSON" -> generateExpenseJSONFile(expensesList)
+                        "JSON" -> generateExpenseJSONFile(expensesList)
                         else -> null
                     }
                 }
@@ -241,7 +242,7 @@ class DataExportFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
 
@@ -303,7 +304,7 @@ class DataExportFragment : Fragment() {
     private fun generateExpenseCSVFile(expenseList: List<ExpenseWithAccountName>): Uri? {
 
         if (expenseList.isEmpty()) {
-            showToast("No income records to export")
+            showToast("No expense records to export")
             return null
         } else {
             val csvHeader =
@@ -320,7 +321,7 @@ class DataExportFragment : Fragment() {
                 val amount = expense.amount
                 val date = expense.date
 
-                val row = "$account,Income,$title,$category,$amount,$date\n"
+                val row = "$account,Expense,$title,$category,$amount,$date\n"
                 csvContent.append(row)
             }
 
@@ -349,83 +350,98 @@ class DataExportFragment : Fragment() {
         }
     }
 
-//    @RequiresApi(Build.VERSION_CODES.Q)
-//    private fun generateIncomeJSONFile(incomeList: List<Income>): Uri? {
-//        val jsonArray = JSONArray()
-//
-//        // Iterate through the income list and create JSON objects
-//        for (income in incomeList) {
-//            val jsonObject = JSONObject()
-//            jsonObject.put("title", income.title)
-//            jsonObject.put("amount", income.amount)
-//            jsonObject.put("date", income.date.toString())
-//
-//            jsonArray.put(jsonObject)
-//        }
-//
-//        // Convert the JSON array to a string
-//        val jsonString = jsonArray.toString()
-//
-//        // Write the JSON string to a file
-//        val fileName = "income_data.json"
-//        val fileContent = jsonString.toByteArray()
-//
-//        val contentValues = ContentValues().apply {
-//            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-//            put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
-//            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-//        }
-//
-//        val resolver = requireContext().contentResolver
-//        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-//
-//        uri?.let { fileUri ->
-//            resolver.openOutputStream(fileUri)?.use { outputStream ->
-//                outputStream.write(fileContent)
-//            }
-//        }
-//
-//        return uri
-//    }
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun generateIncomeJSONFile(incomeList: List<IncomeWithAccountName>): Uri? {
+        if (incomeList.isEmpty()) {
+            showToast("No income records to export")
+            return null
+        } else {
 
-//    @RequiresApi(Build.VERSION_CODES.Q)
-//    private fun generateExpenseJSONFile(incomeList: List<Expense>): Uri? {
-//        val jsonArray = JSONArray()
-//
-//        // Iterate through the income list and create JSON objects
-//        for (income in incomeList) {
-//            val jsonObject = JSONObject()
-//            jsonObject.put("title", income.title)
-//            jsonObject.put("amount", income.amount)
-//            jsonObject.put("date", income.date.toString())
-//
-//            jsonArray.put(jsonObject)
-//        }
-//
-//        // Convert the JSON array to a string
-//        val jsonString = jsonArray.toString()
-//
-//        // Write the JSON string to a file
-//        val fileName = "income_data.json"
-//        val fileContent = jsonString.toByteArray()
-//
-//        val contentValues = ContentValues().apply {
-//            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-//            put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
-//            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-//        }
-//
-//        val resolver = requireContext().contentResolver
-//        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-//
-//        uri?.let { fileUri ->
-//            resolver.openOutputStream(fileUri)?.use { outputStream ->
-//                outputStream.write(fileContent)
-//            }
-//        }
-//
-//        return uri
-//    }
+            val jsonArray = JSONArray()
+
+            // Iterate through the income list and create JSON objects
+            for (income in incomeList) {
+                val jsonObject = JSONObject()
+                jsonObject.put("account", income.accountName)
+                jsonObject.put("title", income.incomeTitle)
+                jsonObject.put("category", income.categoryName)
+                jsonObject.put("amount", income.amount)
+                jsonObject.put("date", income.date.toString())
+
+                jsonArray.put(jsonObject)
+            }
+
+            // Convert the JSON array to a string
+            val jsonString = jsonArray.toString()
+
+            // Write the JSON string to a file
+            val fileName = "income_data.json"
+            val fileContent = jsonString.toByteArray()
+
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+
+            val resolver = requireContext().contentResolver
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+            uri?.let { fileUri ->
+                resolver.openOutputStream(fileUri)?.use { outputStream ->
+                    outputStream.write(fileContent)
+                }
+            }
+
+            showToast("Data Export successful, check your download folder")
+
+
+            return uri
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun generateExpenseJSONFile(expenseList: List<ExpenseWithAccountName>): Uri? {
+        val jsonArray = JSONArray()
+
+        // Iterate through the income list and create JSON objects
+        for (expense in expenseList) {
+            val jsonObject = JSONObject()
+            jsonObject.put("account", expense.accountName)
+            jsonObject.put("title", expense.expense_title)
+            jsonObject.put("category", expense.categoryName)
+            jsonObject.put("amount", expense.amount)
+            jsonObject.put("date", expense.date.toString())
+
+            jsonArray.put(jsonObject)
+        }
+
+        // Convert the JSON array to a string
+        val jsonString = jsonArray.toString()
+
+        // Write the JSON string to a file
+        val fileName = "expense_data.json"
+        val fileContent = jsonString.toByteArray()
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+        }
+
+        val resolver = requireContext().contentResolver
+        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+        uri?.let { fileUri ->
+            resolver.openOutputStream(fileUri)?.use { outputStream ->
+                outputStream.write(fileContent)
+            }
+        }
+
+        showToast("Data Export successful, check your download folder")
+
+        return uri
+    }
 
     private fun showDatePickerDialog(
         textViewToUpdate: TextView, currentDate: Calendar, minDate: Calendar? = null
@@ -455,7 +471,7 @@ class DataExportFragment : Fragment() {
     }
 
     private fun formatDate(calendar: Calendar): String {
-        val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return simpleDateFormat.format(calendar.time)
     }
 }

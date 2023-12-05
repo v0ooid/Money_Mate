@@ -40,7 +40,7 @@ interface ExpenseDao {
                 "INNER JOIN Category ON Expense.categoryId = Category.categoryId " +
                 "WHERE Expense.accountId = :accountId " +
                 "AND Expense.categoryId = :categoryId " +
-                "AND Expense.date BETWEEN :startDate AND :endDate"
+                "AND SUBSTR(Expense.date, 1, 7) BETWEEN :startDate AND :endDate"
     )
     fun getExpenseByCriteria(
         accountId: Long,

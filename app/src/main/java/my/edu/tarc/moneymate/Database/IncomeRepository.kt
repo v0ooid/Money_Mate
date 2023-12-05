@@ -19,8 +19,6 @@ class IncomeRepository (private val incomeDao: IncomeDao) {
         endDate: String
     ): List<IncomeWithAccountName> {
         return incomeDao.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
-
-//        return incomeDao.getIncomeByCriteria(accountId, categoryId, startDate, endDate)
     }
 
     @WorkerThread

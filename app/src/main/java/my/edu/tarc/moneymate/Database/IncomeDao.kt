@@ -48,8 +48,7 @@ interface IncomeDao {
                 "INNER JOIN Category ON Income.categoryId = Category.categoryId " +
                 "WHERE Income.accountId = :accountId " +
                 "AND Income.categoryId = :categoryId " +
-                "AND Income.date BETWEEN :startDate AND :endDate"
-    )
+                "AND SUBSTR(date, 1, 7) BETWEEN :startDate AND :endDate")
     fun getIncomeByCriteria(
         accountId: Long,
         categoryId: Long,
