@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:text="Back up your data to Cloud Database. Your transactions records, monetary account, budget and goals will be backup to Firebase Cloud Database."
+        android:text="Backup your data to the Cloud Database. Your transaction records, monetary accounts, budgets, and goals will be saved to Firebase Cloud Database."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView40"
         app:layout_constraintTop_toBottomOf="@+id/textView40" />
@@ -122,7 +122,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:text="Data will be restore from cloud database. Data from cloud database will replace "
+        android:text="The data will be retrieved from the cloud database, and this retrieved data will replace the existing data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView45"
         app:layout_constraintTop_toBottomOf="@+id/textView45" />

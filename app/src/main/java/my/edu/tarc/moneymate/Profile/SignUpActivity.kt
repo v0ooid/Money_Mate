@@ -53,7 +53,7 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    private fun performSignUp(){
+    private fun performSignUp() {
         val email = findViewById<EditText>(R.id.tvEmail_SignUp)
         val password = findViewById<EditText>(R.id.tvPassword_SignUp)
         val fullname = findViewById<EditText>(R.id.tvName_SignUp)
@@ -74,7 +74,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         auth.fetchSignInMethodsForEmail(inputEmail)
-            .addOnSuccessListener{ task ->
+            .addOnSuccessListener { task ->
                 val signInMethods = task?.signInMethods ?: emptyList<String>()
 
                 if (signInMethods.isNotEmpty()) {
@@ -83,46 +83,63 @@ class SignUpActivity : AppCompatActivity() {
                     auth.createUserWithEmailAndPassword(inputEmail, inputPassword)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
-
                                 val currentUser = FirebaseAuth.getInstance().currentUser
-                                val userID = currentUser?.uid
-                                val db = FirebaseFirestore.getInstance()
-                                val usersCollection = db.collection("users")
 
-                                if (userID != null) {
-                                    usersCollection.document(userID).set(
-                                        hashMapOf(
-                                            "fullname" to inputName,
-                                            "email" to inputEmail,
-                                            "password" to inputPassword
+                                currentUser?.sendEmailVerification()
+                                    ?.addOnCompleteListener { verificationTask ->
+
+                                        if (verificationTask.isSuccessful) {
+
+                                            val userID = currentUser?.uid
+                                            val db = FirebaseFirestore.getInstance()
+                                            val usersCollection = db.collection("users")
+
+
+                                            if (userID != null) {
+                                                usersCollection.document(userID).set(
+                                                    hashMapOf(
+                                                        "fullname" to inputName,
+                                                        "email" to inputEmail,
+                                                        "password" to inputPassword
+                                                    )
+                                                )
+                                            }
+
+
+                                            val intent = Intent(this, SignInActivity::class.java)
+                                            startActivity(intent)
+
+                                            Toast.makeText(
+                                                baseContext,
+                                                "Your account is registered. Verification email sent.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Toast.makeText(
+                                                baseContext, "Sign Up failed.",
+                                                Toast.LENGTH_SHORT,
+                                            ).show()
+                                        }
+                                    }
+
+                                    ?.addOnFailureListener {
+                                        Toast.makeText(
+                                            this,
+                                            "Error occurred ${it.localizedMessage}",
+                                            Toast.LENGTH_SHORT
                                         )
-                                    )
-                                }
-
-                                val intent = Intent(this, SignInActivity::class.java)
-                                startActivity(intent)
-
-                                Toast.makeText(
-                                    baseContext, "Successful.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(
-                                    baseContext, "Sign Up failed.",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
+                                            .show()
+                                    }
                             }
-                        }
-                        .addOnFailureListener{
-                            Toast.makeText(this, "Error occurred ${it.localizedMessage}", Toast.LENGTH_SHORT)
-                                .show()
-                        }                }
 
-            }.addOnFailureListener { exception ->
-                // Handle failure in fetching sign-in methods
-                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }.addOnFailureListener { exception ->
+                            // Handle failure in fetching sign-in methods
+                            Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                }
             }
     }
 }

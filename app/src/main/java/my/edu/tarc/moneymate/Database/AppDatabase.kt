@@ -48,8 +48,6 @@ abstract class AppDatabase : RoomDatabase() {
                 val expenseDao = INSTANCE?.expenseDao()
                 val monetaryAccountDao = INSTANCE?.monetaryAccountDao()
 
-
-
                 categoryDao?.insertCategory(Category(0, "Salary", R.drawable.baseline_description_24, "income"))
                 categoryDao?.insertCategory(Category(1, "Payment", R.drawable.round_auto_awesome_24, "income"))
                 categoryDao?.insertCategory(Category(2, "Invest", R.drawable.round_line_axis_24, "income"))

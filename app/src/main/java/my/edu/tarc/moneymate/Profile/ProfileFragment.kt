@@ -1,12 +1,14 @@
 package my.edu.tarc.moneymate.Profile
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +31,7 @@ import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentProfileBinding
+
 
 class ProfileFragment : Fragment() {
 
@@ -109,6 +112,7 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("CommitPrefEdits")
     private fun runRemainingProfileFragmentLogic(){
         val sharedPreferences = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", "")
@@ -261,6 +265,10 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_financialAdvisorFragment2)
         }
 
+        binding.accountTerminationCard.setOnClickListener{
+            showConfirmationDialog()
+        }
+
 
         //Logout
         binding.cardVLogout.setOnClickListener {
@@ -269,30 +277,96 @@ class ProfileFragment : Fragment() {
 
             val userId = userPref.getString("userId", "")
 
-            val APP_LOCK_PREFS =
-                requireContext().getSharedPreferences(
-                    "APP_LOCK_PREFS",
-                    Context.MODE_PRIVATE
-                )
-
             if (userId != null) {
                 clearUserData(userId)
             }
 
-            userPref.edit().putString("userId", "").apply()
-
-
-            val appLockEditor = APP_LOCK_PREFS.edit()
-            appLockEditor.clear().apply()
+            clearSharedPreferences()
 
             val navController = findNavController()
             navController.navigate(R.id.action_profileFragment_to_signInActivity)
         }
     }
 
+    private fun showConfirmationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirm Account Deletion")
+            .setMessage("Are you sure you want to delete your account?")
+            .setPositiveButton("Delete") { _, _ ->
+                // User confirmed deletion, initiate account deletion process
+                deleteAccount()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                // User canceled deletion
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun deleteAccount() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+
+        if (userId != null) {
+            // Show a progress dialog or confirmation message here if needed
+
+            // Delete Firebase Authentication Account
+            user.delete()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Account deleted successfully
+                        // Proceed with deleting Firestore data
+                        deleteFirestoreUserData(userId)
+                        clearSharedPreferences()
+                        navigateToSignUpActivity()
+                    } else {
+                        // Account deletion failed
+                        // Handle failure
+                    }
+                }
+        }
+    }
+
+
+    private fun deleteFirestoreUserData(userId: String) {
+        val db = FirebaseFirestore.getInstance()
+        val userDocRef = db.collection("users").document(userId)
+
+        // Delete the user document and its subcollections (if any)
+        userDocRef.delete()
+            .addOnSuccessListener {
+                // Firestore data deleted successfully
+                // Show success message or handle accordingly
+            }
+            .addOnFailureListener { e ->
+                // Handle failure to delete Firestore data
+            }
+    }
+
+    private fun clearSharedPreferences() {
+        val userPref = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
+        val appLockPref = requireContext().getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
+        val gamePref = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
+
+        val userEditor = userPref.edit()
+        val appLockEditor = appLockPref.edit()
+        val gameEditor = gamePref.edit()
+
+        userEditor.clear().apply()
+        appLockEditor.clear().apply()
+        gameEditor.clear().apply()
+    }
+
+    private fun navigateToSignUpActivity() {
+        val intent = Intent(requireContext(), SignInActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+
     private fun clearUserData(userId: String) {
         val context = requireContext()
-        // Call the clearDataForUser function from AppDatabase
         AppDatabase.clearDataForUser(context, userId)
     }
 
@@ -319,10 +393,8 @@ class ProfileFragment : Fragment() {
         val dialogView = layoutInflater.inflate(R.layout.layout_edit_email_dialog, null)
         val overlayView = layoutInflater.inflate(R.layout.dark_overlay, null)
 
-// Get a reference to the overlay layout
         val overlayLayout = overlayView.findViewById<FrameLayout>(R.id.overlayLayout)
 
-// Show the dialog
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -334,9 +406,7 @@ class ProfileFragment : Fragment() {
         val body = dialog.findViewById<TextView>(R.id.textViewEditBody)
         body.text = "An E-mail will be sent for E-mail change"
 
-// Find views and set text or listeners
 
-// Set actions for yesBtn
         val yesBtn = dialog.findViewById<Button>(R.id.btnConfrimDialog)
         yesBtn.setOnClickListener {
             // Perform actions here
@@ -344,25 +414,22 @@ class ProfileFragment : Fragment() {
             overlayLayout.visibility = View.GONE
         }
 
-// Set actions for noBtn
         val noBtn = dialog.findViewById<Button>(R.id.btnCancelDialog)
         noBtn.setOnClickListener {
             dialog.dismiss()
             overlayLayout.visibility = View.GONE
         }
 
-// Add the overlay to the root view of the activity
         val parentLayout = requireActivity().findViewById<ViewGroup>(android.R.id.content)
         parentLayout.addView(overlayView)
 
-// Show the dialog
         dialog.show()
 
-// Dismiss the overlay when the dialog is dismissed
         dialog.setOnDismissListener {
             parentLayout.removeView(overlayView)
         }
     }
+
 
 
 }

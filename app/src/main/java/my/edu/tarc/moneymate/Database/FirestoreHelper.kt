@@ -1,6 +1,7 @@
 package my.edu.tarc.moneymate.Database
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
@@ -8,6 +9,7 @@ import kotlinx.coroutines.launch
 import my.edu.tarc.moneymate.Budget.Budget
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.Expense.Expense
+import my.edu.tarc.moneymate.Goal.Goal
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 import java.util.Date
@@ -17,7 +19,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun convertMAccountToFirestoreFormat(mAccount: MonetaryAccount): Map<String, Any> {
         val dataMap = mutableMapOf<String, Any>()
 
-        // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["accountId"] = mAccount.accountId
         dataMap["accountName"] = mAccount.accountName
         dataMap["accountBalance"] = mAccount.accountBalance
@@ -29,7 +30,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun convertCategoryToFirestoreFormat(category: Category): Map<String, Any> {
         val dataMap = mutableMapOf<String, Any>()
 
-        // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["categoryId"] = category.categoryId
         dataMap["image"] = category.image
         dataMap["title"] = category.title
@@ -41,7 +41,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun convertBudgetToFirestoreFormat(budget: Budget): Map<String, Any> {
         val dataMap = mutableMapOf<String, Any>()
 
-        // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["budgetId"] = budget.budgetId
         dataMap["budgetName"] = budget.budgetName
         dataMap["budgetLimit"] = budget.budgetLimit
@@ -55,7 +54,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun convertIncomeToFirestoreFormat(income: Income): Map<String, Any> {
         val dataMap = mutableMapOf<String, Any>()
 
-        // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["incomeId"] = income.incomeId
         dataMap["title"] = income.incomeTitle
         dataMap["description"] = income.description
@@ -72,7 +70,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
     fun convertExpenseToFirestoreFormat(expense: Expense): Map<String, Any> {
         val dataMap = mutableMapOf<String, Any>()
 
-        // Assuming 'MonetaryAccount' has fields like 'name', 'balance', 'currency', etc.
         dataMap["expenseId"] = expense.expenseId
         dataMap["expense_title"] = expense.expense_title
         dataMap["description"] = expense.description
@@ -85,6 +82,19 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
         return dataMap
     }
 
+    fun convertGoalToFirestoreFormat(goal: Goal): Map<String, Any> {
+        val dataMap = mutableMapOf<String, Any>()
+
+        dataMap["goalId"] = goal.id
+        dataMap["goalTitle"] = goal.title
+        dataMap["goalDescription"] = goal.description
+        dataMap["targetAmount"] = goal.targetAmount
+        dataMap["savedAmount"] = goal.savedAmount
+        dataMap["desiredDate"] = goal.desiredDate
+
+        return dataMap
+    }
+
     fun convertToFirestoreFormat(data: Any): Map<String, Any> {
         return when (data) {
             is MonetaryAccount -> convertMAccountToFirestoreFormat(data)
@@ -92,6 +102,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
             is Budget -> convertBudgetToFirestoreFormat(data)
             is Income -> convertIncomeToFirestoreFormat(data)
             is Expense -> convertExpenseToFirestoreFormat(data)
+            is Goal -> convertGoalToFirestoreFormat(data)
             else -> throw IllegalArgumentException("Unsupported data type")
         }
     }
@@ -115,12 +126,109 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
             }
     }
 
+    fun uploadGamePrefsToFirestore(userId: String, level: Int, badgeEquipped: Int, loggedInDays: Int, recordedIncomes: Int, recordedExpenses: Int) {
+        val batch = db.batch()
+
+        val keys = listOf("Level", "BadgeEquipped", "LoggedInDays", "RecordedIncomes", "RecordedExpenses")
+        val values = listOf(level, badgeEquipped, loggedInDays, recordedIncomes, recordedExpenses)
+
+        keys.forEachIndexed { index, key ->
+            val documentRef = db.collection("users").document(userId)
+                .collection("GamePrefs").document(key)
+
+            val data = hashMapOf(
+                "key" to key,
+                "value" to values[index]
+            )
+
+            batch.set(documentRef, data)
+        }
+
+        batch.commit()
+            .addOnSuccessListener {
+                // Batch committed successfully
+            }
+            .addOnFailureListener { e ->
+                // Handle batch commit failure
+            }
+    }
+
     fun restoreDataFromFirebase(userId: String){
         restoremAccountFromFirebase(userId)
         restoreCategoryFromFirebase(userId)
         restoreBudgetFromFirebase(userId)
         restoreIncomeFromFirebase(userId)
         restoreExpenseFromFirebase(userId)
+        restoreGoalFromFirebase(userId)
+
+        val gamePref: SharedPreferences = context.getSharedPreferences("GamePrefs", Context.MODE_PRIVATE)
+        restoreGamePrefFromFirebase(userId, gamePref)
+
+    }
+
+    fun restoreGamePrefFromFirebase(userId: String, gamePref: SharedPreferences) {
+        val firestoreCollection = db.collection("users").document(userId)
+            .collection("GamePrefs")
+
+        firestoreCollection.get()
+            .addOnSuccessListener { documents ->
+                val editor = gamePref.edit()
+                for (document in documents) {
+                    val key = document.getString("key")
+                    val value = document.getLong("value")?.toInt() ?: 0
+
+                    key?.let {
+                        editor.putInt(it, value)
+                    }
+                }
+                editor.apply()
+            }
+            .addOnFailureListener { e ->
+                // Handle failure to retrieve data
+            }
+    }
+
+
+
+    fun restoreGoalFromFirebase(userId: String) {
+        val dataList = mutableListOf<Goal>()
+
+        Log.e("income", "Working")
+
+        db.collection("users")
+            .document(userId)
+            .collection("Goal")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    val data = document.data
+                    println("Goal: $data")
+
+                    data?.let {
+                        val expense = Goal(
+                            id = (it["goalId"] as? Long) ?: 0L,
+                            title = it["goalTitle"] as? String ?: "",
+                            description = it["goalDescription"] as? String ?: "",
+                            targetAmount = (it["targetAmount"] as? Long)?.toInt() ?: 0,
+                            savedAmount =  (it["savedAmount"] as? Long)?.toInt() ?: 0,
+                            desiredDate = (it["desiredDate"] as? String) ?: ""
+                       )
+                        dataList.add(expense)
+                    }
+                }
+                Log.e("dataList expense", dataList.toString())
+
+                GlobalScope.launch {
+                    try {
+                        AppDatabase.getDatabase(context).GoalDao().insertAll(dataList)
+                    } catch (e: Exception) {
+                        Log.e("InsertionError", "Error inserting expenses: ${e.message}")
+                    } }
+            }
+
+            .addOnFailureListener { e ->
+                println("Error fetching MonetaryAccount data: ${e.message}")
+            }
     }
 
     fun restoreExpenseFromFirebase(userId: String) {
@@ -141,9 +249,9 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                         val expense = Expense(
                             expenseId = (it["expenseId"] as? Long) ?: 0L,
                             expense_title = it["expense_title"] as? String ?: "",
-                            expense_icon_image = (it["expense_icon_image"] as? Int) ?: 0,
+                            expense_icon_image = (it["expense_icon_image"] as? Long)?.toInt() ?: 0,
                             description = it["description"] as? String ?: "",
-                            amount = (it["amount"] as? Int) ?: 0,
+                            amount = (it["amount"] as? Long)?.toInt() ?: 0,
                             date =  (it["date"] as? String) ?: "",
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
@@ -186,9 +294,9 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                         val income = Income(
                             incomeId = (it["incomeId"] as? Long) ?: 0L,
                             incomeTitle = it["title"] as? String ?: "",
-                            image = (it["image"] as? Int) ?: 0,
+                            image = (it["image"] as? Long)?.toInt() ?: 0,
                             description = it["description"] as? String ?: "",
-                            amount = (it["amount"] as? Int) ?: 0,
+                            amount = (it["amount"] as? Long)?.toInt() ?: 0,
                             date =  (it["date"] as? String) ?: "",
                             categoryId = (it["categoryId"] as? Long) ?: 0L,
                             accountId = (it["accountId"] as? Long) ?: 0L
@@ -225,7 +333,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                             budgetName = it["budgetName"] as? String ?: "",
                             budgetLimit = (it["budgetLimit"] as? Double) ?: 0.0,
                             budgetSpent = (it["budgetSpent"] as? Double) ?: 0.0,
-                            budgetIcon = (it["budgetIcon"] as? Int) ?: 0,
+                            budgetIcon = (it["budgetIcon"] as? Long)?.toInt() ?: 0,
                             categoryId = (it["categoryId"] as? Long) ?: 0L
                         )
                         dataList.add(budget)
@@ -260,7 +368,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
 
                             categoryId = (it["categoryId"] as? Long) ?: 0L ,
                             title = it["title"] as? String ?: "",
-                            image = (it["image"] as? Int) ?: 0,
+                            image = (it["image"] as? Long)?.toInt() ?: 0,
                             type = it["type"] as? String ?: "",
                         )
                         dataList.add(category)
@@ -295,7 +403,7 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
                             accountId = (it["accountId"] as? Long) ?: 0L ,
                             accountName = it["accountName"] as? String ?: "",
                             accountBalance = (it["accountBalance"] as? Double) ?: 0.0,
-                            accountIcon = (it["accountIcon"] as? Int) ?: 0
+                            accountIcon = (it["accountIcon"] as? Long)?.toInt() ?: 0
                         )
                         dataList.add(monetaryAccount)
                     }

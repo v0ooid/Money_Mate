@@ -54,18 +54,11 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
         val appLockUnlock = sharedPreferences.getBoolean("APP_LOCK_UNLOCKED", true)
 
-        Log.e("status",appLockUnlock.toString())
-
         if (!isLoggedIn()) {
-
             // User is not logged in, navigate to the login screen
             navigateToLogin()
 
         } else {
-            Log.w("Testing2", "mainactivity")
-
-            Log.e("Main activity", appLockUnlock.toString())
-
             if (!appLockUnlock) {
                 checkAppLockStatus()
             } else {

@@ -81,22 +81,33 @@ class SignInActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
 
-                    saveSharePreference()
+                    val user = auth.currentUser
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    if (user != null && user.isEmailVerified) {
 
-                    Toast.makeText(
-                        baseContext, "Success",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        saveSharePreference()
 
-                    val userId = auth.currentUser?.uid
-                    if (userId != null) {
-                        val firestoreHelper = FirestoreHelper(FirebaseFirestore.getInstance(), this)
-                        firestoreHelper.restoreDataFromFirebase(userId)
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+
+                        Toast.makeText(
+                            baseContext, "Success",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        val userId = auth.currentUser?.uid
+                        if (userId != null) {
+                            val firestoreHelper =
+                                FirestoreHelper(FirebaseFirestore.getInstance(), this)
+                            firestoreHelper.restoreDataFromFirebase(userId)
+                        }
+                    } else {
+                        Toast.makeText(
+                            baseContext,
+                            "Please verify your email, before sign in.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
                     }
-
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(

@@ -67,6 +67,7 @@
             val sharedPreferences = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
             val userId = sharedPreferences.getString("userId", null)
 
+
             val firestoreHelper = FirestoreHelper(FirebaseFirestore.getInstance(), requireContext())
             if (userId != null) {
                 firestoreHelper.restoreDataFromFirebase(userId)
