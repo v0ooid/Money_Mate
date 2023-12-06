@@ -1,12 +1,8 @@
 package my.edu.tarc.moneymate.Alarm
 
-import android.app.Notification
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.R
@@ -29,7 +25,6 @@ class AlarmNotificationAdapter(private var alarmNotification: List<AlarmNotifica
 
             itemView.setOnClickListener{
                 listener.onEditClicked(notification)
-
             }
 //            itemView.findViewById<ImageView>(R.id.button_delete).setOnClickListener {
 //                listener.onDeleteClicked(notification)
@@ -57,7 +52,4 @@ class AlarmNotificationAdapter(private var alarmNotification: List<AlarmNotifica
         holder.bind(alarmNotification[position])
     }
 
-//    private fun deleteItem(position: Int){
-//       alarmNotificationViewModel.delete(alarmNotification[position])
-//    }
 }

@@ -7,9 +7,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Window
 import android.view.WindowManager
-import androidx.core.view.ContentInfoCompat.Flags
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -54,7 +53,10 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
         val appLockUnlock = sharedPreferences.getBoolean("APP_LOCK_UNLOCKED", true)
 
+        Log.e("status",appLockUnlock.toString())
+
         if (!isLoggedIn()) {
+
             // User is not logged in, navigate to the login screen
             navigateToLogin()
 
@@ -93,12 +95,6 @@ class MainActivity : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_SECURE
                 )
 
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.transactionFragment,R.id.budgetFragment,R.id.navigation_feature,R.id.profileFragment
-//            )
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
                 navView.setupWithNavController(navController)
             }
         }
@@ -161,7 +157,7 @@ class MainActivity : AppCompatActivity() {
         // Example: Launch a new LoginActivity
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
-        finish() // Optional: Finish the MainActivity to prevent going back to it after logging in
+//        finish() // Optional: Finish the MainActivity to prevent going back to it after logging in
     }
 
     private fun checkAppLockStatus() {

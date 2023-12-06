@@ -17,4 +17,11 @@
     <color name="edit_text_background">#f6fbff</color>
     <color name="Red">#F44336</color>
     <color name="Blue">#03A9F4</color>
+
+        <color name="color1">#FF6347</color>
+        <color name="color2">#FFD700</color>
+        <color name="color3">#6A5ACD</color>
+        <color name="color4">#98FB98</color>
+        <!-- Add more colors as needed -->
+
 </resources>

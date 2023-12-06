@@ -2,44 +2,42 @@ package my.edu.tarc.moneymate.Database
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import my.edu.tarc.moneymate.Expense.Expense
-import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Record.Record
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class RecordRepository(private val recordDao: RecordDao) {
 
     val records: LiveData<List<Record>> = recordDao.getRecords()
 
-//    val allIncome: LiveData<List<Income>> = recordDao.getAllIncome()
-//    val allExpense: LiveData<List<Expense>> = recordDao.getAllExpense()
-//
-//    val combinedData:LiveData<List<Any>> = MediatorLiveData<List<Any>>().apply {
-//        addSource(allIncome){
-//            incomes-> value = combineData(incomes,allExpense.value?: emptyList())
-//        }
-//        addSource(allExpense){
-//            expense -> value = combineData(allIncome.value?: emptyList(), expense)
-//        }
-//    }
-//    private fun combineData(incomes: List<Income>, expenses: List<Expense>): List<Any> {
-//        return listOf(incomes, expenses).flatten()
-//    }
-//
-//    val getAllData: LiveData<incomeExpenseCombined> = recordDao.getAllIncomeAndExpense()
+    fun getTransactionsForMonth(date: Date): LiveData<List<Record>> {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        calendar.time = date
 
-//    @WorkerThread
-//    suspend fun addExpense(expense: Expense){
-//        expenseDao.insertExpense(expense)
-//    }
-//
-//    @WorkerThread
-//    suspend fun deleteExpense(expense: Expense){
-//        expenseDao.deleteExpense(expense)
-//    }
-//
+        // Setting to the first day of the month
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        val startDate = dateFormat.format(calendar.time)
+
+        // Setting to the last day of the month
+        calendar.add(Calendar.MONTH, 1)
+        calendar.add(Calendar.DAY_OF_MONTH, -1)
+        val endDate = dateFormat.format(calendar.time)
+
+        return recordDao.getRecordsForMonth(startDate, endDate)
+    }
     @WorkerThread
     suspend fun updateRecord(record: Record){
         recordDao.updateRecord(record)
+    }
+
+
+    fun getAccountNameForRecord(accountId: Long): LiveData<String?> {
+        return recordDao.getAccountNameForRecord(accountId)
+    }
+    fun getRecordsForMonth(startDate: String, endDate: String): LiveData<List<Record>> {
+        return recordDao.getRecordsForMonth(startDate, endDate)
     }
 }

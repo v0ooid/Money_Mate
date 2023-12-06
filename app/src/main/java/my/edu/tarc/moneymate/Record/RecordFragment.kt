@@ -14,12 +14,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +26,8 @@ import my.edu.tarc.moneymate.Database.ExpenseRepository
 import my.edu.tarc.moneymate.Database.RecordRepository
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
+import my.edu.tarc.moneymate.FinancialAdvisor.FinancialAdvisorViewModel
+import my.edu.tarc.moneymate.FinancialAdvisor.FinancialHealthStatus
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeAdapter
 import my.edu.tarc.moneymate.Income.IncomeViewModel
@@ -69,9 +66,7 @@ class RecordFragment : Fragment() {
     private var accountName: List<String>? = null
     var recordList: List<Record> = emptyList()
     private var recordList2 = mutableListOf<Record>()
-
-
-    //private lateinit var viewModel: RecordViewModel
+    private lateinit var financialAdvisorViewModel: FinancialAdvisorViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,34 +83,6 @@ class RecordFragment : Fragment() {
         incomerecyclerView = binding.recordIncomeTransaction
         expenserecyclerView = binding.recordExpenseTransaction
         transferRecyclerView = binding.recordTransferTransaction
-//        incomerecyclerView = binding.recordIncomeTransaction
-//        incomerecyclerView.layoutManager = LinearLayoutManager(requireContext())
-//        RecordAdapter = RecordAdapter(requireContext(),incomeViewModel, recordViewModel,this, recordList2)
-//        incomerecyclerView.itemAnimator = null
-//        incomerecyclerView.adapter = RecordAdapter
-//        incomerecyclerView.adapter?.notifyDataSetChanged()
-//
-//        expenserecyclerView = binding.recordExpenseTransaction
-//        expenserecyclerView.layoutManager = LinearLayoutManager(requireContext())
-//        RecordExpenseAdapter = RecordExpenseAdapter(requireContext(),expenseViewModel,recordViewModel, this, recordList2)
-//        expenserecyclerView.itemAnimator = null
-//        expenserecyclerView.adapter = RecordExpenseAdapter
-//        expenserecyclerView.adapter?.notifyDataSetChanged()
-//        recordViewModel.getAllRecord.observe(viewLifecycleOwner) { data ->
-//            recordList = data
-//            recordList2 = data.toMutableList()
-//            Log.d("Inside", "Inside")
-//
-//            Log.d("TestData", data.toString())
-//            RecordAdapter.notifyDataSetChanged()
-//            RecordExpenseAdapter.notifyDataSetChanged()
-//            expenserecyclerView.adapter?.notifyDataSetChanged()
-//        }
-//
-//
-//
-//        Log.d("recordList", recordList.toString())
-//        Log.d("recordList2", recordList2.toString())
 
         setupRecyclerViews()
         observeRecordData()
@@ -130,6 +97,39 @@ class RecordFragment : Fragment() {
             showCustomDialog()
         }
 
+        // Initialize FinancialAdvisorViewModel
+        val factory = FinancialAdvisorViewModel.Factory(requireActivity().application)
+        financialAdvisorViewModel =
+            ViewModelProvider(this, factory).get(FinancialAdvisorViewModel::class.java)
+
+
+        financialAdvisorViewModel.accountsFinancialHealth.observe(viewLifecycleOwner){
+            data -> data.forEach{
+                accountHealth ->
+            if (accountHealth.status == FinancialHealthStatus.ATTENTION || accountHealth.status == FinancialHealthStatus.DANGER) {
+                val message = "Account: ${accountHealth.accountName}\nStatus: ${accountHealth.status}\nTips: ${accountHealth.financialTips.joinToString(" ")}"
+                financialAdvisorViewModel.showNotification("Financial Health Alert", message)
+            }
+        }
+
+        }
+
+
+//        monetaryAccountViewModel.getAllmAccount.observe(viewLifecycleOwner) { data ->
+//            val accountId = data.map { it.accountId }
+//            Log.e("Record Fragment", "On ViewCreated $accountId")
+//            accountId.forEach { accountId ->
+//                financialAdvisorViewModel.checkAndNotifyAccountStatus(accountId)
+//                Log.e("Record Fragment","Inside $accountId")
+//            }
+//        }
+//        financialAdvisorViewModel.accountsFinancialHealth.observe(viewLifecycleOwner) { accountsHealth ->
+//            accountsHealth.forEach { accountHealth ->
+//                Log.d("Fragmetn accoutn heal", accountHealth.toString())
+//            }
+//        }
+
+
     }
 
     private fun setupRecyclerViews() {
@@ -138,7 +138,13 @@ class RecordFragment : Fragment() {
         incomerecyclerView.adapter = RecordAdapter
 
         expenserecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        RecordExpenseAdapter = RecordExpenseAdapter(requireContext(), expenseViewModel, recordViewModel, budgetViewModel,this, mutableListOf())
+        RecordExpenseAdapter = RecordExpenseAdapter(
+            requireContext(),
+            expenseViewModel,
+            recordViewModel,
+            budgetViewModel,this,
+            mutableListOf()
+        )
         expenserecyclerView.adapter = RecordExpenseAdapter
 
         transferRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -153,6 +159,7 @@ class RecordFragment : Fragment() {
 
     private fun observeRecordData() {
         recordViewModel.getAllRecord.observe(viewLifecycleOwner) { data ->
+            Log.d("Record Fragment", "observeRecordData$data.")
             // Update your adapters with new data
             RecordAdapter.updateList(data)
             RecordExpenseAdapter.updateList(data)
@@ -161,6 +168,8 @@ class RecordFragment : Fragment() {
             RecordTransferAdapter.updateList(it)
         }
     }
+
+
 
     fun showCustomDialog() {
         // Inflate the custom layout
@@ -172,17 +181,12 @@ class RecordFragment : Fragment() {
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
-//
-//        // Set up button click handler
-//        dialogSpinner.setOnClickListener {
-//            val userInput = dialogInput.text.toString()
-//            // Handle the user input
-//            dialog.dismiss()
-//        }
+
         monetaryAccountViewModel.accountIdsandName.observe(viewLifecycleOwner) { data ->
             val accountIdInside = data.map { it.first }
             val accountNameInside = data.map { it.second }
-            val adapterItem = listOf("Account") + accountNameInside
+
+            val adapterItem = listOf("Choose An Account") + accountNameInside
             val adapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, adapterItem)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -198,7 +202,7 @@ class RecordFragment : Fragment() {
                     Log.d("position outside", position.toString())
 
                     val selectedItem = parent?.getItemAtPosition(position).toString()
-                    if (selectedItem != "Account") {
+                    if (selectedItem != "Choose An Account") {
                         val selectedAccountId = data[position - 1].first
                         val selectedAccountName = accountNameInside[position - 1]
                         Log.d("Account Choosed", selectedItem)
@@ -225,68 +229,9 @@ class RecordFragment : Fragment() {
                 }
 
             }
-            Log.d("accountId", accountId.toString())
-            Log.d("accountId", accountName.toString())
+            Log.e("Record Fragment", "Show custom dialog $accountId and $accountName")
             dialog.show()
         }
-
-
-//        dialogSpinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
-//            AdapterView.OnItemSelectedListener {
-//
-//            override fun onItemClick(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                Log.d("testItem","testing")
-//
-//            }
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//
-//                Log.d("testItem","testing")
-//
-//                getAccountId()
-//
-//
-//
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//
-//        }
-
-        // Show the dialog
-
     }
-
-//    fun getAccountId():LiveData<List<Long>>{
-//
-//        monetaryAccountViewModel.getAllmAccount.observe(viewLifecycleOwner){
-//                data -> monetaryAccountList = data
-//        }
-//        monetaryAccountViewModel.accountIds.observe(viewLifecycleOwner)
-//        {
-//                data-> accountId = data
-//
-//        }
-//        monetaryAccountViewModel.accountName.observe(viewLifecycleOwner){
-//            data-> accountName = data
-//        }
-//
-//
-//        val accountIdList = monetaryAccountList?.map { it.accountId }
-//        Log.d("test account Id", accountIdList.toString())
-//        return MutableLiveData(accountIdList)
-//    }
 
 }

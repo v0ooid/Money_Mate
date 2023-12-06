@@ -23,6 +23,10 @@ class MonetaryAccountRepository(private val monetaryAccountDao: MonetaryAccountD
         monetaryAccountDao.updateAccount(monetaryAccount)
     }
 
+    suspend fun fetchAccountName(accountId: String): String? {
+        return monetaryAccountDao.getAccountById(accountId).toString()
+    }
+
     fun getTotalAmount(): LiveData<Double> {
         return monetaryAccountDao.getTotalAmount()
     }

@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Database
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -38,7 +39,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun alarmNotificationDao():AlarmNotificationDao
     abstract fun GoalDao():GoalDao
     abstract fun reportDao():ReportDao
-    private class DatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+    private class DatabaseCallback(private val scope: CoroutineScope,private val context: Context) : RoomDatabase.Callback() {
+        @SuppressLint("DiscouragedApi")
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             // Insert initial categories here
@@ -97,7 +99,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "MoneyMate_db"
                 )
-                    .addCallback(DatabaseCallback(GlobalScope))
+                    .addCallback(DatabaseCallback(GlobalScope,context))
                     .build()
                 INSTANCE = newInstance
                 return newInstance

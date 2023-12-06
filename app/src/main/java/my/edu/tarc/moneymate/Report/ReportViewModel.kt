@@ -1,11 +1,10 @@
 package my.edu.tarc.moneymate.Report
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.ReportRepository
 import my.edu.tarc.moneymate.Expense.Expense
@@ -69,6 +68,7 @@ class ReportViewModel(application: Application) : AndroidViewModel(application) 
         // This is a simplified example, replace with actual logic to fetch and filter data
         val filteredData : LiveData<List<ReportItem>> = MediatorLiveData<List<ReportItem>>().apply {
             val incomesLiveData = repository.getIncomeInRange(startMonthYear, endMonthYear)
+            Log.d("Report View Model", "Show the example income $incomesLiveData startMonthYear $startMonthYear endMonthYear $endMonthYear")
             val goalsLiveData = repository.getGoalInRange(startMonthYear, endMonthYear)
             val expensesLiveData = repository.getExpensesInRange(startMonthYear, endMonthYear)
             addSource(incomesLiveData) { incomes ->

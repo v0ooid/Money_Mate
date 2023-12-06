@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_white"
     tools:context=".Record.RecordFragment"
     app:cardElevation="10dp"
     app:cardCornerRadius="20dp">
@@ -15,8 +16,8 @@
             android:id="@+id/title_chooseAccount_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/choose_an_account"
-            android:textSize="8pt"
+            android:text="Monetary Account"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -54,7 +54,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
                         android:src="@drawable/round_share_24" />
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -98,7 +101,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvChart"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:layout_marginTop="10dp"
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +110,7 @@
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChart"
+                    android:background="@drawable/background_white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.cardview.widget.CardView>
@@ -166,10 +170,11 @@
 
             <Spinner
                 android:id="@+id/tvReportYearFrom"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dialog"
                 android:text="2020 JAN"
+                android:background="@null"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/From"
@@ -179,9 +184,11 @@
 
             <Spinner
                 android:id="@+id/tvReportMonthFrom"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dialog"
+                android:background="@null"
+
                 android:text="2020 JAN"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -204,12 +211,13 @@
 
             <Spinner
                 android:id="@+id/tvReportYearTo"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dialog"
                 android:text="2020 JAN"
                 android:textSize="15sp"
                 android:textStyle="bold"
+                android:background="@null"
 
                 app:layout_constraintBottom_toBottomOf="@id/to"
                 app:layout_constraintEnd_toStartOf="@id/tvReportMonthTo"
@@ -218,12 +226,13 @@
 
             <Spinner
                 android:id="@+id/tvReportMonthTo"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dialog"
                 android:text="2020 JAN"
                 android:textSize="15sp"
                 android:textStyle="bold"
+                android:background="@null"
 
                 app:layout_constraintBottom_toBottomOf="@id/tvReportYearTo"
                 app:layout_constraintEnd_toStartOf="@+id/report_search"
@@ -278,6 +287,7 @@
                         android:text="Category: " />
 
                     <TextView
+                        android:id="@+id/tvReportTitleAmount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

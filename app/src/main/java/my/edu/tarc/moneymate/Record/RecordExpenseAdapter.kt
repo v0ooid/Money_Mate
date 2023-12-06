@@ -17,7 +17,6 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import my.edu.tarc.moneymate.Budget.BudgetViewModel
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
 import my.edu.tarc.moneymate.Income.Income
@@ -25,6 +24,7 @@ import my.edu.tarc.moneymate.R
 
 class RecordExpenseAdapter constructor(
     private val context: Context,
+
     private val expenseViewModel: ExpenseViewModel,
     private val recordViewModel: RecordViewModel,
     private val budgetViewModel: BudgetViewModel,
@@ -44,6 +44,7 @@ class RecordExpenseAdapter constructor(
         val expenseLayout: View = itemView.findViewById(R.id.expense_linear)
         val transferLayout: View = itemView.findViewById(R.id.transfer_linear)
         val expenseIcon : ImageView = itemView.findViewById(R.id.record_expense_icon)
+        val expenseMAccount: TextView = itemView.findViewById(R.id.expenseMAccount)
     }
 
     override fun onCreateViewHolder(
@@ -66,11 +67,18 @@ class RecordExpenseAdapter constructor(
             holder.expenseDate.text = recordList[position].date
             holder.expenseDes.text = recordList[position].description
             holder.expenseIcon.setImageResource(recordList[position].image)
+            recordViewModel.getAccountNameForRecord(recordList[position].accountId.toLong()).observe(getFragment.viewLifecycleOwner, { accountName ->
+                holder.expenseMAccount.text = accountName ?: "Unknown Account"
+            })
+
+
             Log.d("currentdataExpense", recordList[position].toString())
+
         } else if (recordList[position].type == "income") {
             holder.expenseLayout.visibility = View.GONE
             holder.incomeLayout.visibility = View.GONE
             holder.transferLayout.visibility = View.GONE
+
         } else if (recordList[position].type == "transfer"){
             holder.expenseLayout.visibility = View.GONE
             holder.incomeLayout.visibility = View.GONE

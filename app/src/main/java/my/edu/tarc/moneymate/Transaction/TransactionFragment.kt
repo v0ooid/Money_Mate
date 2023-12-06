@@ -77,13 +77,15 @@ class TransactionFragment : Fragment() {
             childFragmentManager.findFragmentById(R.id.transactionfragmentContainerView) as NavHostFragment
         val navController = navHostTransactionFragment.navController
 
-        binding.expandCal.setOnClickListener {
-            if (binding.cardDesc.visibility == View.GONE)
-                binding.cardDesc.visibility = View.VISIBLE
-            else if (binding.cardDesc.visibility == View.VISIBLE) {
-                binding.cardDesc.visibility = View.GONE
-            }
-        }
+//        binding.expandCal.setOnClickListener {
+//            if (binding.cardDesc.visibility == View.GONE) {
+//                binding.cardDesc.visibility = View.VISIBLE
+//            }
+//            else if (binding.cardDesc.visibility == View.VISIBLE) {
+//                binding.cardDesc.visibility = View.GONE
+//            }
+//        }
+
 
 
         binding.leftIcon.setOnClickListener {
@@ -317,7 +319,7 @@ class TransactionFragment : Fragment() {
 //        val selectedAccountId = arguments?.getLong("selectedAccountId")
 //        Log.d("testing bundle", selectedAccountId.toString())
         viewModel.result.observe(viewLifecycleOwner) { data ->
-            result = data
+            result = String.format("%02d",data.toInt())
         }
         viewModel.categoryId.observe(viewLifecycleOwner){data ->
             categoryId = data
@@ -328,6 +330,7 @@ class TransactionFragment : Fragment() {
 
         if (transactionTypeSelected == "income") {
             val income = Income(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
+            Log.d("Transaction Fragment","Income value current $income")
             incomeViewModel.addIncome(income)
             onIncomeRecorded()
 

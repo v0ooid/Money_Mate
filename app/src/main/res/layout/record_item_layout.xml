@@ -12,14 +12,14 @@
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:visibility="visible"
         >
     <ImageView
         android:id="@+id/record_income_icon"
         android:layout_width="0dp"
         android:layout_height="50dp"
-
+        android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="1"
 
         />
@@ -27,32 +27,44 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_weight="4"
-        android:layout_height="50dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/record_income_title"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:paddingStart="5dp"
             android:layout_marginTop="4dp"
             android:text="@string/title"
+            android:textStyle="bold"
             android:singleLine="true"
             android:ellipsize="end"
-            android:textSize="20sp"
-            android:layout_marginEnd="5dp"
-            app:layout_constraintEnd_toStartOf="@id/record_income_dateTime"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:textSize="25sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/incomeMAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            />
 
         <TextView
             android:id="@+id/record_income_dateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/datetime"
-            android:textSize="11sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="12sp"
+            android:paddingStart="5dp"
+            android:layout_margin="5dp"
+            app:layout_constraintTop_toBottomOf="@id/record_income_title"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/record_income_description"/>
         <TextView
             android:id="@+id/record_income_description"
@@ -60,196 +72,223 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/record_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/record_income_title"
+
             android:singleLine="true"
             android:ellipsize="end"
-            android:paddingStart="5dp"
+            android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/record_income_result"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_weight="2"
         android:text="@string/result"
         android:textSize="8pt"
+        android:layout_gravity="center"
         android:gravity="center"
         android:paddingStart="5dp"
         android:paddingEnd="5dp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/expense_linear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:background="@drawable/frame_expense_record"
         android:padding="5dp"
-        android:visibility="gone">
-
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:visibility="invisible"
+        >
         <ImageView
             android:id="@+id/record_expense_icon"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical|center_horizontal|center"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="4">
+            android:layout_weight="4"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/record_expense_title"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:paddingStart="5dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="5dp"
-                android:ellipsize="end"
-                android:singleLine="true"
                 android:text="@string/title"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@+id/record_expense_dateTime"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/expenseMAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cash"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                />
 
             <TextView
                 android:id="@+id/record_expense_dateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/datetime"
-                android:textSize="11sp"
-                app:layout_constraintBottom_toTopOf="@id/record_expense_description"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                android:textSize="12sp"
+                android:paddingStart="5dp"
+                android:layout_margin="5dp"
+                app:layout_constraintTop_toBottomOf="@id/record_expense_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/record_expense_description"/>
             <TextView
                 android:id="@+id/record_expense_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:paddingStart="5dp"
-                android:paddingEnd="10dp"
-                android:singleLine="true"
                 android:text="@string/record_description"
+
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/record_expense_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <TextView
             android:id="@+id/record_expense_result"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:text="@string/result"
+            android:textSize="8pt"
+            android:layout_gravity="center"
             android:gravity="center"
             android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="@string/result"
-            android:textSize="8pt" />
+            android:paddingEnd="5dp" />
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/dateseperator_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:padding="5dp"
-        android:visibility="gone">
-
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dateseparator"
-            android:textSize="5pt" />
+            android:textSize="5pt"
+            />
 
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/transfer_linear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:background="@drawable/frame_record"
         android:padding="5dp"
-        android:visibility="gone">
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/record_transfer_icon"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical|center_horizontal|center"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="61dp"
-            android:layout_height="50dp"
-            android:layout_weight="4">
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/record_transfer_source_account"
-                android:layout_width="wrap_content"
+                android:id="@+id/record_transfer_title"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginTop="4dp"
                 android:text="@string/title"
-                android:textSize="20sp"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/transferMAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cash"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                />
 
             <TextView
                 android:id="@+id/record_transfer_dateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/datetime"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/record_transfer_description" />
-
+                android:textSize="12sp"
+                android:paddingStart="5dp"
+                android:layout_margin="5dp"
+                app:layout_constraintTop_toBottomOf="@id/record_transfer_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/record_transfer_description"/>
             <TextView
                 android:id="@+id/record_transfer_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:paddingStart="5dp"
-                android:paddingEnd="10dp"
-                android:singleLine="true"
                 android:text="@string/record_description"
+
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/record_transfer_source_account" />
 
-            <TextView
-                android:id="@+id/record_transfer_destination_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="TextView"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="@+id/imageView2" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/record_transfer_source_account"
-                app:layout_constraintStart_toEndOf="@+id/record_transfer_source_account"
-                app:layout_constraintTop_toTopOf="@+id/record_transfer_source_account"
-                app:srcCompat="@drawable/baseline_arrow_forward_ios_24" />
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
         <TextView
             android:id="@+id/record_transfer_result"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:text="@string/result"
+            android:textSize="8pt"
+            android:layout_gravity="center"
             android:gravity="center"
             android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="@string/result"
-            android:textSize="8pt" />
+            android:paddingEnd="5dp" />
     </LinearLayout>
 
 

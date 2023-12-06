@@ -34,6 +34,9 @@ class ReportAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    fun getItemsForPDF(): List<Any> {
+        return items // Return the data used by the adapter
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {

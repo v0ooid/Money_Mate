@@ -249,11 +249,11 @@ class ProfileFragment : Fragment() {
             navController.navigate(R.id.action_profileFragment_to_appLockFragment)
         }
         binding.cardViewAlarmNotification.setOnClickListener{
-            findNavController().navigate(R.id.action_profileFragment_to_alarmNotificationFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_alarmFirstPageFragment)
         }
 
         binding.ivAlarmNotificationRight.setOnClickListener{
-            findNavController().navigate(R.id.action_profileFragment_to_alarmNotificationFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_alarmFirstPageFragment)
         }
         binding.cardViewGoal.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_goalFragment)

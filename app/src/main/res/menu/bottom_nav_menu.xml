@@ -9,7 +9,7 @@
         android:icon="@drawable/goal"
         android:title="@string/budget" />
     <item
-        android:id="@+id/navigation_feature"
+        android:id="@+id/forumFragment"
         android:icon="@drawable/application"
         android:title="@string/feature"/>
     <item

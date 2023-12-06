@@ -11,3 +11,7 @@ data class MonetaryAccount(
     var accountBalance: Double,
     val accountIcon: Int
 )
+{
+    // Empty constructor required by Room
+    constructor() : this(0, "", 0.0, 0)
+}

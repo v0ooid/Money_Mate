@@ -2,8 +2,6 @@ package my.edu.tarc.moneymate.Alarm
 
 import android.app.AlarmManager
 import android.app.AlertDialog
-import android.app.Notification
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -11,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +18,12 @@ import android.widget.ImageView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentSetAlarmBinding
 import java.util.Calendar
-import java.util.Locale
 
 
 class SetAlarmFragment : Fragment() {
@@ -61,7 +57,7 @@ class SetAlarmFragment : Fragment() {
             editingAlarmId = SetAlarmFragmentArgs.fromBundle(it).alarmId
         }
         editingAlarmId?.let { loadAlarmData(it) }
-        Log.d("editingAlarmId", editingAlarmId.toString())
+        Log.d("Set Alarm Fragment", "editing Alarm Id $editingAlarmId")
         return binding.root
     }
 
@@ -99,6 +95,8 @@ class SetAlarmFragment : Fragment() {
             showDeleteConfirmationDialog()
 
         }
+        checkAndRequestExactAlarmPermission()
+
         saveButton.setOnClickListener {
             saveAlarmSetting()
 
@@ -108,14 +106,21 @@ class SetAlarmFragment : Fragment() {
 
 
     }
+    private fun checkAndRequestExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                startActivity(intent)
+            }
+        }
+    }
 
     private fun loadAlarmData(alarmId: Long) {
         viewModel.getAlarmById(alarmId).observe(viewLifecycleOwner) { alarm ->
             alarm?.let { populateFields(it) }
         }
     }
-
-
 
     private fun showDeleteConfirmationDialog() {
         AlertDialog.Builder(requireContext())
@@ -129,79 +134,63 @@ class SetAlarmFragment : Fragment() {
     }
 
     private fun scheduleAlarm(alarm: AlarmNotification) {
-        val channelId = "Alarm_Notification_Channel"
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            // Direct the user to the system settings screen
-            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-            startActivity(intent)
-            return
+        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            putExtra("Channel_ID", "Alarm_Notification_Channel_ID")
+            putExtra("Alarm Id", alarm.id)
+            putExtra("Title", alarm.title)
+            putExtra("Desc", alarm.description)
         }
 
-        alarm.repeatDay.forEach { day ->
-            val dayOfWeek = getDayOfWeek(day)
-            val calendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, alarm.hour)
-                set(Calendar.MINUTE, alarm.minit)
-                set(Calendar.SECOND, 0)
-                set(Calendar.DAY_OF_WEEK, dayOfWeek)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            alarm.id.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-                // Ensure the alarm is set for the next occurrence of the day
-                while (before(Calendar.getInstance())) {
-                    add(Calendar.DAY_OF_YEAR, 7)
-                }
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, alarm.hour)
+            set(Calendar.MINUTE, alarm.minit)
+            set(Calendar.SECOND, 0)
+        }
+
+        // Schedule the alarm
+        if (alarm.repeatDay.isEmpty()) {
+            if (calendar.timeInMillis <= System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
-
-            val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
-                action = "my.edu.tarc.moneymate.ALARM_ACTION"
-                putExtra("Channel_ID", channelId)
-                putExtra("Title", alarm.title)
-                putExtra("Desc", alarm.description)
-            }
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                requireContext(),
-                generateUniqueRequestCode(alarm.id, dayOfWeek), // Unique request code
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
             try {
-                alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    pendingIntent
-                )
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
             } catch (e: SecurityException) {
-                Log.e("Alarm Scheduling Error", "SecurityException: ${e.message}")
-                // Handle the exception, possibly by notifying the user
+                Log.e("Alarm Scheduling", "Failed to set exact alarm: ${e.message}")
+                // Consider showing a message to the user here
             }
+        } else {
+            // Handle repeating alarms
+            // ...
         }
-    }
-
-    private fun generateUniqueRequestCode(alarmId: Long, dayOfWeek: Int): Int {
-        return (alarmId.toInt() * 10) + dayOfWeek
     }
 
     private fun deleteAlarm() {
-        // Cancel the alarm from AlarmManager
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
             action = "my.edu.tarc.moneymate.ALARM_ACTION"
         }
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            specificAlarm.id.toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        Log.d("SpecificAlarm Id", specificAlarm.id.toString())
-        alarmManager.cancel(pendingIntent)
 
-        // Delete the alarm from your data source (e.g., ViewModel, database)
+        specificAlarm.repeatDay.forEach { day ->
+            val pendingIntent = PendingIntent.getBroadcast(
+                requireContext(),
+                (specificAlarm.id + getDayOfWeek(day)).toInt(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            Log.d("Set Alarm Fragment", "Delete Alarm Function specific alarm repeat day $day")
+            alarmManager.cancel(pendingIntent)
+        }
+
         viewModel.delete(specificAlarm)
-
-        // Navigate back
         findNavController().navigateUp()
     }
 
@@ -223,108 +212,129 @@ class SetAlarmFragment : Fragment() {
                 "Friday" -> checkBoxFriday.isChecked = true
                 "Saturday" -> checkBoxSaturday.isChecked = true
                 "Sunday" -> checkBoxSunday.isChecked = true
-
-
             }
         }
         specificAlarm = alarm
         // ...
     }
 
-    private fun saveAlarmSetting() {
 
-        var hour = timePicker.hour
-        var minute = timePicker.minute
+    private fun saveAlarmSetting() {
+        val hour = timePicker.hour
+        val minute = timePicker.minute
+        val title = binding.eTAlarmTitle.text.toString().ifEmpty { "Alarm Notification" }
+        val desc = binding.eTAlarmDescription.text.toString().ifEmpty { "Alarm Description" }
         val uniqueId = System.currentTimeMillis().toInt()
 
-        var title: String = binding.eTAlarmTitle.text.toString()
-        if (binding.eTAlarmTitle.text.toString() == "") {
-            title = "Alarm Notification"
-        }
-        var desc: String = binding.eTAlarmDescription.text.toString()
-        if (binding.eTAlarmDescription.text.toString() == "") {
-            desc = "Alarm Description"
-        }
-        var selectedDay = mutableListOf<String>()
-        if (checkboxMonday.isChecked) {
-            selectedDay.add("Monday")
-        }
-        if (checkBoxTuesday.isChecked) {
-            selectedDay.add("Tuesday")
-        }
-        if (checkBoxWednesday.isChecked) {
-            selectedDay.add("Wednesday")
-        }
-        if (checkBoxThursday.isChecked) {
-            selectedDay.add("Thursday")
-        }
-        if (checkBoxFriday.isChecked) {
-            selectedDay.add("Friday")
-        }
-        if (checkBoxSaturday.isChecked) {
-            selectedDay.add("Saturday")
-        }
-        if (checkBoxSunday.isChecked) {
-            selectedDay.add("Sunday")
-        }
-        val alarm =
-            if (editingAlarmId!= null && editingAlarmId!!.toInt() != 0) {
-                AlarmNotification(
-                    id = editingAlarmId!!,
-                    hour = hour,
-                    minit = minute,
-                    repeatDay = selectedDay.toList(),
-                    title = title,
-                    description = desc,
-                )
+        var selectedDays = mutableListOf<String>()
+        if (checkboxMonday.isChecked) selectedDays.add("Monday")
+        if (checkBoxTuesday.isChecked) selectedDays.add("Tuesday")
+        if (checkBoxWednesday.isChecked) selectedDays.add("Wednesday")
+        if (checkBoxThursday.isChecked) selectedDays.add("Thursday")
+        if (checkBoxFriday.isChecked) selectedDays.add("Friday")
+        if (checkBoxSaturday.isChecked) selectedDays.add("Saturday")
+        if (checkBoxSunday.isChecked) selectedDays.add("Sunday")
 
-            } else {
-                AlarmNotification(
-                    id = uniqueId.toLong(),
-                    hour = hour,
-                    minit = minute,
-                    repeatDay = selectedDay.toList(),
-                    title = title,
-                    description = desc,
-                )
 
-            }
-        Log.e("Log to test alarm ", editingAlarmId.toString())
-        Log.d("uniqueId.toLong()", uniqueId.toString())
-        Log.d("test alarm data", alarm.toString())
-        val currentList = viewModel.notification.value ?: emptyList()
-        val updatedList = currentList + alarm
+        val alarm = if (editingAlarmId!= null && editingAlarmId!!.toInt() != 0) {
+            AlarmNotification(
+                id = editingAlarmId!!,
+                hour = hour,
+                minit = minute,
+                repeatDay = selectedDays.toList(),
+                title = title,
+                description = desc,
+            )
 
-//        viewModel.updateNotification(updatedList)
-//        viewModel.insertAll(updatedList)
-
-        if (editingAlarmId?.toInt() != 0) {
-            viewModel.updateAlarm(alarm)
         } else {
-            viewModel.insertAll(updatedList)
+            AlarmNotification(
+                id = uniqueId.toLong(),
+                hour = hour,
+                minit = minute,
+                repeatDay = selectedDays.toList(),
+                title = title,
+                description = desc,
+            )
+
         }
 
+        Log.d("SetAlarm Fragment","Alarm Data $alarm")
 
-        Log.d("testing", updatedList.toString())
-//        viewModel.updateNotification(alarmList)
-        scheduleAlarm(alarm)
-        Log.d("Alarm ID after being set", alarm.id.toString())
+        if (editingAlarmId != null && editingAlarmId != 0L) {
+            viewModel.updateAlarm(alarm) // Update existing alarm
+            Log.d("Set Alarm Fragment", " Save Alarm Setting update alarm")
+        } else {
+            viewModel.insert(alarm) // Insert new alarm
+            Log.d("Set Alarm Fragment", " Save Alarm Setting insert alarm")
 
-        specificAlarm = alarm
+        }
+        if (selectedDays.isEmpty()) {
+            scheduleAlarm(alarm) // Schedule non-repeating alarm
+        } else {
+            selectedDays.forEach { day ->
+                scheduleAlarmForDay(alarm, day) // Schedule repeating alarms
+            }
+            selectedDays.clear()
+
+        }
+
+        Toast.makeText(context, "Alarm set successfully", Toast.LENGTH_SHORT).show()
+
     }
 
 
 
     private fun getDayOfWeek(day: String): Int {
-        return when (day.lowercase(Locale.getDefault())) {
-            "sunday" -> Calendar.SUNDAY
-            "monday" -> Calendar.MONDAY
-            "tuesday" -> Calendar.TUESDAY
-            "wednesday" -> Calendar.WEDNESDAY
-            "thursday" -> Calendar.THURSDAY
-            "friday" -> Calendar.FRIDAY
-            "saturday" -> Calendar.SATURDAY
-            else -> throw IllegalArgumentException("Invalid day: $day")
+        return when (day.lowercase()) {
+            "Sunday" -> Calendar.SUNDAY
+            "Monday" -> Calendar.MONDAY
+            "Tuesday" -> Calendar.TUESDAY
+            "Wednesday" -> Calendar.WEDNESDAY
+            "Thursday" -> Calendar.THURSDAY
+            "Friday" -> Calendar.FRIDAY
+            "Saturday" -> Calendar.SATURDAY
+            else -> 0
+        }
+    }
+
+
+    private fun scheduleAlarmForDay(alarm: AlarmNotification, dayOfWeek: String) {
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, alarm.hour)
+            set(Calendar.MINUTE, alarm.minit)
+            set(Calendar.SECOND, 0)
+            set(Calendar.DAY_OF_WEEK, getDayOfWeek(dayOfWeek))
+            if (timeInMillis < System.currentTimeMillis()) {
+                add(Calendar.WEEK_OF_YEAR, 1)
+            }
+        }
+
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            action = "my.edu.tarc.moneymate.ALARM_ACTION"
+            putExtra("Channel_ID", "Alarm_Notification_Channel")
+            putExtra("Alarm Id", alarm.id)
+            putExtra("Title", alarm.title)
+            putExtra("Desc", alarm.description)
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            (alarm.id + getDayOfWeek(dayOfWeek)).toInt(), // Unique ID for each day
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        try {
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY * 7,
+                pendingIntent
+            )
+        } catch (e: SecurityException) {
+            Log.e("Alarm Scheduling Error", "SecurityException: ${e.message}")
         }
     }
 

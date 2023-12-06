@@ -11,4 +11,5 @@ data class Goal(
     var targetAmount: Int,
     var savedAmount: Int,
     var desiredDate: String,
+    var alarmTime: Long? = null // Store the time for the alarm
 )

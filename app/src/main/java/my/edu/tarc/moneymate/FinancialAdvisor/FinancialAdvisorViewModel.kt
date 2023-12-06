@@ -1,102 +1,28 @@
 package my.edu.tarc.moneymate.FinancialAdvisor
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.FinancialAdvisorRepository
-import my.edu.tarc.moneymate.Expense.Expense
-import my.edu.tarc.moneymate.Income.Income
+import my.edu.tarc.moneymate.R
+
 class FinancialAdvisorViewModel(
     application: Application,
     private val repository: FinancialAdvisorRepository,
     private val financialAnalyzer: FinancialAnalyzer
 ) : AndroidViewModel(application) {
-
-
-    //
-//    private val _totalIncome = MutableLiveData<Int>()
-//    val totalIncome: LiveData<Int> = _totalIncome
-//
-//    private val _totalExpenses = MutableLiveData<Int>()
-//    val totalExpenses: LiveData<Int> = _totalExpenses
-//
-//    private val _financialHealthStatus = MutableLiveData<FinancialHealthStatus>()
-//    val financialHealthStatus: LiveData<FinancialHealthStatus> = _financialHealthStatus
-//
-//    private val _financialTips = MutableLiveData<List<String>>()
-//    val financialTips: LiveData<List<String>> = _financialTips
-//
-//    private val _accountsFinancialHealth = MediatorLiveData<List<AccountFinancialHealth>>()
-//    val accountsFinancialHealth: LiveData<List<AccountFinancialHealth>> = _accountsFinancialHealth
-//
-//    init {
-//        analyzeFinancialHealth()
-//        analyzeAllAccountsFinancialHealth()
-//
-//        val accountsLiveData = repository.getAllMonetaryAccounts()
-//        _accountsFinancialHealth.addSource(accountsLiveData) { accounts ->
-//            accounts.forEach { account ->
-//                val incomesLiveData = repository.getIncomesForAccount(account.accountId)
-//                val expensesLiveData = repository.getExpensesForAccount(account.accountId)
-//
-//                _accountsFinancialHealth.addSource(incomesLiveData) { incomes ->
-//                    _accountsFinancialHealth.addSource(expensesLiveData) { expenses ->
-//                        val accountHealth = financialAnalyzer.analyzeAccountFinancialHealth(
-//                            account,
-//                            incomes,
-//                            expenses
-//                        )
-//                        // Update _accountsFinancialHealth with the new accountHealth
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun analyzeFinancialHealth() {
-//        repository.getAllIncome().observeForever { incomeList ->
-//            val totalIncome = incomeList.sumOf { it.amount }
-//            _totalIncome.value = totalIncome
-//            updateFinancialHealth()
-//        }
-//
-//        repository.getAllExpenses().observeForever { expenseList ->
-//            val totalExpenses = expenseList.sumOf { it.amount }
-//            _totalExpenses.value = totalExpenses
-//            updateFinancialHealth()
-//        }
-//    }
-//
-//    private fun analyzeAllAccountsFinancialHealth() {
-//        viewModelScope.launch {
-//            val accounts = repository.getAllMonetaryAccounts()
-//            val accountsHealth = accounts.map { account ->
-//                val incomes = repository.getIncomesForAccount(account.accountId)
-//                val expenses = repository.getExpensesForAccount(account.accountId)
-//                financialAnalyzer.analyzeAccountFinancialHealth(account, incomes, expenses)
-//            }
-//            _accountsFinancialHealth.value = accountsHealth
-//        }
-//    }
-//
-//
-//    private fun updateFinancialHealth() {
-//        val income = _totalIncome.value ?: 0
-//        val expenses = _totalExpenses.value ?: 0
-//        val healthStatus = financialAnalyzer.analyzeFinancialHealth(income, expenses)
-//        _financialHealthStatus.value = healthStatus
-//        _financialTips.value = financialAnalyzer.provideFinancialTips(healthStatus)
-//    }
 
 
     private val _accountsFinancialHealth = MutableLiveData<List<AccountFinancialHealth>>()
@@ -122,6 +48,36 @@ class FinancialAdvisorViewModel(
                 }
             }
         }
+    }
+    fun checkAndNotifyAccountStatus(accountId: Long) {
+        val accountHealth = accountsFinancialHealth.value?.find { it.accountId == accountId }
+        Log.e("Financial View Model","Outside of check status $accountHealth")
+        accountHealth?.let {
+            if (it.status == FinancialHealthStatus.ATTENTION || it.status == FinancialHealthStatus.DANGER) {
+                showNotification("Financial Health Alert", "Your account ${it.accountName} needs attention.")
+            }
+            Log.e("Financial View Model", "Check and NotifyAccount Status Trigged")
+        }
+    }
+
+
+     fun showNotification(title: String, message: String) {
+        val notificationManager = getApplication<Application>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create notification channel for Android Oreo and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("financial_health_channel", "Financial Health", NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(getApplication(), "financial_health_channel")
+            .setContentTitle(title)
+            .setContentText(message)
+            .setSmallIcon(R.drawable.round_check_24) // Replace with your notification icon
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        notificationManager.notify(1, notification)
     }
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
