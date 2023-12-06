@@ -22,8 +22,7 @@ import my.edu.tarc.moneymate.Record.Record
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.Transfer.Transfer
-import java.util.Calendar
-import java.util.Date
+
 
 @Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class, Transfer::class] , version = 3, exportSchema = false)
 @TypeConverters(ListStringConverter::class)

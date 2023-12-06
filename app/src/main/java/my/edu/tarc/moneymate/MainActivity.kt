@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Thread.sleep(3000)
-        installSplashScreen()
 
         val sharedPreferences = getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
         val appLockUnlock = sharedPreferences.getBoolean("APP_LOCK_UNLOCKED", true)

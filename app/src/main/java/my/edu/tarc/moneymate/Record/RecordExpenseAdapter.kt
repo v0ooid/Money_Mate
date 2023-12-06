@@ -17,9 +17,9 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.Budget.BudgetViewModel
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
-import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.R
 
 class RecordExpenseAdapter constructor(
@@ -50,10 +50,10 @@ class RecordExpenseAdapter constructor(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecordExpenseAdapter.RecordViewHolder {
+    ): RecordViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.record_item_layout, parent, false)
-        return RecordExpenseAdapter.RecordViewHolder(view)
+        return RecordViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecordViewHolder, position: Int) {

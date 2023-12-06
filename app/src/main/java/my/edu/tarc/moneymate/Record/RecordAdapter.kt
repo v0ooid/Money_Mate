@@ -19,8 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.Database.MonetaryAccountDao
 import my.edu.tarc.moneymate.Income.Income
-import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
+import my.edu.tarc.moneymate.Income.IncomeViewModel
 import org.w3c.dom.Text
 
 class RecordAdapter constructor(
@@ -260,5 +260,6 @@ class RecordAdapter constructor(
         dialog.show()
     }
 }
+
 
 

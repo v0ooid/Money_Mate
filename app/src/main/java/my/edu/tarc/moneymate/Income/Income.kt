@@ -1,12 +1,12 @@
 package my.edu.tarc.moneymate.Income
 
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
-
 
 @Entity(tableName = "Income",
     foreignKeys = [

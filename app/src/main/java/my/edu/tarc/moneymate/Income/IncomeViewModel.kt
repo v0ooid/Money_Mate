@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Income
 
+
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -11,6 +12,7 @@ import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.IncomeRepository
 import my.edu.tarc.moneymate.Database.MonetaryAccountRepository
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
+import my.edu.tarc.moneymate.Income.Income
 
 class IncomeViewModel(application: Application) : AndroidViewModel(application) {
 

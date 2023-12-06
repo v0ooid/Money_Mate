@@ -36,7 +36,7 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
 
     val accountIdsandName:LiveData<List<Pair<Long,String>>>  = getAllmAccount.map{accountList->
         accountList.map {
-            account->
+                account->
             Pair(account.accountId,account.accountName)
         }
     }
@@ -56,3 +56,7 @@ class MonetaryAccountViewModel(application: Application) : AndroidViewModel(appl
 
 
 }
+
+
+
+

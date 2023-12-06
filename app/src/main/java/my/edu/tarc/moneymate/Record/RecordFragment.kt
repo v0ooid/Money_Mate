@@ -2,8 +2,7 @@ package my.edu.tarc.moneymate.Record
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
-import androidx.lifecycle.ViewModelProvider
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,24 +11,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.Budget.BudgetViewModel
-import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.Database.AppDatabase
-import my.edu.tarc.moneymate.Database.ExpenseRepository
-import my.edu.tarc.moneymate.Database.RecordRepository
-import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
 import my.edu.tarc.moneymate.FinancialAdvisor.FinancialAdvisorViewModel
 import my.edu.tarc.moneymate.FinancialAdvisor.FinancialHealthStatus
 import my.edu.tarc.moneymate.Income.Income
-import my.edu.tarc.moneymate.Income.IncomeAdapter
 import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccountViewModel
@@ -37,7 +29,6 @@ import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.Transaction.TransactionFragment
 import my.edu.tarc.moneymate.Transaction.TransactionViewModel
 import my.edu.tarc.moneymate.Transfer.TransferViewModel
-import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentRecordBinding
 
 class RecordFragment : Fragment() {
@@ -82,16 +73,16 @@ class RecordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         incomerecyclerView = binding.recordIncomeTransaction
         expenserecyclerView = binding.recordExpenseTransaction
-        transferRecyclerView = binding.recordTransferTransaction
+//        transferRecyclerView = binding.recordTransferTransaction
 
         setupRecyclerViews()
         observeRecordData()
 
         val navController = findNavController()
-        binding.ivTask.setOnClickListener{
-            navController.navigate(
-                R.id.action_recordFragment_to_dailyTaskFragment)
-        }
+//        binding.ivTask.setOnClickListener{
+//            navController.navigate(
+//                R.id.action_recordFragment_to_dailyTaskFragment)
+//        }
         binding.fabTransactionAdd.setOnClickListener {
             // findNavController().navigate(R.id.action_recordFragment_to_transactionFragment)
             showCustomDialog()
@@ -101,7 +92,6 @@ class RecordFragment : Fragment() {
         val factory = FinancialAdvisorViewModel.Factory(requireActivity().application)
         financialAdvisorViewModel =
             ViewModelProvider(this, factory).get(FinancialAdvisorViewModel::class.java)
-
 
         financialAdvisorViewModel.accountsFinancialHealth.observe(viewLifecycleOwner){
             data -> data.forEach{
