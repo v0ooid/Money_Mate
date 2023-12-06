@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Database
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -23,7 +24,7 @@ import my.edu.tarc.moneymate.R
 import java.util.Calendar
 import java.util.Date
 
-@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class] , version = 3, exportSchema = false)
+@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class] , version = 2, exportSchema = false)
 @TypeConverters(ListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -36,41 +37,41 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun alarmNotificationDao():AlarmNotificationDao
     abstract fun GoalDao():GoalDao
     abstract fun reportDao():ReportDao
-    private class DatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+    private class DatabaseCallback(private val scope: CoroutineScope,private val context: Context) : RoomDatabase.Callback() {
+        @SuppressLint("DiscouragedApi")
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             // Insert initial categories here
             scope.launch {
                 val categoryDao = INSTANCE?.categoryDao()
+                val monetaryAccountDao = INSTANCE?.monetaryAccountDao()
                 val incomeDao = INSTANCE?.incomeDao()
                 val expenseDao = INSTANCE?.expenseDao()
-                val monetaryAccountDao = INSTANCE?.monetaryAccountDao()
+
+                monetaryAccountDao?.insertAccount(MonetaryAccount(1, "Cash", 1000.0,context.resources.getIdentifier("round_money_24", "drawable", context.packageName)))
+                categoryDao?.insertCategory(Category(0, "Salary", context.resources.getIdentifier("baseline_description_24", "drawable", context.packageName), "income"))
+                categoryDao?.insertCategory(Category(1, "Payment",context.resources.getIdentifier("round_auto_awesome_24", "drawable", context.packageName), "income"))
+                categoryDao?.insertCategory(Category(2, "Invest",context.resources.getIdentifier("round_line_axis_24", "drawable", context.packageName), "income"))
+                categoryDao?.insertCategory(Category(3, "Pay", context.resources.getIdentifier("round_money_24", "drawable", context.packageName), "income"))
+                categoryDao?.insertCategory(Category(4, "Allowance", context.resources.getIdentifier("round_attach_money_24", "drawable", context.packageName), "income"))
+
+                categoryDao?.insertCategory(Category(5, "Bills", context.resources.getIdentifier("round_electric_bolt_24", "drawable", context.packageName), "expense"))
+                categoryDao?.insertCategory(Category(6, "Installment",context.resources.getIdentifier("round_tv_24", "drawable", context.packageName), "expense"))
+                categoryDao?.insertCategory(Category(7, "Sales", context.resources.getIdentifier("round_point_of_sale_24", "drawable", context.packageName), "expense"))
+                categoryDao?.insertCategory(Category(8, "Drink",context.resources.getIdentifier("round_local_drink_24", "drawable", context.packageName), "expense"))
+                categoryDao?.insertCategory(Category(9, "Food", context.resources.getIdentifier("round_free_breakfast_24", "drawable", context.packageName), "expense"))
 
 
 
-                categoryDao?.insertCategory(Category(0, "Salary", R.drawable.baseline_description_24, "income"))
-                categoryDao?.insertCategory(Category(1, "Payment", R.drawable.round_auto_awesome_24, "income"))
-                categoryDao?.insertCategory(Category(2, "Invest", R.drawable.round_line_axis_24, "income"))
-                categoryDao?.insertCategory(Category(3, "Pay", R.drawable.round_money_24, "income"))
-                categoryDao?.insertCategory(Category(4, "Allowance", R.drawable.round_attach_money_24, "income"))
+                incomeDao?.insertIncome(Income(1, "Salary", context.resources.getIdentifier("round_auto_awesome_24", "drawable", context.packageName), "July Salary",100,1,1,"2023-10-16 11:55"))
+                incomeDao?.insertIncome(Income(2, "Investment", context.resources.getIdentifier("round_line_axis_24", "drawable", context.packageName), "July Investment",200,2,1,"2023-11-16 11:55"))
+                incomeDao?.insertIncome(Income(3, "Payback", context.resources.getIdentifier("round_money_24", "drawable", context.packageName), "July Payback",300,3,1,"2023-09-16 11:55"))
+                incomeDao?.insertIncome(Income(4, "Allowance",context.resources.getIdentifier("round_attach_money_24", "drawable", context.packageName), "July Allowance",400,4,1,"2023-01-16 11:55"))
 
-                categoryDao?.insertCategory(Category(5, "Bills", R.drawable.round_electric_bolt_24, "expense"))
-                categoryDao?.insertCategory(Category(6, "Installment", R.drawable.round_tv_24, "expense"))
-                categoryDao?.insertCategory(Category(7, "Sales", R.drawable.round_point_of_sale_24, "expense"))
-                categoryDao?.insertCategory(Category(8, "Drink", R.drawable.round_local_drink_24, "expense"))
-                categoryDao?.insertCategory(Category(9, "Food", R.drawable.round_free_breakfast_24, "expense"))
-
-                monetaryAccountDao?.insertAccount(MonetaryAccount(1, "Cash", 1000.0,R.drawable.round_money_24))
-
-                incomeDao?.insertIncome(Income(1, "Salary", R.drawable.round_auto_awesome_24, "July Salary",100,1,1,"2023-10-16 11:55"))
-                incomeDao?.insertIncome(Income(2, "Investment", R.drawable.round_line_axis_24, "July Investment",200,2,1,"2023-11-16 11:55"))
-                incomeDao?.insertIncome(Income(3, "Payback", R.drawable.round_money_24, "July Payback",300,3,1,"2023-9-16 11:55"))
-                incomeDao?.insertIncome(Income(4, "Allowance", R.drawable.round_attach_money_24, "July Allowance",400,4,1,"2023-1-16 11:55"))
-
-                expenseDao?.insertExpense(Expense(1, "Pay", R.drawable.round_electric_bolt_24, "July Pay",400,5,1,"2023-12-16 11:55"))
-                expenseDao?.insertExpense(Expense(2, "Installment",  R.drawable.round_tv_24, "July Installment",300,6,1,"2023-10-16 11:55"))
-                expenseDao?.insertExpense(Expense(3, "Drink", R.drawable.round_local_drink_24, "July Drink",200,7,1,"2023-11-16 11:55"))
-                expenseDao?.insertExpense(Expense(4, "Food", R.drawable.round_free_breakfast_24, "July Food",100,8,1,"2023-12-16 11:55"))
+                expenseDao?.insertExpense(Expense(1, "Pay", context.resources.getIdentifier("round_electric_bolt_24", "drawable", context.packageName), "July Pay",400,5,1,"2023-12-16 11:55"))
+                expenseDao?.insertExpense(Expense(2, "Installment",context.resources.getIdentifier("round_tv_24", "drawable", context.packageName), "July Installment",300,6,1,"2023-10-16 11:55"))
+                expenseDao?.insertExpense(Expense(3, "Drink", context.resources.getIdentifier("round_point_of_sale_24", "drawable", context.packageName), "July Drink",200,7,1,"2023-11-16 11:55"))
+                expenseDao?.insertExpense(Expense(4, "Food", context.resources.getIdentifier("round_local_drink_24", "drawable", context.packageName), "July Food",100,8,1,"2023-12-16 11:55"))
 
 
             }
@@ -97,7 +98,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "MoneyMate_db"
                 )
-                    .addCallback(DatabaseCallback(GlobalScope))
+                    .addCallback(DatabaseCallback(GlobalScope,context))
                     .build()
                 INSTANCE = newInstance
                 return newInstance

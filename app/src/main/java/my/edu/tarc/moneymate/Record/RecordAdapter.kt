@@ -17,16 +17,19 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.Database.MonetaryAccountDao
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
+import org.w3c.dom.Text
 
 class RecordAdapter constructor(
     private val context: Context,
     private val incomeViewModel: IncomeViewModel,
     private val recordViewModel: RecordViewModel,
     val getFragment: RecordFragment,
-    private val recordList: MutableList<Record>
+    private val recordList: MutableList<Record>,
+    private val monetaryAccountDao: MonetaryAccountDao
 ) : RecyclerView.Adapter<RecordAdapter.RecordViewHolder>() {
     class RecordViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val incometitle: TextView = itemView.findViewById(R.id.record_income_title)
@@ -40,7 +43,8 @@ class RecordAdapter constructor(
         val incomeLayout: View = itemView.findViewById(R.id.income_linear)
         val expenseLayout: View = itemView.findViewById(R.id.expense_linear)
         val incomeIcon : ImageView = itemView.findViewById(R.id.record_income_icon)
-
+        val incomeMAccount: TextView = itemView.findViewById(R.id.incomeMAccount)
+        val expenseMAccount: TextView = itemView.findViewById(R.id.expenseMAccount)
     }
 
 
@@ -57,6 +61,9 @@ class RecordAdapter constructor(
     override fun getItemCount(): Int {
         return recordList.size
     }
+//    private fun getAccountName(accountId: Long): String? {
+//        return monetaryAccountDao.getAccountNameById(accountId)
+//    }
 
     override fun onBindViewHolder(holder: RecordViewHolder, position: Int) {
 
@@ -68,6 +75,12 @@ class RecordAdapter constructor(
             holder.incomeResult.text = "RM" + recordList[position].amount.toString()
             holder.incomeDes.text = recordList[position].description
             holder.incomeIcon.setImageResource(recordList[position].image)
+            recordViewModel.getAccountNameForRecord(recordList[position].accountId.toLong()).observe(getFragment.viewLifecycleOwner, { accountName ->
+                holder.incomeMAccount.text = accountName ?: "Unknown Account"
+            })
+            val accountNamee = recordViewModel.getAccountName(recordList[position].accountId.toLong())
+//            val accountName = getAccountName(recordList[position].accountId.toLong())
+//            holder.incomeMAccount.text = (accountNamee?:"Unknown Acccount").toString()
             Log.d("currentdata", recordList[position].type)
         } else if (recordList[position].type == "expense") {
             holder.incomeLayout.visibility = View.GONE

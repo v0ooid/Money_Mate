@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
-import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.R
 
 class RecordExpenseAdapter constructor(
@@ -42,7 +41,7 @@ class RecordExpenseAdapter constructor(
         val incomeLayout: View = itemView.findViewById(R.id.income_linear)
         val expenseLayout: View = itemView.findViewById(R.id.expense_linear)
         val expenseIcon : ImageView = itemView.findViewById(R.id.record_expense_icon)
-
+        val expenseMAccount: TextView = itemView.findViewById(R.id.expenseMAccount)
     }
 
     override fun onCreateViewHolder(
@@ -63,6 +62,9 @@ class RecordExpenseAdapter constructor(
             holder.expenseDate.text = recordList[position].date
             holder.expenseDes.text = recordList[position].description
             holder.expenseIcon.setImageResource(recordList[position].image)
+            recordViewModel.getAccountNameForRecord(recordList[position].accountId.toLong()).observe(getFragment.viewLifecycleOwner, { accountName ->
+                holder.expenseMAccount.text = accountName ?: "Unknown Account"
+            })
             Log.d("currentdataExpense", recordList[position].toString())
         } else if (recordList[position].type == "income") {
             holder.expenseLayout.visibility = View.GONE

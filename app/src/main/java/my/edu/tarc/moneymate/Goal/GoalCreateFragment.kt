@@ -3,19 +3,15 @@ package my.edu.tarc.moneymate.Goal
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.view.menu.MenuView.ItemView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.Database.GoalRepository
-import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentGoalCreateBinding
 import java.util.Calendar
 
@@ -106,7 +102,8 @@ class GoalCreateFragment : Fragment() {
         val datePickerDialog = DatePickerDialog(requireContext(),
             { _, selectedYear, selectedMonth, selectedDayOfMonth ->
                 // Set the selected date to EditText in the format you desire
-                val selectedDate = "${selectedDayOfMonth}/${selectedMonth + 1}/$selectedYear"
+                val formattedMonth = String.format("%02d",selectedMonth + 1)
+                val selectedDate = "${selectedYear}-$formattedMonth-${selectedDayOfMonth}"
                 binding.etGoalDate.setText(selectedDate)
             }, year, month, day)
 

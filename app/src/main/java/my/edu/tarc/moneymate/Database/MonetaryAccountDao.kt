@@ -1,5 +1,3 @@
-//package my.edu.tarc.moneymate.Database
-
 package my.edu.tarc.moneymate.Database
 
 import androidx.lifecycle.LiveData
@@ -34,6 +32,7 @@ interface MonetaryAccountDao {
 
     @Query("SELECT SUM(accountBalance) FROM monetary_accounts")
     fun getTotalAmount(): LiveData<Double>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(dataList: List<MonetaryAccount>)

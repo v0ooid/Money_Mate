@@ -1,35 +1,31 @@
 package my.edu.tarc.moneymate.Report
 
 import android.app.AlertDialog
-import android.content.ContentValues
+import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.media.MediaScannerConnection
+import android.graphics.pdf.PdfDocument
 import android.net.Uri
-import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +33,6 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import my.edu.tarc.moneymate.Expense.Expense
@@ -45,13 +40,13 @@ import my.edu.tarc.moneymate.Goal.Goal
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
-import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentReportBinding
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 class ReportFragment : Fragment() {
@@ -88,74 +83,14 @@ class ReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-//        recyclerView = view.findViewById(R.id.rvReport)
-//        recyclerView.layoutManager = LinearLayoutManager(context)
-//        recyclerView.adapter = ReportAdapter(emptyList())
-//        viewModel = ViewModelProvider(this)[ReportViewModel::class.java]
-//        Log.d("I am here","I am here")
-//        viewModel.reportItems.observe(viewLifecycleOwner) { items ->
-//            if (items.isNotEmpty()) {
-//                recyclerView.adapter = ReportAdapter(items)
-//                Log.e("report item  view model", items.toString())
-//
-//            }else
-//            {
-//                Log.e("report item  view model", "View Model Empty")
-//            }
-//        }
-//
-//        spinnerMonth = view.findViewById(R.id.tvReportMonthFrom)
-//        spinnerYear = view.findViewById(R.id.tvReportYearFrom)
-//
-//        incomeViewModel = ViewModelProvider(this).get(IncomeViewModel::class.java)
-//
-////        binding.reportSearch.setOnClickListener{
-////            val startDate = "selected start date" // Replace with logic to get start date
-////            val endDate = "selected end date" // Replace with logic to get end date
-////
-////            incomeViewModel.getIncomeForDateRange(startDate, endDate)
-////        }
-////        reportAdapter = ReportAdapter(emptyList())
-////        incomeViewModel.incomeInRange.observe(viewLifecycleOwner) { incomeList ->
-////            val reportItems = incomeList.map { ReportItem.IncomeItem(it) }
-////            reportAdapter.updateData(reportItems) // Update adapter data when new data arrives
-////        }
-////
-////        spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-////            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-////                updateIncomeData()
-////            }
-////            override fun onNothingSelected(parent: AdapterView<*>?) {}
-////        }
-////        spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-////            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-////                updateIncomeData()
-////            }
-////            override fun onNothingSelected(parent: AdapterView<*>?) {}
-////        }
-//        reportAdapter = ReportAdapter(emptyList())
-//        recyclerView.adapter = reportAdapter
-//
-//        binding.reportSearch.setOnClickListener {
-//            val startMonthYear = "2023-10" // Adjust to get from UI
-//            val endMonthYear = "2023-11" // Adjust to get from UI
-//
-//            viewModel.getFilteredData(startMonthYear, endMonthYear).observe(viewLifecycleOwner) { filteredData ->
-//                reportAdapter.submitData(filteredData)
-//            }
-//        }
-//
-//
-//
-        val months = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
+        val months = arrayOf("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val years = (currentYear-3..currentYear).toList()
         val monthAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months)
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.tvReportMonthFrom.adapter = monthAdapter
         binding.tvReportMonthTo.adapter = monthAdapter
 
+        val years = (currentYear-3..currentYear+3).toList()
         val yearAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.tvReportYearFrom.adapter = yearAdapter
@@ -163,9 +98,9 @@ class ReportFragment : Fragment() {
         setupTabLayout()
         binding.tvReportMonthFrom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val selectedMonth = months[position]
-                val selectedYear = binding.tvReportYearFrom.selectedItem.toString()
-                startMonthYear = "$selectedYear-${position + 1}" // Assuming month starts from 1
+                val selectedMonth = String.format("%02d",position+1)
+                val selectedYear = String.format("%02d",binding.tvReportYearFrom.selectedItem)
+                startMonthYear = "$selectedYear-$selectedMonth"
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -177,9 +112,11 @@ class ReportFragment : Fragment() {
 
         binding.tvReportMonthTo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val selectedMonth = months[position]
-                val selectedYear = binding.tvReportYearTo.selectedItem.toString()
-                endMonthYear = "$selectedYear-${position + 1}" // Assuming month starts from 1
+                val selectedMonth = String.format("%02d",position+1)
+                val selectedItem = binding.tvReportYearTo.selectedItem
+                val selectedYear = String.format("%02d",selectedItem)
+                Log.d("selected year", "selectedYear $selectedYear and $selectedItem")
+                endMonthYear = "$selectedYear-$selectedMonth"
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -197,8 +134,13 @@ class ReportFragment : Fragment() {
         layoutToCapture = view.findViewById(R.id.report_bottomPart)
         searchButton = view.findViewById(R.id.ivReportShare)
 
-        searchButton.setOnClickListener {
-            checkPermissionAndSaveImage()
+//        searchButton.setOnClickListener {
+//            checkPermissionAndSaveImage()
+//        }
+        searchButton.setOnClickListener{
+
+
+            savePdfFromView(layoutToCapture)
         }
 
 
@@ -234,7 +176,9 @@ class ReportFragment : Fragment() {
                             setupPieChartWithReportItems(data)
                         }
                         setupSearchButtonListener()
+                        binding.tvReportTitle.text = "General Report"
                         binding.tvReportTitleCategory.text = "Category "
+                        binding.tvReportTitleAmount.text = "Amount"
 
                     }
                     1 -> {
@@ -256,7 +200,10 @@ class ReportFragment : Fragment() {
                             layoutParams.height = (300 * resources.displayMetrics.density).toInt()
                             binding.cvChart.layoutParams = layoutParams
                         }
+                        binding.tvReportTitle.text = "Income Report"
+
                         binding.tvReportTitleCategory.text = "Category "
+                        binding.tvReportTitleAmount.text = "Amount"
 
                     }
                     2 -> {
@@ -274,7 +221,10 @@ class ReportFragment : Fragment() {
                                     setupPieChartWithExpense(data)
                                 }
                         }
+                        binding.tvReportTitle.text = "Expense Report"
+
                         binding.tvReportTitleCategory.text = "Category "
+                        binding.tvReportTitleAmount.text = "Amount"
 
                     }
                     3 -> {
@@ -292,7 +242,11 @@ class ReportFragment : Fragment() {
                                     setupPieChartWithGoal(data)
                                 }
                         }
+                        binding.tvReportTitle.text = "Goal Report"
+
                         binding.tvReportTitleCategory.text = "Target Amount: "
+                        binding.tvReportTitleAmount.text = "Saved Amount"
+
                     }
                 }
             }
@@ -329,42 +283,104 @@ class ReportFragment : Fragment() {
     private fun setupPieChartWithIncome(data: List<Income>) {
         val entries = ArrayList<PieEntry>()
 
-        // Assuming each Income has a category or type that you want to display
-        val incomeByCategory = data.groupBy { it.incomeTitle } // Replace 'category' with the actual field
+        val incomeByCategory = data.groupBy { it.incomeTitle }
         for ((category, incomes) in incomeByCategory) {
             val totalAmount = incomes.sumOf { it.amount }
             entries.add(PieEntry(totalAmount.toFloat(), category))
         }
 
         val dataSet = PieDataSet(entries, "Income Categories")
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS) // Use Material Colors for Income Categories
+
+        // Custom colors
+        val colors = mutableListOf<Int>()
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color1))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color2))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color3))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color4))
+
+        while (colors.size < entries.size) {
+            colors.add(R.color.color1) // Replace 'someDefaultColor' with a default color
+        }
+        // Add more colors if needed
+        dataSet.colors = colors
+
+        // Style the data set
+        dataSet.sliceSpace = 3f
+        dataSet.selectionShift = 5f
+        dataSet.valueTextColor = Color.WHITE
+        dataSet.valueTextSize = 10f
+
         val pieData = PieData(dataSet)
 
+        // Customize the pie chart
         binding.pieChart.data = pieData
-        binding.pieChart.description.isEnabled = false // Optional: disable the description
-        binding.pieChart.isDrawHoleEnabled = false // Optional: for a full pie chart
-        binding.pieChart.animateY(1400, Easing.EaseInOutQuad) // Animate the chart
-        binding.pieChart.invalidate() // Refresh the chart
+        binding.pieChart.apply {
+            description.isEnabled = false
+            isDrawHoleEnabled = true
+            holeRadius = 40f
+            setHoleColor(Color.TRANSPARENT)
+            setTransparentCircleColor(Color.WHITE)
+            setTransparentCircleAlpha(110)
+            setDrawCenterText(true)
+            centerText = "Income Distribution"
+
+            setCenterTextColor(Color.BLACK)
+            setCenterTextSize(14f)
+            animateY(1400, Easing.EaseInOutQuad)
+            legend.isEnabled = true
+
+            invalidate()
+        }
     }
+
     private fun setupPieChartWithExpense(data: List<Expense>) {
         val entries = ArrayList<PieEntry>()
 
-        // Assuming each Income has a category or type that you want to display
-        val expenseByCategory = data.groupBy { it.expense_title } // Replace 'category' with the actual field
-        for ((category, incomes) in expenseByCategory) {
-            val totalAmount = incomes.sumOf { it.amount }
+        val expenseByCategory = data.groupBy { it.expense_title }
+        for ((category, expenses) in expenseByCategory) {
+            val totalAmount = expenses.sumOf { it.amount }
             entries.add(PieEntry(totalAmount.toFloat(), category))
         }
 
         val dataSet = PieDataSet(entries, "Expense Categories")
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS) // Use Material Colors for Income Categories
+
+        // Custom colors
+        val colors = mutableListOf<Int>()
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color1))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color2))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color3))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color4))
+
+        while (colors.size < entries.size) {
+            colors.add(R.color.color1) // Replace 'someDefaultColor' with a default color
+        }
+        dataSet.colors = colors
+        // Style the data set
+        dataSet.sliceSpace = 3f
+        dataSet.selectionShift = 5f
+        dataSet.valueTextColor = Color.WHITE
+        dataSet.valueTextSize = 10f
+
         val pieData = PieData(dataSet)
 
+        // Customize the pie chart
         binding.pieChart.data = pieData
-        binding.pieChart.description.isEnabled = false // Optional: disable the description
-        binding.pieChart.isDrawHoleEnabled = false // Optional: for a full pie chart
-        binding.pieChart.animateY(1400, Easing.EaseInOutQuad) // Animate the chart
-        binding.pieChart.invalidate() // Refresh the chart
+        binding.pieChart.apply {
+            description.isEnabled = false
+            isDrawHoleEnabled = true
+            holeRadius = 40f
+            setHoleColor(Color.TRANSPARENT)
+            setTransparentCircleColor(Color.WHITE)
+            setTransparentCircleAlpha(110)
+            setDrawCenterText(true)
+            centerText = "Expense Distribution"
+            setCenterTextColor(Color.BLACK)
+            setCenterTextSize(14f)
+            animateY(1400, Easing.EaseInOutQuad)
+            legend.isEnabled = true
+
+            invalidate()
+        }
     }
     private fun setupPieChartWithGoal(data: List<Goal>) {
         val totalTargetAmount = data.sumOf { it.targetAmount }
@@ -376,15 +392,44 @@ class ReportFragment : Fragment() {
         }
 
         val dataSet = PieDataSet(entries, "Goal Summary")
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS) // Use different colors for Target and Saved Amounts
+
+        // Custom colors
+        val colors = mutableListOf<Int>()
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color1))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color2))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color3))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.color4))
+
+        while (colors.size < entries.size) {
+            colors.add(R.color.color1) // Replace 'someDefaultColor' with a default color
+        }
+        dataSet.colors = colors
+
+        // Style the data set
+        dataSet.sliceSpace = 3f
+        dataSet.selectionShift = 5f
+        dataSet.valueTextColor = Color.WHITE
+        dataSet.valueTextSize = 10f
+
         val pieData = PieData(dataSet)
 
+        // Customize the pie chart
         binding.pieChart.data = pieData
         binding.pieChart.apply {
             description.isEnabled = false
-            isDrawHoleEnabled = false
+            isDrawHoleEnabled = true
+            holeRadius = 40f
+            setHoleColor(Color.TRANSPARENT)
+            setTransparentCircleColor(Color.WHITE)
+            setTransparentCircleAlpha(110)
+            setDrawCenterText(true)
+            centerText = "Goal Progress"
+            setCenterTextColor(Color.BLACK)
+            setCenterTextSize(14f)
             animateY(1400, Easing.EaseInOutQuad)
-            invalidate() // Refresh the chart
+            legend.isEnabled = true
+
+            invalidate()
         }
     }
 
@@ -414,47 +459,184 @@ class ReportFragment : Fragment() {
             }
         }
     }
+    private fun savePdfFromView(view: View) {
 
-    private fun checkPermissionAndSaveImage() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Permission is not granted, request it
-            requestPermissions(
-                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                WRITE_EXTERNAL_STORAGE_REQUEST_CODE
-            )
-            Log.d("testing pressed","Failed 2")
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+        val dateString = dateFormat.format(Date())
+        val fileName = "Report_$dateString.pdf"
 
+        // Define the file path where the PDF will be saved
+        val pdfFilePath = requireContext().getExternalFilesDir(null)?.absolutePath + "/" + fileName        // Measure and layout the view
+        view.measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(view.height, View.MeasureSpec.EXACTLY))
+        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+
+        // Create a bitmap
+        val bitmap = Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+
+        // Create a PdfDocument
+        val pdfDocument = PdfDocument()
+        val pageInfo = PdfDocument.PageInfo.Builder(bitmap.width, bitmap.height, 1).create()
+        val page = pdfDocument.startPage(pageInfo)
+
+        // Draw the bitmap onto the PdfDocument's Canvas
+        page.canvas.drawBitmap(bitmap, 0f, 0f, null)
+        pdfDocument.finishPage(page)
+
+        // Write the PdfDocument to a file
+        try {
+            val fileOutputStream = FileOutputStream(pdfFilePath)
+            pdfDocument.writeTo(fileOutputStream)
+            Snackbar.make(view, "PDF saved to $pdfFilePath", Snackbar.LENGTH_LONG)
+                .setAction("View"){
+                    openPDFFile(pdfFilePath)
+                }
+                .show()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Snackbar.make(view, "Error saving PDF", Snackbar.LENGTH_LONG).show()
+        } finally {
+            pdfDocument.close()
+            bitmap.recycle()
+        }
+    }
+
+
+
+//
+//    // Inside your Fragment or Activity
+//    private fun generatePDF(adapter: ReportAdapter) {
+//        val pdfDocument = PdfDocument(PdfWriter("report.pdf"))
+//        val document = Document(pdfDocument, PageSize.A4)
+//        document.setMargins(20f, 20f, 20f, 20f)
+//
+//        val table = Table(floatArrayOf(25f, 25f, 25f, 25f)).useAllAvailableWidth()
+//        table.addCell(createCell("Source Title", true))
+//        table.addCell(createCell("Date", true))
+//        table.addCell(createCell("Category", true))
+//        table.addCell(createCell("Amount", true))
+//
+//        for (i in 0 until adapter.itemCount) {
+//            val viewHolder = adapter.createViewHolder(null, adapter.getItemViewType(i))
+//            adapter.onBindViewHolder(viewHolder, i)
+//            when (viewHolder) {
+//                is ReportAdapter.IncomeViewHolder -> {
+//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_source).text.toString()))
+//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_date).text.toString()))
+//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_category).text.toString()))
+//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_amount).text.toString()))
+//                }
+//                // Add cases for GoalViewHolder and ExpenseViewHolder if needed
+//            }
+//        }
+//
+//        table.setBackgroundColor(ColorConstants.WHITE)
+//        table.setFontColor(ColorConstants.BLACK)
+//        table.setTextAlignment(TextAlignment.LEFT)
+//
+//        document.add(table)
+//        document.close()
+//
+//        showSnackbarAndRedirect("report.pdf")
+//    }
+//
+//    private fun createCell(text: String, isHeader: Boolean = false): Cell {
+//        val cell = Cell().add(text)
+//        cell.setBackgroundColor(if (isHeader) ColorConstants.LIGHT_GRAY else ColorConstants.WHITE)
+//        cell.setFontColor(if (isHeader) ColorConstants.WHITE else ColorConstants.BLACK)
+//        cell.setFontSize(12f)
+//        cell.setTextAlignment(TextAlignment.CENTER)
+//        cell.setBorder(Border.NO_BORDER)
+//        cell.setPadding(5f)
+//        return cell
+//    }
+    private fun showSnackbarAndRedirect(filePath: String?) {
+        if (filePath != null) {
+            Snackbar.make(
+                requireView(),
+                "PDF generated successfully",
+                Snackbar.LENGTH_LONG
+            ).setAction("View") {
+                openPDFFile(filePath)
+            }.show()
         } else {
-            // Permission has already been granted, save the image
-            saveImageToGallery()
-            Log.d("testing pressed","Success")
-
+            // Handle the case where filePath is null (if PDF generation fails)
+            Snackbar.make(
+                requireView(),
+                "PDF generation failed",
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, proceed to save the image
-                saveImageToGallery()
-                Log.d("testing pressed","Test")
-            } else {
-                // Permission denied, inform the user or handle accordingly
-                showPermissionExplanationDialog()
-                Log.d("testing pressed","Failed")
+    private fun openPDFFile(filePath: String) {
+        val file = File(filePath)
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            requireContext().packageName + ".provider",
+            file
+        )
 
-            }
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, "application/pdf")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // Handle scenario where no PDF viewer app is installed
+            Toast.makeText(
+                requireContext(),
+                "No PDF viewer application found",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
+
+//    private fun checkPermissionAndSaveImage() {
+//        if (ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // Permission is not granted, request it
+//            requestPermissions(
+//                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+//                WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+//            )
+//            Log.d("testing pressed","Failed 2")
+//
+//        } else {
+//            // Permission has already been granted, save the image
+//            saveImageToGallery()
+//            Log.d("testing pressed","Success")
+//
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Permission granted, proceed to save the image
+//                saveImageToGallery()
+//                Log.d("testing pressed","Test")
+//            } else {
+//                // Permission denied, inform the user or handle accordingly
+//                showPermissionExplanationDialog()
+//                Log.d("testing pressed","Failed")
+//
+//            }
+//        }
+//    }
     private fun showPermissionExplanationDialog() {
         // Create a dialog or snackbar to inform the user about the necessity of the permission
         // and guide them to the app settings
@@ -478,74 +660,59 @@ class ReportFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun saveImageToGallery() {
-        val bitmap = getBitmapFromView(layoutToCapture) // Replace layoutToCapture with the view you want to capture
-
-        // Generating a filename for the image
-        val fileName = "layout_capture_${System.currentTimeMillis()}.png"
-
-        // Creating a new content resolver
-        val resolver = requireContext().contentResolver
-
-        // Creating a new ContentValues object to store the image details
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.WIDTH, bitmap?.width)
-            put(MediaStore.Images.Media.HEIGHT, bitmap?.height)
-        }
-
-        // Inserting the image into the MediaStore
-        val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-        imageUri?.let { uri ->
-            try {
-                // Open an output stream to write the bitmap data to the content provider
-                resolver.openOutputStream(uri)?.use { outputStream ->
-                    bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                }
-
-                // Notify the gallery of the new image
-                MediaScannerConnection.scanFile(
-                    requireContext(),
-                    arrayOf(uri.path),
-                    arrayOf("image/png")
-                ) { path, uri ->
-                    // Callback when scanning is complete, you can log or perform any other action here
-                    Log.d("MediaScanner", "Scanned $path")
-                }
-
-                // Image saved successfully
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-
-        Snackbar.make(layoutToCapture, "Layout captured and saved", Snackbar.LENGTH_SHORT).show()
-        findNavController().navigateUp()
-        Log.d("testing Save", "Success")
-    }
-
-    private fun getBitmapFromView(view: View): Bitmap? {
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        view.draw(canvas)
-        return bitmap
-    }
-
-//    private fun updateIncomeData() {
-//        val selectedMonth = spinnerMonth.selectedItem.toString()
-//        val selectedYear = spinnerYear.selectedItem.toString()
+//    private fun saveImageToGallery() {
+//        val bitmap = getBitmapFromView(layoutToCapture) // Replace layoutToCapture with the view you want to capture
 //
-//        // Combine selected month and year into YYYY-MM format
-//        val selectedMonthYear = "$selectedYear-$selectedMonth"
+//        // Generating a filename for the image
+//        val fileName = "layout_capture_${System.currentTimeMillis()}.png"
 //
-//        // Observe income data for the selected month and year
-//        incomeViewModel.getIncomeForMonthYear(selectedMonthYear).observe(viewLifecycleOwner) { incomeList ->
-//            // Handle the retrieved incomeList for display or further processing
+//        // Creating a new content resolver
+//        val resolver = requireContext().contentResolver
+//
+//        // Creating a new ContentValues object to store the image details
+//        val contentValues = ContentValues().apply {
+//            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+//            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+//            put(MediaStore.Images.Media.WIDTH, bitmap?.width)
+//            put(MediaStore.Images.Media.HEIGHT, bitmap?.height)
 //        }
+//
+//        // Inserting the image into the MediaStore
+//        val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+//
+//        imageUri?.let { uri ->
+//            try {
+//                // Open an output stream to write the bitmap data to the content provider
+//                resolver.openOutputStream(uri)?.use { outputStream ->
+//                    bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+//                }
+//
+//                // Notify the gallery of the new image
+//                MediaScannerConnection.scanFile(
+//                    requireContext(),
+//                    arrayOf(uri.path),
+//                    arrayOf("image/png")
+//                ) { path, uri ->
+//                    // Callback when scanning is complete, you can log or perform any other action here
+//                    Log.d("MediaScanner", "Scanned $path")
+//                }
+//
+//                // Image saved successfully
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//        }
+//
+//        Snackbar.make(layoutToCapture, "Layout captured and saved", Snackbar.LENGTH_SHORT).show()
+//        findNavController().navigateUp()
+//        Log.d("testing Save", "Success")
 //    }
-
-
+//
+//    private fun getBitmapFromView(view: View): Bitmap? {
+//        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+//        val canvas = Canvas(bitmap)
+//        view.draw(canvas)
+//        return bitmap
+//    }
 
 }

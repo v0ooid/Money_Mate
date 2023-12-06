@@ -26,6 +26,8 @@ class FinancialAnalyzer {
         return if (balance >= 0) FinancialHealthStatus.HEALTHY else FinancialHealthStatus.DANGER
     }
 
+
+
     fun provideFinancialTips(healthStatus: FinancialHealthStatus): List<String> {
         val tips = when (healthStatus) {
             FinancialHealthStatus.HEALTHY -> listOf("Continue saving 20% of your income", "Consider investing in stocks", "Create an emergency fund","Consider increasing contributions to your retirement savings plan to maximize future financial security.","Start planning for estate management and wills to secure your financial legacy.",

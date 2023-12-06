@@ -44,7 +44,7 @@
     <string name="edit_record">Edit Record</string>
     <string name="titleRecord">Title :</string>
     <string-array name="testSpinner">
-        <item>Account</item>
+        <item>Choose An Account</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>

@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="86dp" />
+            app:layout_constraintGuide_begin="118dp" />
 
         <TextView
             android:id="@+id/tvBudgetNameLabel"
@@ -66,9 +66,9 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/manrope_medium"
-            android:text="Amount :"
+            android:text="Amount(RM) :"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/etRecordTitle" />
 
@@ -97,9 +97,10 @@
             android:fontFamily="@font/manrope_medium"
             android:text="Description :"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/etRecordAmount" />
+
         <EditText
             android:id="@+id/etRecordDesc"
             android:layout_width="0dp"

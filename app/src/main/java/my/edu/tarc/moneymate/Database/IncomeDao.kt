@@ -1,17 +1,12 @@
 package my.edu.tarc.moneymate.Database
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import my.edu.tarc.moneymate.Category.Category
-import my.edu.tarc.moneymate.DataExport.IncomeWithAccountName
 import my.edu.tarc.moneymate.Income.Income
-import java.util.Date
 
 @Dao
 interface IncomeDao {
@@ -47,10 +42,10 @@ interface IncomeDao {
             "AND Income.categoryId = :categoryId ")
     fun getIncomeByCriteria(accountId: Long, categoryId: Long): List<Income>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertAll(dataList: List<Income>)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     suspend fun insertIncome(income: Income)
 
     @Update

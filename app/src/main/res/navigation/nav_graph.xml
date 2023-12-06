@@ -35,9 +35,6 @@
             android:id="@+id/action_profileFragment_to_appLockCustomPasswordFragment"
             app:destination="@id/appLockCustomPasswordFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_alarmNotificationFragment"
-            app:destination="@id/alarmNotificationFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_goalFragment"
             app:destination="@id/goalFragment" />
         <action
@@ -53,6 +50,9 @@
         <action
             android:id="@+id/action_profileFragment_to_dataSyncFragment"
             app:destination="@id/dataSyncFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_alarmFirstPageFragment"
+            app:destination="@id/alarmFirstPageFragment" />
     </fragment>
     <activity
         android:id="@+id/signInActivity"
@@ -248,5 +248,28 @@
         android:name="my.edu.tarc.moneymate.FinancialAdvisor.FinancialAdvisorFragment"
         android:label="fragment_financial_advisor2"
         tools:layout="@layout/fragment_financial_advisor2" />
+    <fragment
+        android:id="@+id/forumFragment"
+        android:name="my.edu.tarc.moneymate.Forum.ForumFragment"
+        android:label="fragment_forum"
+        tools:layout="@layout/fragment_forum" />
+    <fragment
+        android:id="@+id/alarmFirstPageFragment"
+        android:name="my.edu.tarc.moneymate.Alarm.AlarmFirstPageFragment"
+        android:label="AlarmFirstPageFragment"
+        tools:layout="@layout/fragment_alarm_first_page"
+        >
+        <action
+            android:id="@+id/action_alarmFirstPageFragment_to_alarmNotificationFragment"
+            app:destination="@id/alarmNotificationFragment" />
+        <action
+            android:id="@+id/action_alarmFirstPageFragment_to_goalAlarmFragment"
+            app:destination="@id/goalAlarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/goalAlarmFragment"
+        android:name="my.edu.tarc.moneymate.Alarm.GoalAlarmFragment"
+        android:label="fragment_goal_alarm"
+        tools:layout="@layout/fragment_goal_alarm" />
 
 </navigation>

@@ -47,12 +47,22 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="my.edu.tarc.moneymate.ALARM_ACTION"/>
+                <action android:name="my.edu.tarc.moneymate.ACTION_GOAL_REMINDER"/>
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="my.edu.tarc.moneymate.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

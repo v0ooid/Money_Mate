@@ -28,6 +28,8 @@ interface CategoryDao {
     @Query("SELECT * FROM Category WHERE type = 'expense'")
     fun getExpenseCategory(): LiveData<MutableList<Category>>
 
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(dataList: List<Category>)
 

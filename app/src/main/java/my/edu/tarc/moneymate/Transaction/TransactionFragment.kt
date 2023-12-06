@@ -1,32 +1,24 @@
 package my.edu.tarc.moneymate.Transaction
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.Tab
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Expense.ExpenseViewModel
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeViewModel
 import my.edu.tarc.moneymate.R
-import my.edu.tarc.moneymate.databinding.FragmentIncomeBinding
 import my.edu.tarc.moneymate.databinding.FragmentTransactionBinding
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -69,13 +61,14 @@ class TransactionFragment : Fragment() {
             childFragmentManager.findFragmentById(R.id.transactionfragmentContainerView) as NavHostFragment
         val navController = navHostTransactionFragment.navController
 
-        binding.expandCal.setOnClickListener {
-            if (binding.cardDesc.visibility == View.GONE)
-                binding.cardDesc.visibility = View.VISIBLE
-            else if (binding.cardDesc.visibility == View.VISIBLE) {
-                binding.cardDesc.visibility = View.GONE
-            }
-        }
+//        binding.expandCal.setOnClickListener {
+//            if (binding.cardDesc.visibility == View.GONE) {
+//                binding.cardDesc.visibility = View.VISIBLE
+//            }
+//            else if (binding.cardDesc.visibility == View.VISIBLE) {
+//                binding.cardDesc.visibility = View.GONE
+//            }
+//        }
 
 
 
@@ -302,7 +295,7 @@ class TransactionFragment : Fragment() {
 //        val selectedAccountId = arguments?.getLong("selectedAccountId")
 //        Log.d("testing bundle", selectedAccountId.toString())
         viewModel.result.observe(viewLifecycleOwner) { data ->
-            result = data
+            result = String.format("%02d",data.toInt())
         }
         viewModel.categoryId.observe(viewLifecycleOwner){data ->
             categoryId = data
@@ -313,6 +306,7 @@ class TransactionFragment : Fragment() {
 
         if (transactionTypeSelected == "income") {
             val income = Income(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
+            Log.d("Transaction Fragment","Income value current $income")
             incomeViewModel.addIncome(income)
         }
         else if (transactionTypeSelected == "expense")

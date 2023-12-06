@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +34,7 @@ class AlarmNotificationViewModel(application: Application) : AndroidViewModel(ap
         repository.insertAll(alarm)
     }
 
+
     fun delete(alarm: AlarmNotification) = viewModelScope.launch {
         repository.delete(alarm)
     }
@@ -43,10 +43,8 @@ class AlarmNotificationViewModel(application: Application) : AndroidViewModel(ap
         return repository.getAlarmById(id)
     }
 
-    fun updateAlarm(alarm: AlarmNotification) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.update(alarm)
-        }
+    fun updateAlarm(alarm: AlarmNotification) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(alarm)
     }
 
 }

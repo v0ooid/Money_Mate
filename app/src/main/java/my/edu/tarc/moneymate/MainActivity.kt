@@ -3,36 +3,28 @@ package my.edu.tarc.moneymate
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Window
+import android.view.View
 import android.view.WindowManager
-import androidx.core.view.ContentInfoCompat.Flags
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-
-import android.view.View
-import android.widget.Toast
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.findNavController
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.storage.FirebaseStorage
-import my.edu.tarc.moneymate.AppLock.AppLock6Activity
 import my.edu.tarc.moneymate.AppLock.AppLock4Activity
+import my.edu.tarc.moneymate.AppLock.AppLock6Activity
 import my.edu.tarc.moneymate.AppLock.AppLockCustPassActivity
 import my.edu.tarc.moneymate.Profile.SignInActivity
 import my.edu.tarc.moneymate.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class   MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var incomerecyclerView: RecyclerView
@@ -57,13 +49,13 @@ class MainActivity : AppCompatActivity() {
             navigateToLogin()
 
         } else {
-            Log.w("Testing2", "mainactivity")
+
 
             Log.e("Main activity", appLockUnlock.toString())
 
             if (!appLockUnlock) {
                 checkAppLockStatus()
-            } else {
+            }
                 val navView: BottomNavigationView = binding.navView
                 val navHostFragment =
                     supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
@@ -82,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         navView.visibility = View.VISIBLE
                     }
-                }
+
                 Log.d("Testing", "testing main activity")
                 window.setFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -93,15 +85,10 @@ class MainActivity : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_SECURE
                 )
 
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.transactionFragment,R.id.budgetFragment,R.id.navigation_feature,R.id.profileFragment
-//            )
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
                 navView.setupWithNavController(navController)
             }
         }
+
 
     }
 
@@ -161,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         // Example: Launch a new LoginActivity
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
-        finish() // Optional: Finish the MainActivity to prevent going back to it after logging in
+//        finish() // Optional: Finish the MainActivity to prevent going back to it after logging in
     }
 
     private fun checkAppLockStatus() {

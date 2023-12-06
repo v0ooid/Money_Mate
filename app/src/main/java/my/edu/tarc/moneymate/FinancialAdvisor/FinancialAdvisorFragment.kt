@@ -2,19 +2,15 @@ package my.edu.tarc.moneymate.FinancialAdvisor
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import my.edu.tarc.moneymate.Alarm.AlarmNotificationViewModel
-import my.edu.tarc.moneymate.Database.FinancialAdvisorRepository
 import my.edu.tarc.moneymate.R
-import my.edu.tarc.moneymate.databinding.FragmentAlarmNotificationBinding
 import my.edu.tarc.moneymate.databinding.FragmentFinancialAdvisorBinding
 
 
@@ -48,8 +44,6 @@ private lateinit var viewModel: FinancialAdvisorViewModel
         viewModel.accountsFinancialHealth.observe(viewLifecycleOwner) { accountsHealth ->
             accountsHealth.forEach { accountHealth ->
                 Log.d("Fragmetn accoutn heal", accountHealth.toString())
-                // Update your UI here with accountHealth information
-                // For example, show accountHealth status and tips in a RecyclerView or a set of TextViews
             }
         }
         binding.leftIcon.setOnClickListener{

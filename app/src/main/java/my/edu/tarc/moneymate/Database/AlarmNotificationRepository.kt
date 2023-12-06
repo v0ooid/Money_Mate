@@ -22,7 +22,7 @@ class AlarmNotificationRepository(private val alarmNotificationDao: AlarmNotific
         return alarmNotificationDao.getAlarmById(id)
     }
 
-    suspend fun update(alarm: AlarmNotification) {
+    fun update(alarm: AlarmNotification) {
         alarmNotificationDao.updateAlarm(alarm)
     }
 
