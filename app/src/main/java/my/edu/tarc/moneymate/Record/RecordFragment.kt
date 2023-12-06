@@ -73,16 +73,17 @@ class RecordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         incomerecyclerView = binding.recordIncomeTransaction
         expenserecyclerView = binding.recordExpenseTransaction
-//        transferRecyclerView = binding.recordTransferTransaction
+        transferRecyclerView = binding.recordTransferTransaction
 
         setupRecyclerViews()
         observeRecordData()
 
         val navController = findNavController()
-//        binding.ivTask.setOnClickListener{
-//            navController.navigate(
-//                R.id.action_recordFragment_to_dailyTaskFragment)
-//        }
+        binding.ivTask.setOnClickListener{
+            navController.navigate(
+                R.id.action_recordFragment_to_dailyTaskFragment)
+        }
+
         binding.fabTransactionAdd.setOnClickListener {
             // findNavController().navigate(R.id.action_recordFragment_to_transactionFragment)
             showCustomDialog()
@@ -124,9 +125,15 @@ class RecordFragment : Fragment() {
 
     private fun setupRecyclerViews() {
         incomerecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        RecordAdapter = RecordAdapter(requireContext(), incomeViewModel, recordViewModel, this, mutableListOf())
+        RecordAdapter = RecordAdapter(
+            requireContext(),
+            incomeViewModel,
+            recordViewModel,
+            this,
+            mutableListOf(),
+            recordViewModel.monetaryAccountDao
+        )
         incomerecyclerView.adapter = RecordAdapter
-
         expenserecyclerView.layoutManager = LinearLayoutManager(requireContext())
         RecordExpenseAdapter = RecordExpenseAdapter(
             requireContext(),

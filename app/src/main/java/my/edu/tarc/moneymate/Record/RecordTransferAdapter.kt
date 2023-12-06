@@ -35,8 +35,8 @@ class RecordTransferAdapter constructor(
     private var monetaryAccounts = mutableListOf<MonetaryAccount>()
 
     class RecordViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val sourceAccount: TextView = itemView.findViewById(R.id.record_transfer_source_account)
-        val destAccount: TextView = itemView.findViewById(R.id.record_transfer_destination_account)
+        val sourceAccount: TextView = itemView.findViewById(R.id.transferSourceAccount)
+        val destAccount: TextView = itemView.findViewById(R.id.transferDestAccount)
         val transferDesc: TextView = itemView.findViewById(R.id.record_transfer_description)
         val transferResult: TextView = itemView.findViewById(R.id.record_transfer_result)
         val transferDate: TextView = itemView.findViewById(R.id.record_transfer_dateTime)
