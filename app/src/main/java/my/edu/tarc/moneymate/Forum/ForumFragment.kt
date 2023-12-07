@@ -14,10 +14,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment
+import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
+import my.edu.tarc.moneymate.AppLock.AppLockCustomPasswordFragment
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.Report.ReportViewModel
 import my.edu.tarc.moneymate.databinding.FragmentForumBinding
@@ -54,7 +58,66 @@ class ForumFragment : Fragment(),ForumThreadAdapter.CommentPostListener {
         sharedPreferences = requireActivity().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         currentUserId = sharedPreferences.getString("userId", "")
 
+        val sharedPreferences =
+            requireContext().getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
 
+        val sectionPreferences =
+            requireContext().getSharedPreferences("APP_FORUM_PREFS", Context.MODE_PRIVATE)
+
+        val lockEn = sectionPreferences.getBoolean("Enabled", false)
+
+        val lockStatus = sectionPreferences.getBoolean("Locked", false)
+
+        Log.e("lockEn", lockEn.toString())
+        Log.e("lockStatus", lockStatus.toString())
+
+
+        if (lockEn){
+            if (lockStatus) {
+                val appLockType = sharedPreferences.getString("SECURITY_TYPE_KEY", "")
+                if (appLockType == "4Digit") {
+                    val fragment = AppLock4DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "FORUM_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_forumFragment_to_appLock4DigitFragment,
+                        bundle
+                    )
+                } else if (appLockType == "6Digit") {
+                    val fragment = AppLock6DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "FORUM_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_forumFragment_to_appLock6DigitFragment,
+                        bundle
+                    )
+                } else {
+                    val fragment = AppLockCustomPasswordFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "FORUM_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_forumFragment_to_appLockCustomPasswordFragment,
+                        bundle
+                    )
+                }
+            } else{
+                runRemainingForumFragmentLogic()
+            }
+        } else {
+            runRemainingForumFragmentLogic()
+        }
+    }
+
+    private fun runRemainingForumFragmentLogic(){
         setupSharedPreferences()
         setupRecyclerView()
         fetchThreads()
@@ -63,6 +126,7 @@ class ForumFragment : Fragment(),ForumThreadAdapter.CommentPostListener {
             showAddPostDialog()
         }
     }
+
     private fun setupSharedPreferences() {
         val sharedPreferences = requireActivity().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
         currentUserId = sharedPreferences.getString("userId", "")

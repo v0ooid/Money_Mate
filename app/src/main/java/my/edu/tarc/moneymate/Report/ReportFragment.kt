@@ -8,6 +8,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -30,9 +31,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import my.edu.tarc.moneymate.Expense.Expense
@@ -106,8 +112,6 @@ class ReportFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
-
-            // Implement onNothingSelected
         }
 
         binding.tvReportMonthTo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -133,13 +137,7 @@ class ReportFragment : Fragment() {
 
         layoutToCapture = view.findViewById(R.id.report_bottomPart)
         searchButton = view.findViewById(R.id.ivReportShare)
-
-//        searchButton.setOnClickListener {
-//            checkPermissionAndSaveImage()
-//        }
         searchButton.setOnClickListener{
-
-
             savePdfFromView(layoutToCapture)
         }
 
@@ -150,11 +148,27 @@ class ReportFragment : Fragment() {
         observeCombinedData()
         setupSearchButtonListener()
 
+        binding.toggleButton.setOnClickListener {
+            toggleChartVisibility()
+
+        }
+
+
     }
     private fun deselectAllTabs(tabLayout: TabLayout) {
         val tabStrip = tabLayout.getChildAt(0) as LinearLayout
         for (i in 0 until tabStrip.childCount) {
             tabStrip.getChildAt(i).isClickable = false
+        }
+    }
+
+    private fun toggleChartVisibility() {
+        if (binding.pieChart.visibility == View.VISIBLE) {
+            binding.pieChart.visibility = View.GONE
+            binding.barChart.visibility = View.VISIBLE
+        } else {
+            binding.pieChart.visibility = View.VISIBLE
+            binding.barChart.visibility = View.GONE
         }
     }
     private fun enableTabClicks(tabLayout: TabLayout) {
@@ -174,6 +188,7 @@ class ReportFragment : Fragment() {
                         viewModel.reportItems.observe(viewLifecycleOwner){
                             data-> reportAdapter.submitData(data)
                             setupPieChartWithReportItems(data)
+                            setupBarChartWithReportItems(data)
                         }
                         setupSearchButtonListener()
                         binding.tvReportTitle.text = "General Report"
@@ -188,11 +203,13 @@ class ReportFragment : Fragment() {
                             // Update RecyclerView with income data only
                             reportAdapter.submitIncomeData(incomeData)
                             setupPieChartWithIncome(incomeData)
+                            setupBarChartWithIncome(incomeData)
                         }
                         binding.reportSearch.setOnClickListener{
                             viewModel.getFilteredDataIncome(startMonthYear, endMonthYear).observe(viewLifecycleOwner) { incomeData ->
                                 reportAdapter.submitIncomeData(incomeData)
                                 setupPieChartWithIncome(incomeData)
+                                setupBarChartWithIncome(incomeData)
                             }
                         }
                         binding.cvChart.setOnClickListener {
@@ -212,6 +229,8 @@ class ReportFragment : Fragment() {
 
                             reportAdapter.submitExpensesData(expenseData)
                             setupPieChartWithExpense(expenseData)
+                            setupBarChartWithExpense(expenseData)
+
 
                         }
                         binding.reportSearch.setOnClickListener {
@@ -219,6 +238,8 @@ class ReportFragment : Fragment() {
                                 .observe(viewLifecycleOwner) { data ->
                                     reportAdapter.submitExpensesData(data)
                                     setupPieChartWithExpense(data)
+                                    setupBarChartWithExpense(data)
+
                                 }
                         }
                         binding.tvReportTitle.text = "Expense Report"
@@ -233,6 +254,7 @@ class ReportFragment : Fragment() {
 
                             reportAdapter.submitGoalsData(goalData)
                             setupPieChartWithGoal(goalData)
+                            setupBarChartWithGoal(goalData)
 
                         }
                         binding.reportSearch.setOnClickListener {
@@ -240,6 +262,8 @@ class ReportFragment : Fragment() {
                                 .observe(viewLifecycleOwner) { data ->
                                     reportAdapter.submitGoalsData(data)
                                     setupPieChartWithGoal(data)
+                                    setupBarChartWithGoal(data)
+
                                 }
                         }
                         binding.tvReportTitle.text = "Goal Report"
@@ -260,6 +284,37 @@ class ReportFragment : Fragment() {
             }
         })
     }
+
+    private fun setupBarChartWithReportItems(data: List<ReportItem>) {
+        val entries = ArrayList<BarEntry>()
+
+        val incomeAmount = data.filterIsInstance<ReportItem.IncomeItem>().sumOf { it.income.amount }
+        val expenseAmount = data.filterIsInstance<ReportItem.ExpenseItem>().sumOf { it.expense.amount }
+        val goalAmount = data.filterIsInstance<ReportItem.GoalItem>().sumOf { it.goal.targetAmount }
+
+        // Assuming you want to display each as a separate bar
+        entries.add(BarEntry(1f, incomeAmount.toFloat()))
+        entries.add(BarEntry(2f, expenseAmount.toFloat()))
+        entries.add(BarEntry(3f, goalAmount.toFloat()))
+
+        val barDataSet = BarDataSet(entries, "Categories")
+        barDataSet.setColors(listOf(Color.GREEN, Color.RED, Color.BLUE)) // Colors for Income, Expense, Goal
+        val barData = BarData(barDataSet)
+
+        binding.barChart.data = barData
+        binding.barChart.description.isEnabled = false // Optionally remove the description
+
+        // Optionally format the X-axis labels
+        val labels = arrayOf("Income", "Expense", "Goal")
+        binding.barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        binding.barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        binding.barChart.xAxis.granularity = 1f
+        binding.barChart.xAxis.setDrawGridLines(false)
+
+        binding.barChart.animateY(1400, Easing.EaseInOutQuad)
+        binding.barChart.invalidate() // Refresh the chart
+    }
+
 
     private fun setupPieChartWithReportItems(data: List<ReportItem>) {
         val entries = ArrayList<PieEntry>()
@@ -429,6 +484,72 @@ class ReportFragment : Fragment() {
             animateY(1400, Easing.EaseInOutQuad)
             legend.isEnabled = true
 
+            invalidate()
+        }
+    }
+    private fun setupBarChartWithIncome(data: List<Income>) {
+        val entries = ArrayList<BarEntry>()
+
+        val incomeByCategory = data.groupBy { it.incomeTitle }
+        var index = 0f
+        for ((_, incomes) in incomeByCategory) {
+            val totalAmount = incomes.sumOf { it.amount }
+            entries.add(BarEntry(index, totalAmount.toFloat()))
+            index++
+        }
+
+        val barDataSet = BarDataSet(entries, "Income Categories")
+        barDataSet.colors = listOf(ContextCompat.getColor(requireContext(), R.color.color1)) // Customize colors
+        val barData = BarData(barDataSet)
+
+        binding.barChart.data = barData
+        customizeBarChartAppearance("Income Distribution")
+    }
+    private fun setupBarChartWithExpense(data: List<Expense>) {
+        val entries = ArrayList<BarEntry>()
+
+        val expenseByCategory = data.groupBy { it.expense_title }
+        var index = 0f
+        for ((_, expenses) in expenseByCategory) {
+            val totalAmount = expenses.sumOf { it.amount }
+            entries.add(BarEntry(index, totalAmount.toFloat()))
+            index++
+        }
+
+        val barDataSet = BarDataSet(entries, "Expense Categories")
+        barDataSet.colors = listOf(ContextCompat.getColor(requireContext(), R.color.color2)) // Customize colors
+        val barData = BarData(barDataSet)
+
+        binding.barChart.data = barData
+        customizeBarChartAppearance("Expense Distribution")
+    }
+    private fun setupBarChartWithGoal(data: List<Goal>) {
+        val entries = ArrayList<BarEntry>()
+
+        val totalTargetAmount = data.sumOf { it.targetAmount }
+        val totalSavedAmount = data.sumOf { it.savedAmount }
+
+        entries.add(BarEntry(0f, totalTargetAmount.toFloat()))
+        entries.add(BarEntry(1f, totalSavedAmount.toFloat()))
+
+        val barDataSet = BarDataSet(entries, "Goal Summary")
+        barDataSet.colors = listOf(ContextCompat.getColor(requireContext(), R.color.color3)) // Customize colors
+        val barData = BarData(barDataSet)
+
+        binding.barChart.data = barData
+        customizeBarChartAppearance("Goal Progress")
+    }
+    private fun customizeBarChartAppearance(chartTitle: String) {
+        binding.barChart.apply {
+            description.isEnabled = false
+            setDrawBarShadow(false)
+            setDrawValueAboveBar(true)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            axisLeft.axisMinimum = 0f
+            axisRight.isEnabled = false
+            setFitBars(true)
+            animateY(1400, Easing.EaseInOutQuad)
+            legend.isEnabled = true
             invalidate()
         }
     }

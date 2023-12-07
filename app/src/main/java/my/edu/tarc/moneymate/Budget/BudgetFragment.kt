@@ -1,6 +1,7 @@
 package my.edu.tarc.moneymate.Budget
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,8 +16,11 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment
+import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.CustomSpinner.ClassSpinnerAdapter
 import my.edu.tarc.moneymate.Database.AppDatabase
@@ -44,6 +48,69 @@ class BudgetFragment : Fragment() {
     ): View? {
         _binding = FragmentBudgetBinding.inflate(inflater, container, false)
 
+        val sharedPreferences =
+            requireContext().getSharedPreferences("APP_LOCK_PREFS", Context.MODE_PRIVATE)
+
+        val sectionPreferences =
+            requireContext().getSharedPreferences("APP_BUDGET_PREFS", Context.MODE_PRIVATE)
+
+        val lockEn = sectionPreferences.getBoolean("Enabled", false)
+
+        val lockStatus = sectionPreferences.getBoolean("Locked", false)
+
+        if (lockEn) {
+            if (lockStatus) {
+                val appLockType = sharedPreferences.getString("SECURITY_TYPE_KEY", "")
+                if (appLockType == "4Digit") {
+                    val fragment = AppLock4DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "BUDGET_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_budgetFragment_to_appLock4DigitFragment,
+                        bundle
+                    )
+                } else if (appLockType == "6Digit") {
+                    val fragment = AppLock6DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "BUDGET_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_budgetFragment_to_appLock6DigitFragment,
+                        bundle
+                    )
+                } else {
+                    val fragment = AppLock6DigitFragment()
+                    val bundle = Bundle()
+                    bundle.putString("FRAGMENT_LOCK", "BUDGET_FRAGMENT")
+                    fragment.arguments = bundle
+
+                    val navController = findNavController()
+                    navController.navigate(
+                        R.id.action_budgetFragment_to_appLockCustomPasswordFragment,
+                        bundle
+                    )
+                }
+            } else {
+                runRemainingBudgetFragmentLogic()
+            }
+        } else {
+            runRemainingBudgetFragmentLogic()
+        }
+        return binding.root
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+//        viewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
+    }
+
+    private fun runRemainingBudgetFragmentLogic(){
         val appDatabase = AppDatabase.getDatabase(requireContext())
         budgetDao = appDatabase.budgetDao()
 
@@ -74,14 +141,6 @@ class BudgetFragment : Fragment() {
         binding.fabBudgetAdd.setOnClickListener{
             showDialog()
         }
-
-        return binding.root
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
     }
 
     private fun showDialog() {

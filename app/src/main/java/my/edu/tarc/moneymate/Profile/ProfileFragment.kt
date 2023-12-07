@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import my.edu.tarc.moneymate.AppLock.AppLock4DigitFragment
 import my.edu.tarc.moneymate.AppLock.AppLock6DigitFragment
+import my.edu.tarc.moneymate.AppLock.AppLockCustomPasswordFragment
 import my.edu.tarc.moneymate.Database.AppDatabase
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentProfileBinding
@@ -88,7 +89,7 @@ class ProfileFragment : Fragment() {
                         bundle
                     )
                 } else {
-                    val fragment = AppLock6DigitFragment()
+                    val fragment = AppLockCustomPasswordFragment()
                     val bundle = Bundle()
                     bundle.putString("FRAGMENT_LOCK", "PROFILE_FRAGMENT")
                     fragment.arguments = bundle

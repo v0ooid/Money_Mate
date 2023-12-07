@@ -83,7 +83,8 @@ class RecordAdapter constructor(
 //            val accountName = getAccountName(recordList[position].accountId.toLong())
 //            holder.incomeMAccount.text = (accountNamee?:"Unknown Acccount").toString()
             Log.d("currentdata", recordList[position].type)
-        } else if (recordList[position].type == "expense") {
+        }
+        else if (recordList[position].type == "expense") {
             holder.incomeLayout.visibility = View.GONE
             holder.expenseLayout.visibility = View.GONE
             holder.transferLayout.visibility = View.GONE

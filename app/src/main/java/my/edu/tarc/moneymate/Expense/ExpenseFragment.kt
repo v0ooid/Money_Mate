@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Expense
 
+import android.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -7,12 +8,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.Category.CategoryViewModel
+import my.edu.tarc.moneymate.IconSpinnerAdapter
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.Income.IncomeAdapter
 import my.edu.tarc.moneymate.R
@@ -33,7 +37,18 @@ class ExpenseFragment : Fragment() {
     private lateinit var viewModel: ExpenseViewModel
     val transactionViewModel: TransactionViewModel by activityViewModels()
     val CategoryViewModel: CategoryViewModel by activityViewModels()
-
+    val icons = listOf(
+        R.drawable.round_money_24,
+        R.drawable.advise,
+        R.drawable.baseline_attach_money_24,
+        R.drawable.baseline_person_24,
+        R.drawable.malaysian_ringgit_icon,
+        R.drawable.round_auto_awesome_24,
+        R.drawable.round_local_drink_24,
+        R.drawable.round_fastfood_24,
+        R.drawable.baseline_fastfood_24,
+        R.drawable.bill
+    )
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +56,7 @@ class ExpenseFragment : Fragment() {
         _binding = FragmentExpenseBinding.inflate(inflater,container,false)
         recyclerView = binding.recyclerViewExpense
 
-        recyclerView.layoutManager = GridLayoutManager(context,4)
+        recyclerView.layoutManager = GridLayoutManager(context,3)
 
         CategoryViewModel.expenseCategory.observe(viewLifecycleOwner){
             data-> categorylist_expense = data
@@ -54,10 +69,34 @@ class ExpenseFragment : Fragment() {
         transactionViewModel.result.observe(viewLifecycleOwner, Observer{ data ->
             Log.w("test",data)
         })
-
+        binding.btnAddNewExpenseCategory.setOnClickListener{
+            showAddCategoryDialog()
+        }
 
 //        prepareList()
         return binding.root
+    }
+    private fun showAddCategoryDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_new_category_layout, null)
+        val editTextTitle = dialogView.findViewById<EditText>(R.id.editTextCategoryTitle)
+        val spinnerIcon = dialogView.findViewById<Spinner>(R.id.spinnerCategoryIcon)
+
+        // Set up the spinner with the adapter
+        val adapter = IconSpinnerAdapter(requireContext(), icons)
+        spinnerIcon.adapter = adapter
+
+        AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setTitle("Add New Category")
+            .setPositiveButton("Add") { dialog, _ ->
+                val title = editTextTitle.text.toString()
+                val selectedIcon = icons[spinnerIcon.selectedItemPosition]
+                val newCategory = Category(title = title, image = selectedIcon, type = "expense")
+                CategoryViewModel.addCategoryItem(newCategory)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+            .show()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

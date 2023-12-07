@@ -115,6 +115,20 @@ class AppLock6DigitFragment : Fragment() {
                 navController.navigate(R.id.action_appLock6DigitFragment_to_profileFragment)
                 Log.e("TAG1", "This working")
             }
+            "BUDGET_FRAGMENT" -> {
+                val sharedPreferences = requireContext().getSharedPreferences("APP_BUDGET_PREFS", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("Locked", false).apply()
+                val navController = findNavController()
+                navController.navigate(R.id.action_appLock6DigitFragment_to_budgetFragment)
+                Log.e("TAG1", "This working")
+            }
+            "FORUM_FRAGMENT" -> {
+                val sharedPreferences = requireContext().getSharedPreferences("APP_FORUM_PREFS", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putBoolean("Locked", false).apply()
+                val navController = findNavController()
+                navController.navigate(R.id.action_appLock6DigitFragment_to_forumFragment)
+                Log.e("TAG1", "This working")
+            }
         }
     }
 }

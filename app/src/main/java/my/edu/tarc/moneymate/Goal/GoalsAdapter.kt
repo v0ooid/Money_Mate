@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import my.edu.tarc.moneymate.R
 
@@ -28,9 +29,22 @@ class GoalsAdapter(private var goal: List<Goal>,private val onGoalClick: (Goal) 
             if (goal.targetAmount > 0) {
                 val progress = (goal.savedAmount.toFloat() / goal.targetAmount * 100).toInt()
                 progressBar.progress = progress
+                updateProgressBarColor(progressBar,progress)
             } else {
                 progressBar.progress = 0
             }
+        }
+        private fun updateProgressBarColor(progressBar: ProgressBar, progress: Int) {
+            val colorRes = when {
+                progress < 10 -> R.color.Red
+                progress < 60 -> R.color.color2
+                else -> R.color.color4
+            }
+
+            progressBar.progressDrawable.setColorFilter(
+                ContextCompat.getColor(itemView.context, colorRes),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
         }
     }
 

@@ -23,7 +23,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.databinding.FragmentSetAlarmBinding
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 
 class SetAlarmFragment : Fragment() {
@@ -140,6 +143,7 @@ class SetAlarmFragment : Fragment() {
             putExtra("Alarm Id", alarm.id)
             putExtra("Title", alarm.title)
             putExtra("Desc", alarm.description)
+            putExtra("Repeating", alarm.repeatDay.isNotEmpty())
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -150,28 +154,28 @@ class SetAlarmFragment : Fragment() {
         )
 
         val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, alarm.hour)
             set(Calendar.MINUTE, alarm.minit)
             set(Calendar.SECOND, 0)
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
         }
 
-        // Schedule the alarm
+        // Log the time for debugging
+        val sdf = SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a", Locale.getDefault())
+        val formattedDateTime = sdf.format(calendar.time)
+        Log.d("Alarm Scheduling", "Alarm set for: $formattedDateTime")
+
         if (alarm.repeatDay.isEmpty()) {
-            if (calendar.timeInMillis <= System.currentTimeMillis()) {
-                calendar.add(Calendar.DAY_OF_YEAR, 1)
-            }
-            try {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-            } catch (e: SecurityException) {
-                Log.e("Alarm Scheduling", "Failed to set exact alarm: ${e.message}")
-                // Consider showing a message to the user here
-            }
+            // Schedule a non-repeating alarm
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
         } else {
-            // Handle repeating alarms
-            // ...
+            // Schedule the first instance of the repeating alarm
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
         }
     }
+
 
     private fun deleteAlarm() {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -300,15 +304,19 @@ class SetAlarmFragment : Fragment() {
 
     private fun scheduleAlarmForDay(alarm: AlarmNotification, dayOfWeek: String) {
         val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, alarm.hour)
             set(Calendar.MINUTE, alarm.minit)
             set(Calendar.SECOND, 0)
             set(Calendar.DAY_OF_WEEK, getDayOfWeek(dayOfWeek))
-            if (timeInMillis < System.currentTimeMillis()) {
+
+            // Adjust for next occurrence if time is already past
+            if (timeInMillis <= System.currentTimeMillis()) {
                 add(Calendar.WEEK_OF_YEAR, 1)
             }
         }
+
+        val alarmTimeFormatted = SimpleDateFormat("EEEE, MMMM d, yyyy 'at' HH:mm", Locale.getDefault()).format(calendar.time)
+        Log.d("SetAlarmFragment", "Scheduling alarm for: $dayOfWeek, $alarmTimeFormatted in Device Time Zone")
 
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
@@ -319,24 +327,30 @@ class SetAlarmFragment : Fragment() {
             putExtra("Desc", alarm.description)
         }
 
+        val requestCode = (alarm.id + getDayOfWeek(dayOfWeek)).toInt() // Unique request code
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
-            (alarm.id + getDayOfWeek(dayOfWeek)).toInt(), // Unique ID for each day
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        try {
-            alarmManager.setRepeating(
+        // Use setExactAndAllowWhileIdle for more precise alarm scheduling
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                AlarmManager.INTERVAL_DAY * 7,
                 pendingIntent
             )
-        } catch (e: SecurityException) {
-            Log.e("Alarm Scheduling Error", "SecurityException: ${e.message}")
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
         }
     }
+
 
 
 }

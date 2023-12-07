@@ -78,7 +78,17 @@
         android:id="@+id/budgetFragment"
         android:name="my.edu.tarc.moneymate.Budget.BudgetFragment"
         android:label="BudgetFragment"
-        tools:layout="@layout/fragment_budget"/>
+        tools:layout="@layout/fragment_budget">
+        <action
+            android:id="@+id/action_budgetFragment_to_appLock4DigitFragment"
+            app:destination="@id/appLock4DigitFragment" />
+        <action
+            android:id="@+id/action_budgetFragment_to_appLock6DigitFragment"
+            app:destination="@id/appLock6DigitFragment" />
+        <action
+            android:id="@+id/action_budgetFragment_to_appLockCustomPasswordFragment"
+            app:destination="@id/appLockCustomPasswordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/transactionFragment"
         android:name="my.edu.tarc.moneymate.Transaction.TransactionFragment"
@@ -162,6 +172,12 @@
         <action
             android:id="@+id/action_appLock4DigitFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_appLock4DigitFragment_to_budgetFragment"
+            app:destination="@id/budgetFragment" />
+        <action
+            android:id="@+id/action_appLock4DigitFragment_to_forumFragment"
+            app:destination="@id/forumFragment" />
     </fragment>
     <fragment
         android:id="@+id/appLock6DigitFragment"
@@ -171,6 +187,12 @@
         <action
             android:id="@+id/action_appLock6DigitFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_appLock6DigitFragment_to_budgetFragment"
+            app:destination="@id/budgetFragment" />
+        <action
+            android:id="@+id/action_appLock6DigitFragment_to_forumFragment"
+            app:destination="@id/forumFragment" />
     </fragment>
     <fragment
         android:id="@+id/appLockCustomPasswordFragment"
@@ -180,6 +202,12 @@
         <action
             android:id="@+id/action_appLockCustomPasswordFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_appLockCustomPasswordFragment_to_budgetFragment"
+            app:destination="@id/budgetFragment" />
+        <action
+            android:id="@+id/action_appLockCustomPasswordFragment_to_forumFragment"
+            app:destination="@id/forumFragment" />
     </fragment>
     <fragment
         android:id="@+id/recordFragment"
@@ -271,7 +299,23 @@
         android:id="@+id/forumFragment"
         android:name="my.edu.tarc.moneymate.Forum.ForumFragment"
         android:label="fragment_forum"
-        tools:layout="@layout/fragment_forum" />
+        tools:layout="@layout/fragment_forum" >
+        <action
+            android:id="@+id/action_forumFragment_to_appLock4DigitFragment"
+            app:destination="@id/appLock4DigitFragment" />
+        <action
+            android:id="@+id/action_forumFragment_to_appLock6DigitFragment"
+            app:destination="@id/appLock6DigitFragment" />
+        <action
+            android:id="@+id/action_forumFragment_to_appLockCustomPasswordFragment"
+            app:destination="@id/appLockCustomPasswordFragment" />
+        <action
+            android:id="@+id/action_forumFragment_to_appLock4DigitFragment2"
+            app:destination="@id/appLock4DigitFragment" />
+        <action
+            android:id="@+id/action_forumFragment_to_appLock6DigitFragment2"
+            app:destination="@id/appLock6DigitFragment" />
+    </fragment>
     <fragment
         android:id="@+id/alarmFirstPageFragment"
         android:name="my.edu.tarc.moneymate.Alarm.AlarmFirstPageFragment"
@@ -290,5 +334,7 @@
         android:name="my.edu.tarc.moneymate.Alarm.GoalAlarmFragment"
         android:label="fragment_goal_alarm"
         tools:layout="@layout/fragment_goal_alarm" />
+
+
 
 </navigation>

@@ -76,9 +76,10 @@ class MainActivity : AppCompatActivity() {
                         || destination.id == R.id.appLockSetupCusPassFragment || destination.id == R.id.appLockFragment
                         || destination.id == R.id.appLockTypeFragment || destination.id == R.id.appLock4DigitFragment
                         || destination.id == R.id.appLock6DigitFragment || destination.id == R.id.appLockCustomPasswordFragment || destination.id == R.id.transactionFragment
-                        ||destination.id == R.id.setAlarmFragment ||destination.id == R.id.alarmNotificationFragment||destination.id == R.id.goalFragment||destination.id == R.id.goalCreateFragment
-                        ||destination.id == R.id.reportFragment || destination.id == R.id.financialAdvisorFragment2|| destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment
-                        ) {
+                        || destination.id == R.id.setAlarmFragment || destination.id == R.id.alarmNotificationFragment || destination.id == R.id.goalFragment || destination.id == R.id.goalCreateFragment
+                        || destination.id == R.id.reportFragment || destination.id == R.id.financialAdvisorFragment2 || destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment
+                        || destination.id == R.id.goalAlarmFragment || destination.id == R.id.alarmFirstPageFragment || destination.id == R.id.badgeFragment
+                    ) {
                         navView.visibility = View.GONE
                     } else {
                         navView.visibility = View.VISIBLE
@@ -96,8 +97,8 @@ class MainActivity : AppCompatActivity() {
 
                 navView.setupWithNavController(navController)
             }
-        }
 
+        }
     }
 
     @SuppressLint("MissingSuperCall")

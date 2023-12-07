@@ -5,7 +5,9 @@ import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,9 +28,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class GoalAlarmFragment : Fragment() {
-
     companion object {
         const val ACTION_GOAL_REMINDER = "my.edu.tarc.moneymate.ACTION_GOAL_REMINDER"
     }
@@ -64,7 +66,6 @@ class GoalAlarmFragment : Fragment() {
         }
     }
 
-
     private fun setupRecyclerView() {
         goalsAdapter = GoalAlarmAdapter(emptyList()) { goal ->
             showAlarmSettingDialog(goal)
@@ -85,7 +86,7 @@ class GoalAlarmFragment : Fragment() {
                     else -> AlarmFrequency.DAILY
                 }
                 scheduleAlarm(goal, frequency)
-                Toast.makeText(requireContext(), "Goal Alarm Have been set successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Goal Alarm will remind you around 8am", Toast.LENGTH_LONG).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
@@ -94,6 +95,12 @@ class GoalAlarmFragment : Fragment() {
     private fun scheduleAlarm(goal: Goal, frequency: AlarmFrequency) {
         val context = context ?: return
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            requestExactAlarmPermission()
+            return
+        }
+
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             action = AlarmReceiver.ACTION_GOAL_REMINDER
             putExtra("Channel_ID","Goal_Alarm_Channel_ID")
@@ -101,7 +108,6 @@ class GoalAlarmFragment : Fragment() {
             putExtra("Goal Desc", goal.description)
             putExtra("goalId", goal.id)
         }
-        Log.d(" Goal Alarm Fragment", "Schedule Alarm Goal ID ${goal.id}")
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -111,20 +117,32 @@ class GoalAlarmFragment : Fragment() {
         )
 
         val nextAlarmTime = getNextAlarmTime(frequency)
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            nextAlarmTime,
-            getIntervalMillis(frequency),
-            pendingIntent
-        )
-        Log.d("GoalAlarmFragment", "Alarm set for: ${Date(nextAlarmTime)}")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // For Android M and above, use setExactAndAllowWhileIdle to allow alarms to fire even in Doze mode
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                nextAlarmTime,
+                pendingIntent
+            )
+        } else {
+            // For older versions, use setExact for precise timing
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                nextAlarmTime,
+                pendingIntent
+            )
+        }
     }
 
+    private fun requestExactAlarmPermission() {
+        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+        startActivity(intent)
+    }
 
     private fun getNextAlarmTime(frequency: AlarmFrequency): Long {
-        val calendar = Calendar.getInstance().apply {
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kuala_Lumpur")).apply {
             timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 8)
+            set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             Log.d("Goal Alarm Fragment", "getNextAlarmTime $timeInMillis")
@@ -142,6 +160,11 @@ class GoalAlarmFragment : Fragment() {
                 }
             }
         }
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val alarmTime = dateFormat.format(Date(calendar.timeInMillis))
+        Log.d("GoalAlarmFragment", "Alarm scheduled for: $alarmTime")
+
         return calendar.timeInMillis
     }
 

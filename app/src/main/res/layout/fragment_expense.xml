@@ -3,28 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Expense.ExpenseFragment">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewExpense"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="4dp" />
+            tools:context=".Expense.ExpenseFragment">
 
-        <androidx.appcompat.widget.AppCompatButton
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewExpense"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/add_new_category_background"
-            android:padding="20dp"
-            android:stateListAnimator="@drawable/add_new_category_animator"
-            android:text="@string/add_new_category"
-            android:textSize="8pt" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewExpense"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="4dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnAddNewExpenseCategory"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recyclerViewExpense"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@drawable/add_new_category_background"
+                    android:padding="20dp"
+                    android:stateListAnimator="@drawable/add_new_category_animator"
+                    android:text="@string/add_new_category"
+                    android:textSize="8pt" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

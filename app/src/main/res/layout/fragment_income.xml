@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAddNewIncomeCategory"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:stateListAnimator="@drawable/add_new_category_animator"
