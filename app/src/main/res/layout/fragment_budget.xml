@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Looks like you don't have any budgets set. To get started, press the '+' button to create a new budget."
+        android:text="Looks like you don't have any budgets set. To get started, press the '+' button to create a new budget. Budgets are bound by categories created."
         android:textAlignment="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

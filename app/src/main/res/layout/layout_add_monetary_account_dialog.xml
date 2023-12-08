@@ -66,9 +66,9 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/manrope_medium"
-            android:text="Amount :"
+            android:text="Value(RM):"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/etvAccountName" />
 
@@ -79,7 +79,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/edit_text_border"
             android:ems="10"
-            android:hint="Eg. RM 1000"
+            android:hint="Eg. 1000"
             android:inputType="numberDecimal"
             android:paddingStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView36"

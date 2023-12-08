@@ -71,7 +71,15 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun deleteIncome(income:Income) = viewModelScope.launch {
+        val deletedIncome = repository.getIncomeById(income.incomeId)
+
         repository.deleteIncome(income)
+
+        val incomeDifference = -deletedIncome.amount
+
+        // Update the monetary account balance
+        updateMonetaryAccountBalance(income.accountId, incomeDifference)
+
     }
 
     fun updateIncome(income: Income) = viewModelScope.launch {

@@ -1,6 +1,7 @@
 package my.edu.tarc.moneymate.Transfer
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -80,8 +81,43 @@ class TransferViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun deleteTransfer(transfer: Transfer) = viewModelScope.launch {
-        transferRepo.deleteTransfer(transfer)
+        val existingTransfer = withContext(Dispatchers.IO) {
+            transferDDao.getTransferById(transfer.transferId)
+        }
+
+        existingTransfer?.let {
+            val transferAmount = existingTransfer.transferAmount
+
+            // Delete the transfer record from the database
+            transferRepo.deleteTransfer(transfer)
+
+            // Fetch accounts involved in the transfer
+            val sourceAccount: MonetaryAccount? = withContext(Dispatchers.IO) {
+                monetaryAccountDao.getAccountbyId2(transfer.sourceAccountId.toString())
+            }
+            val destinationAccount: MonetaryAccount? = withContext(Dispatchers.IO) {
+                monetaryAccountDao.getAccountbyId2(transfer.destinationAccountId.toString())
+            }
+
+            if (sourceAccount != null && destinationAccount != null) {
+
+                Log.e("sourceAccount", sourceAccount.toString())
+                Log.e("destinationAccount", destinationAccount.toString())
+
+                sourceAccount.accountBalance += transferAmount
+                destinationAccount.accountBalance -= transferAmount
+
+                Log.e("sourceAccount", sourceAccount.toString())
+                Log.e("destinationAccount", destinationAccount.toString())
+
+                // Update account balances in the database
+                monetaryAccountDao.updateAccount(sourceAccount)
+                monetaryAccountDao.updateAccount(destinationAccount)
+            }
+        }
     }
+
+
 
     fun updateTransfer(transfer: Transfer) = viewModelScope.launch {
         val existingTransfer = withContext(Dispatchers.IO) {

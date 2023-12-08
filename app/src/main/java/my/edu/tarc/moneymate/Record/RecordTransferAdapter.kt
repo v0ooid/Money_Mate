@@ -112,6 +112,8 @@ class RecordTransferAdapter constructor(
         notifyDataSetChanged()
 
         transferViewModel.deleteTransfer(deleteRecord)
+        transferViewModel.updateTransfer(deleteRecord)
+
 
     }
 

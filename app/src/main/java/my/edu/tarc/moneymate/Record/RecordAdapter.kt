@@ -144,6 +144,8 @@ class RecordAdapter constructor(
 
             // Call the delete method in the ViewModel to delete from the database
             incomeViewModel.deleteIncome(deleteIncome)
+            incomeViewModel.updateIncome(deleteIncome)
+
         }
 
     }

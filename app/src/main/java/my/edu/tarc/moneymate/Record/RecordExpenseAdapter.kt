@@ -135,6 +135,8 @@ class RecordExpenseAdapter constructor(
 
             // Call the delete method in the ViewModel to delete from the database
             expenseViewModel.deleteExpense(deleteExpense)
+            budgetViewModel.deleteExpenseWithBudget(deleteExpense)
+
         }
     }
     private fun updateItem(position: Int, updateExpense: Record) {

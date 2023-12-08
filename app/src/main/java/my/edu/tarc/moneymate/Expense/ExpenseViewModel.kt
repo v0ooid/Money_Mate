@@ -83,7 +83,13 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
 
 
     fun deleteExpense(expense:Expense) = viewModelScope.launch {
+        val deletedExpense = repository.getExpenseById(expense.expenseId)
+
         repository.deleteExpense(expense)
+
+        val expenseDifference = -deletedExpense.amount
+
+        updateMonetaryAccountBalance(expense.accountId, expenseDifference)
     }
 
     fun updateExpense(expense: Expense) = viewModelScope.launch {

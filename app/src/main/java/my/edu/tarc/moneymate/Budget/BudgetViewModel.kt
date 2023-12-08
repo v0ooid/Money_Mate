@@ -52,24 +52,6 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
         repositoryBudget.deleteBudget(budget)
     }
 
-//    fun updateBudgetWithExpense(expense: Expense) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val budget = repositoryBudget.getBudgetByCategory(expense.categoryId)
-//
-//            if (budget != null) {
-//                // Retrieve the current spent amount for the budget
-//                val currentSpent = budget.budgetSpent
-//
-//                // Update the budget spent with the new expense amount
-//                val newSpent = currentSpent + expense.amount
-//                budget.budgetSpent = newSpent
-//
-//                // Save the updated budget in the repository
-//                repositoryBudget.updateBudget(budget)
-//            }
-//        }
-//    }
-
     fun updateBudgetWithExpense(expense: Expense) {
         viewModelScope.launch(Dispatchers.IO) {
             val previousExpense = repositoryExpense.getExpenseById(expense.expenseId)
@@ -81,6 +63,25 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
 
                 // Update the budget spent by adding the expense difference
                 val newSpent = budget.budgetSpent + expenseDifference
+                budget.budgetSpent = newSpent.coerceAtLeast(0.0) // Ensure it doesn't go below zero
+
+                // Save the updated budget in the repository
+                repositoryBudget.updateBudget(budget)
+            }
+        }
+    }
+
+    fun deleteExpenseWithBudget(expense: Expense) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val previousExpense = repositoryExpense.getExpenseById(expense.expenseId)
+            val budget = repositoryBudget.getBudgetByCategory(expense.categoryId)
+
+            if (budget != null) {
+                val previousAmount = previousExpense?.amount ?: 0
+                val expenseDifference = previousAmount  // Using previous amount before deletion
+
+                // Update the budget spent by subtracting the expense amount
+                val newSpent = budget.budgetSpent - expenseDifference
                 budget.budgetSpent = newSpent.coerceAtLeast(0.0) // Ensure it doesn't go below zero
 
                 // Save the updated budget in the repository
