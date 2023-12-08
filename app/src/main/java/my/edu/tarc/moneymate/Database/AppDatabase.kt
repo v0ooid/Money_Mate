@@ -45,9 +45,6 @@ abstract class AppDatabase : RoomDatabase() {
             // Insert initial categories here
             scope.launch {
                 val categoryDao = INSTANCE?.categoryDao()
-                val incomeDao = INSTANCE?.incomeDao()
-                val expenseDao = INSTANCE?.expenseDao()
-                val monetaryAccountDao = INSTANCE?.monetaryAccountDao()
 
                 categoryDao?.insertCategory(Category(0, "Salary", R.drawable.baseline_description_24, "income"))
                 categoryDao?.insertCategory(Category(1, "Payment", R.drawable.round_auto_awesome_24, "income"))
@@ -60,18 +57,6 @@ abstract class AppDatabase : RoomDatabase() {
                 categoryDao?.insertCategory(Category(7, "Sales", R.drawable.round_point_of_sale_24, "expense"))
                 categoryDao?.insertCategory(Category(8, "Drink", R.drawable.round_local_drink_24, "expense"))
                 categoryDao?.insertCategory(Category(9, "Food", R.drawable.round_free_breakfast_24, "expense"))
-
-                monetaryAccountDao?.insertAccount(MonetaryAccount(1, "Cash", 1000.0,R.drawable.round_money_24))
-
-                incomeDao?.insertIncome(Income(1, "Salary", R.drawable.round_auto_awesome_24, "July Salary",100,1,1,"2023-10-16 11:55"))
-                incomeDao?.insertIncome(Income(2, "Investment", R.drawable.round_line_axis_24, "July Investment",200,2,1,"2023-11-16 11:55"))
-                incomeDao?.insertIncome(Income(3, "Payback", R.drawable.round_money_24, "July Payback",300,3,1,"2023-9-16 11:55"))
-                incomeDao?.insertIncome(Income(4, "Allowance", R.drawable.round_attach_money_24, "July Allowance",400,4,1,"2023-1-16 11:55"))
-
-                expenseDao?.insertExpense(Expense(1, "Pay", R.drawable.round_electric_bolt_24, "July Pay",400,5,1,"2023-12-16 11:55"))
-                expenseDao?.insertExpense(Expense(2, "Installment",  R.drawable.round_tv_24, "July Installment",300,6,1,"2023-10-16 11:55"))
-                expenseDao?.insertExpense(Expense(3, "Drink", R.drawable.round_local_drink_24, "July Drink",200,7,1,"2023-11-16 11:55"))
-                expenseDao?.insertExpense(Expense(4, "Food", R.drawable.round_free_breakfast_24, "July Food",100,8,1,"2023-12-16 11:55"))
 
 
             }

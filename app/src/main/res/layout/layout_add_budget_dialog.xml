@@ -80,7 +80,7 @@
             android:background="@drawable/edit_text_border"
             android:ems="10"
             android:hint="Eg. RM 1000"
-            android:inputType="text"
+            android:inputType="number|numberDecimal"
             android:paddingStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvBudgetLimitLabel"
             app:layout_constraintEnd_toEndOf="parent"

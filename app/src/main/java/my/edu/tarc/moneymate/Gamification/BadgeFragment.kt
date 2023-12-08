@@ -33,7 +33,7 @@ class BadgeFragment : Fragment() {
         }
 
         val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userLevel = sharedPreferences.getInt("Level", 0)
+        val userLevel = sharedPreferences.getInt("Level", 1)
         showBadgesForLevel(userLevel)
 
         binding.contraintLevel1.setOnClickListener {

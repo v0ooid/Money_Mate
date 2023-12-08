@@ -114,6 +114,10 @@ class mAccountAdapter(
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.layout_add_monetary_account_dialog)
 
+        val dialogName = dialog.findViewById<TextView>(R.id.dialog_title)
+
+        dialogName.text = "Edit Monetary Account"
+
         val window = dialog.window
         val layoutParams = window?.attributes
         layoutParams?.width = WindowManager.LayoutParams.MATCH_PARENT

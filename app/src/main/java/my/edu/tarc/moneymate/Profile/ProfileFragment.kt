@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -60,6 +61,9 @@ class ProfileFragment : Fragment() {
         val lockEn = sectionPreferences.getBoolean("Enabled", false)
 
         val lockStatus = sectionPreferences.getBoolean("Locked", false)
+
+        auth = Firebase.auth
+
 
         Log.e("Profile frag", lockStatus.toString())
 
@@ -119,7 +123,7 @@ class ProfileFragment : Fragment() {
         val userId = sharedPreferences.getString("userId", "")
         val gamePref = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
 
-        var level = gamePref.getInt("Level", 0)
+        var level = gamePref.getInt("Level", 1)
 
         binding.tvLevel.text = "LV $level"
 
@@ -410,7 +414,27 @@ class ProfileFragment : Fragment() {
 
         val yesBtn = dialog.findViewById<Button>(R.id.btnConfrimDialog)
         yesBtn.setOnClickListener {
-            // Perform actions here
+            val sharedPreferences = requireContext().getSharedPreferences("UserDetails", Context.MODE_PRIVATE)
+            val email = sharedPreferences.getString("email", "")
+
+            if (email != null) {
+                auth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener{task ->
+                        if(task.isSuccessful){
+                            Toast.makeText(
+                                context,
+                                "Email sent successfully to rest your password",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else{
+                            Toast.makeText(
+                                context, "Email is not sent, Email not exist",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+            }
+
             dialog.dismiss()
             overlayLayout.visibility = View.GONE
         }

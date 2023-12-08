@@ -139,6 +139,10 @@ class BudgetAdapter(
         layoutParams?.height = WindowManager.LayoutParams.WRAP_CONTENT
         window?.attributes = layoutParams
 
+        val dialogName = dialog.findViewById<TextView>(R.id.dialog_title)
+
+        dialogName.text = "Edit Budget"
+
         val nameTextView = dialog.findViewById<TextView>(R.id.eTBudgetName)
         val limitTextView = dialog.findViewById<TextView>(R.id.eTBudgetLimit)
         val spinner: Spinner = dialog.findViewById(R.id.sBudgetCategory)

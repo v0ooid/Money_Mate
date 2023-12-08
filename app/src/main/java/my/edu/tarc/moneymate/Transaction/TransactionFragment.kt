@@ -76,6 +76,8 @@ class TransactionFragment : Fragment() {
         val navHostTransactionFragment =
             childFragmentManager.findFragmentById(R.id.transactionfragmentContainerView) as NavHostFragment
         val navController = navHostTransactionFragment.navController
+        tabLayout.getTabAt(0)?.select()
+        viewModel.updateTransactionType("income")
 
 //        binding.expandCal.setOnClickListener {
 //            if (binding.cardDesc.visibility == View.GONE) {
@@ -330,11 +332,8 @@ class TransactionFragment : Fragment() {
 
         if (transactionTypeSelected == "income") {
             val income = Income(0, title,categoryImage,description, result.toInt(),categoryId.toLong(),acccount.toLong(),date.toString())
-            Log.d("Transaction Fragment","Income value current $income")
             incomeViewModel.addIncome(income)
             onIncomeRecorded()
-
-
         }
         else if (transactionTypeSelected == "expense")
         {

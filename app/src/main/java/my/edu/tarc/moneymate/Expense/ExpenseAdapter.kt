@@ -16,6 +16,15 @@ import my.edu.tarc.moneymate.Transaction.TransactionViewModel
 class ExpenseAdapter(private val viewModel: TransactionViewModel, val getFragment: ExpenseFragment,private val categoryExpenseList: MutableList<Category>):
     RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
+    init {
+        if (categoryExpenseList.isNotEmpty()) {
+            viewModel.updateCategoryId(categoryExpenseList[0].categoryId.toString())
+            viewModel.updateTitleData(categoryExpenseList[0].title)
+            viewModel.updateCategoryImage(categoryExpenseList[0].image)
+        }
+    }
+
+
     private var selectedPosition:Int = 0
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         //tell which is the template layout(category_item_gridlayout)

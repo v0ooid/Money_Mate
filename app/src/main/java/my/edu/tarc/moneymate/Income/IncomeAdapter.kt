@@ -18,6 +18,13 @@ import my.edu.tarc.moneymate.Transaction.TransactionViewModel
 class IncomeAdapter constructor(private val viewModel: TransactionViewModel, val getFragment: IncomeFragment, private val categoryList_income: MutableList<Category>)
     :RecyclerView.Adapter<IncomeAdapter.ViewHolder>()
 {
+    init {
+        if (categoryList_income.isNotEmpty()) {
+            viewModel.updateCategoryId(categoryList_income[0].categoryId.toString())
+            viewModel.updateTitleData(categoryList_income[0].title)
+            viewModel.updateCategoryImage(categoryList_income[0].image)
+        }
+    }
 
     private var selectedPosition:Int = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IncomeAdapter.ViewHolder {
