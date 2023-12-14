@@ -37,6 +37,12 @@ class GoalViewModel(private val repository: GoalRepository) : ViewModel() {
         return repository.getGoalById(goalId)
     }
 
+    fun getSavedAmountsByGoalId(goalId: Long): LiveData<List<SavedAmount>> = repository.getSavedAmountsByGoalId(goalId)
+
+    fun addSavedAmount(savedAmount: SavedAmount) = viewModelScope.launch {
+        repository.insertSavedAmount(savedAmount)
+    }
+
     class GoalViewModelFactory(private val repository: GoalRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(GoalViewModel::class.java)) {

@@ -269,6 +269,9 @@
                 android:name="goalId"
                 app:argType="long" />
         </action>
+        <action
+            android:id="@+id/action_goalFragment_to_goalDetailsFragment"
+            app:destination="@id/goalDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalCreateFragment"
@@ -334,7 +337,15 @@
         android:name="my.edu.tarc.moneymate.Alarm.GoalAlarmFragment"
         android:label="fragment_goal_alarm"
         tools:layout="@layout/fragment_goal_alarm" />
-
+    <fragment
+        android:id="@+id/goalDetailsFragment"
+        android:name="my.edu.tarc.moneymate.Goal.GoalDetailsFragment"
+        android:label="fragment_goal_details"
+        tools:layout="@layout/fragment_goal_details" >
+        <argument
+            android:name="goalId"
+            app:argType="long" />
+    </fragment>
 
 
 </navigation>

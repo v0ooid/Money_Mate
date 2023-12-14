@@ -3,6 +3,7 @@ package my.edu.tarc.moneymate.Database
 import android.util.Log
 import androidx.lifecycle.LiveData
 import my.edu.tarc.moneymate.Goal.Goal
+import my.edu.tarc.moneymate.Goal.SavedAmount
 
 class GoalRepository(private val goalDao: GoalDao) {
 
@@ -25,4 +26,7 @@ class GoalRepository(private val goalDao: GoalDao) {
     fun getGoalById(goalId: Long): LiveData<Goal> {
         return goalDao.getGoalById(goalId)
     }
+    fun getSavedAmountsByGoalId(goalId: Long): LiveData<List<SavedAmount>> = goalDao.getSavedAmountsByGoalId(goalId)
+
+    suspend fun insertSavedAmount(savedAmount: SavedAmount) = goalDao.insert(savedAmount)
 }

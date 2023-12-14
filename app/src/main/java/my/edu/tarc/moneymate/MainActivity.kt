@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                         || destination.id == R.id.appLock6DigitFragment || destination.id == R.id.appLockCustomPasswordFragment || destination.id == R.id.transactionFragment
                         || destination.id == R.id.setAlarmFragment || destination.id == R.id.alarmNotificationFragment || destination.id == R.id.goalFragment || destination.id == R.id.goalCreateFragment
                         || destination.id == R.id.reportFragment || destination.id == R.id.financialAdvisorFragment2 || destination.id == R.id.dataExportFragment || destination.id == R.id.dataSyncFragment
-                        || destination.id == R.id.goalAlarmFragment || destination.id == R.id.alarmFirstPageFragment || destination.id == R.id.badgeFragment
+                        || destination.id == R.id.goalAlarmFragment || destination.id == R.id.alarmFirstPageFragment || destination.id == R.id.badgeFragment|| destination.id == R.id.goalDetailsFragment
                     ) {
                         navView.visibility = View.GONE
                     } else {

@@ -21,6 +21,7 @@ class GoalFragment : Fragment() {
     companion object {
         fun newInstance() = GoalFragment()
     }
+
     private var _binding: FragmentShowGoalBinding? = null
     private val binding get() = _binding!!
     private lateinit var goalViewModel: GoalViewModel
@@ -30,7 +31,11 @@ class GoalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentShowGoalBinding.inflate(inflater, container, false)
-        val factory = GoalViewModel.GoalViewModelFactory(GoalRepository(AppDatabase.getDatabase(requireContext()).GoalDao()))
+        val factory = GoalViewModel.GoalViewModelFactory(
+            GoalRepository(
+                AppDatabase.getDatabase(requireContext()).GoalDao()
+            )
+        )
         goalViewModel = ViewModelProvider(this, factory).get(GoalViewModel::class.java)
         return binding.root
     }
@@ -42,19 +47,35 @@ class GoalFragment : Fragment() {
         binding.fabTransactionAdd.setOnClickListener {
             navigateToCreateGoal()
         }
-        binding.leftIcon.setOnClickListener{
+        binding.leftIcon.setOnClickListener {
             findNavController().navigateUp()
         }
 
     }
+
+    //    private fun setupRecyclerView() {
+//        val adapter = GoalsAdapter(
+//            listOf(),
+//            onGoalClick = { goal -> editGoal(goal) },
+//            onGoalLongClick = { goal -> confirmDeleteGoal(goal) }
+//        )// Initially empty list
+//        binding.rvGoalList.adapter = adapter
+//        binding.rvGoalList.layoutManager = LinearLayoutManager(context)
+//    }
     private fun setupRecyclerView() {
         val adapter = GoalsAdapter(
             listOf(),
-            onGoalClick = { goal -> editGoal(goal) },
+            onGoalClick = { goal -> navigateToGoalDetail(goal) },
             onGoalLongClick = { goal -> confirmDeleteGoal(goal) }
-        )// Initially empty list
+        )
         binding.rvGoalList.adapter = adapter
         binding.rvGoalList.layoutManager = LinearLayoutManager(context)
+    }
+
+    private fun navigateToGoalDetail(goal: Goal) {
+        // Assuming you have a navigation action defined in your navigation graph
+        val action = GoalFragmentDirections.actionGoalFragmentToGoalDetailsFragment(goal.id)
+        findNavController().navigate(action)
     }
 
     private fun editGoal(goal: Goal) {
@@ -84,10 +105,5 @@ class GoalFragment : Fragment() {
         findNavController().navigate(R.id.action_goalFragment_to_goalCreateFragment)
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(GoalViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
 
 }

@@ -9,7 +9,7 @@ class FinancialAnalyzer {
     fun analyzeAccountFinancialHealth(account: MonetaryAccount, incomes: List<Income>, expenses: List<Expense>): AccountFinancialHealth {
         val totalIncome = incomes.sumOf { it.amount }
         val totalExpenses = expenses.sumOf { it.amount }
-        val netBalance = account.accountBalance + totalIncome - totalExpenses
+        val netBalance =  (totalIncome - totalExpenses).toDouble()
         val status = when {
             netBalance >= account.accountBalance * 0.3 -> FinancialHealthStatus.HEALTHY
             netBalance > 0 -> FinancialHealthStatus.ATTENTION
@@ -37,7 +37,7 @@ class FinancialAnalyzer {
             ,"Focus on reducing discretionary spending like dining out, entertainment, and luxury items.","Look into refinancing options for any high-interest loans to reduce your interest burden.",
              "Set up automatic transfers to a savings account to consistently build your reserves","Consider consulting a financial advisor to help you navigate this delicate financial situation."
                 )
-            FinancialHealthStatus.DANGER -> listOf("Reduce unnecessary expenses", "Look for additional income sources", "Focus on paying off high-interest debts","Focus on paying down high-interest debts as quickly as possible."
+            FinancialHealthStatus.DANGER -> listOf("Reduce unnecessary expenses", "Look for additional income sources", "Focus on paying off high-interest debts"
             ,"Eliminate all non-essential expenses and live as frugally as possible.","Reach out to creditors to negotiate payment plans or lower interest rates.","Get help from financial counseling services to manage debt and plan a route to recovery."
                 ,"Develop a strict budget that covers only essential living expenses."
             )

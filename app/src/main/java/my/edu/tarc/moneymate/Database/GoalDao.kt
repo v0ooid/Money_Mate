@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.Update
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Goal.Goal
+import my.edu.tarc.moneymate.Goal.SavedAmount
 import my.edu.tarc.moneymate.Income.Income
 
 @Dao
@@ -19,7 +20,6 @@ interface GoalDao {
 
     @Query("SELECT * FROM goals")
     fun getAllGoals(): LiveData<List<Goal>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGoal(goal: Goal)
 
@@ -34,4 +34,20 @@ interface GoalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(dataList: List<Goal>)
+
+    // Insert a new saved amount record
+    @Insert
+    suspend fun insert(savedAmount: SavedAmount)
+
+    // Get all saved amounts for a specific goal
+    @Query("SELECT * FROM saved_amounts WHERE goalId = :goalId")
+    fun getSavedAmountsByGoalId(goalId: Long): LiveData<List<SavedAmount>>
+
+    // Update a saved amount record
+    @Update
+    suspend fun update(savedAmount: SavedAmount)
+
+    // Delete a saved amount record
+    @Delete
+    suspend fun delete(savedAmount: SavedAmount)
 }

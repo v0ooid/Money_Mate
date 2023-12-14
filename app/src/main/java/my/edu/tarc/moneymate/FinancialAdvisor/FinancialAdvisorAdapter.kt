@@ -30,7 +30,7 @@ class FinancialAdvisorAdapter : RecyclerView.Adapter<FinancialAdvisorAdapter.You
     inner class YourViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(accountFinancialHealth: AccountFinancialHealth) {
             itemView.findViewById<TextView>(R.id.textViewAccountName).text = accountFinancialHealth.accountName
-            itemView.findViewById<TextView>(R.id.textViewAccountBalance).text = "Balance: RM ${accountFinancialHealth.netBalance}"
+            itemView.findViewById<TextView>(R.id.textViewAccountBalance).text = "Balance: RM " + String.format("%.2f", accountFinancialHealth.netBalance)
             itemView.findViewById<TextView>(R.id.textViewFinancialTips).text = "Tip: ${accountFinancialHealth.financialTips.first()}"
 
             val statusView = itemView.findViewById<TextView>(R.id.textViewFinancialStatus)

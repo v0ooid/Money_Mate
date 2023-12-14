@@ -16,6 +16,7 @@ import my.edu.tarc.moneymate.Budget.Budget
 import my.edu.tarc.moneymate.Category.Category
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.Goal.Goal
+import my.edu.tarc.moneymate.Goal.SavedAmount
 import my.edu.tarc.moneymate.Income.Income
 import my.edu.tarc.moneymate.ListStringConverter
 import my.edu.tarc.moneymate.Record.Record
@@ -24,7 +25,7 @@ import my.edu.tarc.moneymate.R
 import my.edu.tarc.moneymate.Transfer.Transfer
 
 
-@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class, Transfer::class] , version = 3, exportSchema = false)
+@Database(entities = [MonetaryAccount::class, Budget::class, Income::class, Category::class, Expense::class, Record::class, AlarmNotification::class, Goal::class, Transfer::class, SavedAmount::class] , version = 3, exportSchema = false)
 @TypeConverters(ListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
