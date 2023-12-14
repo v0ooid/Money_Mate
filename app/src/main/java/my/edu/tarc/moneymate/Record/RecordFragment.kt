@@ -77,6 +77,7 @@ class RecordFragment : Fragment() {
 
         setupRecyclerViews()
         observeRecordData()
+        setupMonthSpinner()
 
         val navController = findNavController()
         binding.ivTask.setOnClickListener{
@@ -106,21 +107,41 @@ class RecordFragment : Fragment() {
         }
 
 
-//        monetaryAccountViewModel.getAllmAccount.observe(viewLifecycleOwner) { data ->
-//            val accountId = data.map { it.accountId }
-//            Log.e("Record Fragment", "On ViewCreated $accountId")
-//            accountId.forEach { accountId ->
-//                financialAdvisorViewModel.checkAndNotifyAccountStatus(accountId)
-//                Log.e("Record Fragment","Inside $accountId")
-//            }
-//        }
-//        financialAdvisorViewModel.accountsFinancialHealth.observe(viewLifecycleOwner) { accountsHealth ->
-//            accountsHealth.forEach { accountHealth ->
-//                Log.d("Fragmetn accoutn heal", accountHealth.toString())
-//            }
-//        }
 
+    }
 
+    private fun setupMonthSpinner() {
+        val months = arrayOf("Show All", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.monthSpinner.adapter = adapter
+        binding.monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (position == 0) {
+                    observeRecordData()
+                } else {
+                    val selectedMonth = position
+                    filterRecordsByMonth(selectedMonth)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Handle case where no selection is made, if necessary
+            }
+        }
+    }
+
+    private fun filterRecordsByMonth(month: Int) {
+        recordViewModel.getRecordsForMonth(month).observe(viewLifecycleOwner) { filteredRecords ->
+            RecordAdapter.updateList(filteredRecords.filter { it.type == "income" })
+            RecordExpenseAdapter.updateList(filteredRecords.filter { it.type == "expense" })
+
+            // Update Transfer adapter if needed
+        }
+        transferViewModel.getRecordsForMonth(month).observe(viewLifecycleOwner){
+                filteredRecords ->
+            RecordTransferAdapter.updateList(filteredRecords)
+        }
     }
 
     private fun setupRecyclerViews() {

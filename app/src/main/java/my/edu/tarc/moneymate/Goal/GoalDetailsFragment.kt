@@ -90,7 +90,7 @@ class GoalDetailsFragment : Fragment() {
         } else {
             0 // Avoid division by zero
         }
-
+        binding.progressText.text = "RM $savedAmount / RM $targetAmount"
         progressBar.progress = progress
     }
 

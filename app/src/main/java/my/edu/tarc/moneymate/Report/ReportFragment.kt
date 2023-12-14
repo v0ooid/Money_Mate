@@ -625,55 +625,6 @@ class ReportFragment : Fragment() {
         }
     }
 
-
-
-//
-//    // Inside your Fragment or Activity
-//    private fun generatePDF(adapter: ReportAdapter) {
-//        val pdfDocument = PdfDocument(PdfWriter("report.pdf"))
-//        val document = Document(pdfDocument, PageSize.A4)
-//        document.setMargins(20f, 20f, 20f, 20f)
-//
-//        val table = Table(floatArrayOf(25f, 25f, 25f, 25f)).useAllAvailableWidth()
-//        table.addCell(createCell("Source Title", true))
-//        table.addCell(createCell("Date", true))
-//        table.addCell(createCell("Category", true))
-//        table.addCell(createCell("Amount", true))
-//
-//        for (i in 0 until adapter.itemCount) {
-//            val viewHolder = adapter.createViewHolder(null, adapter.getItemViewType(i))
-//            adapter.onBindViewHolder(viewHolder, i)
-//            when (viewHolder) {
-//                is ReportAdapter.IncomeViewHolder -> {
-//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_source).text.toString()))
-//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_date).text.toString()))
-//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_category).text.toString()))
-//                    table.addCell(createCell(viewHolder.itemView.findViewById<TextView>(R.id.report_income_amount).text.toString()))
-//                }
-//                // Add cases for GoalViewHolder and ExpenseViewHolder if needed
-//            }
-//        }
-//
-//        table.setBackgroundColor(ColorConstants.WHITE)
-//        table.setFontColor(ColorConstants.BLACK)
-//        table.setTextAlignment(TextAlignment.LEFT)
-//
-//        document.add(table)
-//        document.close()
-//
-//        showSnackbarAndRedirect("report.pdf")
-//    }
-//
-//    private fun createCell(text: String, isHeader: Boolean = false): Cell {
-//        val cell = Cell().add(text)
-//        cell.setBackgroundColor(if (isHeader) ColorConstants.LIGHT_GRAY else ColorConstants.WHITE)
-//        cell.setFontColor(if (isHeader) ColorConstants.WHITE else ColorConstants.BLACK)
-//        cell.setFontSize(12f)
-//        cell.setTextAlignment(TextAlignment.CENTER)
-//        cell.setBorder(Border.NO_BORDER)
-//        cell.setPadding(5f)
-//        return cell
-//    }
     private fun showSnackbarAndRedirect(filePath: String?) {
         if (filePath != null) {
             Snackbar.make(
@@ -717,47 +668,6 @@ class ReportFragment : Fragment() {
         }
     }
 
-
-//    private fun checkPermissionAndSaveImage() {
-//        if (ContextCompat.checkSelfPermission(
-//                requireContext(),
-//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // Permission is not granted, request it
-//            requestPermissions(
-//                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                WRITE_EXTERNAL_STORAGE_REQUEST_CODE
-//            )
-//            Log.d("testing pressed","Failed 2")
-//
-//        } else {
-//            // Permission has already been granted, save the image
-//            saveImageToGallery()
-//            Log.d("testing pressed","Success")
-//
-//        }
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Permission granted, proceed to save the image
-//                saveImageToGallery()
-//                Log.d("testing pressed","Test")
-//            } else {
-//                // Permission denied, inform the user or handle accordingly
-//                showPermissionExplanationDialog()
-//                Log.d("testing pressed","Failed")
-//
-//            }
-//        }
-//    }
     private fun showPermissionExplanationDialog() {
         // Create a dialog or snackbar to inform the user about the necessity of the permission
         // and guide them to the app settings
@@ -780,60 +690,5 @@ class ReportFragment : Fragment() {
         intent.data = uri
         startActivity(intent)
     }
-
-//    private fun saveImageToGallery() {
-//        val bitmap = getBitmapFromView(layoutToCapture) // Replace layoutToCapture with the view you want to capture
-//
-//        // Generating a filename for the image
-//        val fileName = "layout_capture_${System.currentTimeMillis()}.png"
-//
-//        // Creating a new content resolver
-//        val resolver = requireContext().contentResolver
-//
-//        // Creating a new ContentValues object to store the image details
-//        val contentValues = ContentValues().apply {
-//            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-//            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-//            put(MediaStore.Images.Media.WIDTH, bitmap?.width)
-//            put(MediaStore.Images.Media.HEIGHT, bitmap?.height)
-//        }
-//
-//        // Inserting the image into the MediaStore
-//        val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-//
-//        imageUri?.let { uri ->
-//            try {
-//                // Open an output stream to write the bitmap data to the content provider
-//                resolver.openOutputStream(uri)?.use { outputStream ->
-//                    bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-//                }
-//
-//                // Notify the gallery of the new image
-//                MediaScannerConnection.scanFile(
-//                    requireContext(),
-//                    arrayOf(uri.path),
-//                    arrayOf("image/png")
-//                ) { path, uri ->
-//                    // Callback when scanning is complete, you can log or perform any other action here
-//                    Log.d("MediaScanner", "Scanned $path")
-//                }
-//
-//                // Image saved successfully
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
-//
-//        Snackbar.make(layoutToCapture, "Layout captured and saved", Snackbar.LENGTH_SHORT).show()
-//        findNavController().navigateUp()
-//        Log.d("testing Save", "Success")
-//    }
-//
-//    private fun getBitmapFromView(view: View): Bitmap? {
-//        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-//        val canvas = Canvas(bitmap)
-//        view.draw(canvas)
-//        return bitmap
-//    }
 
 }

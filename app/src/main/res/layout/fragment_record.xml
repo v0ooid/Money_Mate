@@ -34,16 +34,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <Spinner
+                android:id="@+id/monthSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/incomeConstraint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="300dp"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/monthSpinner">
 
                 <TextView
                     android:id="@+id/record_transaction_income_title"
@@ -55,7 +60,7 @@
                     android:background="@drawable/border_amount_cal"
                     android:padding="10dp"
                     android:text="@string/income"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/record_income_transaction"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -92,12 +97,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/border_amount_cal"
                     android:padding="10dp"
                     android:text="@string/expense"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/record_expense_transaction"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -132,12 +136,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/border_amount_cal"
                     android:padding="10dp"
                     android:text="Transfer"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/record_transfer_transaction"
                     app:layout_constraintEnd_toEndOf="parent"

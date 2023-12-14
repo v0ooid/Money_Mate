@@ -1,5 +1,6 @@
 package my.edu.tarc.moneymate.Record
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.text.InputType
@@ -97,7 +98,7 @@ class RecordExpenseAdapter constructor(
                     }
 
                     R.id.pmMAccountDelete -> {
-                        deleteItem(position, recordList[position].type)
+                        showDeleteConfirmDialog(position, recordList[position].type)
                         true
                     }
 
@@ -114,6 +115,20 @@ class RecordExpenseAdapter constructor(
 
         // Open the dialog for editing
         showDialogForEdit(position, editExpense)
+    }
+
+    private fun showDeleteConfirmDialog(position: Int, type: String) {
+        AlertDialog.Builder(context)
+            .setTitle("Confirm Deletion")
+            .setMessage("Are you sure you want to delete this record?")
+            .setPositiveButton("Delete") { dialog, _ ->
+                deleteItem(position, type)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun deleteItem(position: Int, type: String) {

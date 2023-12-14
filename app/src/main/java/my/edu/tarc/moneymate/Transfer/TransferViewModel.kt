@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import my.edu.tarc.moneymate.Database.TransferDao
 import my.edu.tarc.moneymate.Database.TransferRepository
 import my.edu.tarc.moneymate.Expense.Expense
 import my.edu.tarc.moneymate.MonetaryAccount.MonetaryAccount
+import my.edu.tarc.moneymate.Record.Record
 
 class TransferViewModel(application: Application) : AndroidViewModel(application) {
     private var mAccountRepo : MonetaryAccountRepository
@@ -153,7 +155,14 @@ class TransferViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-
+    fun getRecordsForMonth(month: Int): LiveData<List<Transfer>> {
+        return getAllTransfer.map { records ->
+            records.filter {
+                val recordMonth = it.transferDate.split("-")[1].toInt()
+                recordMonth == month
+            }
+        }
+    }
 
 
 

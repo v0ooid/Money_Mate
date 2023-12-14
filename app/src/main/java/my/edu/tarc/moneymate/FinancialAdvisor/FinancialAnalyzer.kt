@@ -12,7 +12,7 @@ class FinancialAnalyzer {
         val netBalance =  (totalIncome - totalExpenses).toDouble()
         val status = when {
             netBalance >= account.accountBalance * 0.3 -> FinancialHealthStatus.HEALTHY
-            netBalance > 0 -> FinancialHealthStatus.ATTENTION
+            netBalance >= 0 -> FinancialHealthStatus.ATTENTION
             else -> FinancialHealthStatus.DANGER
         }
         val tips = provideFinancialTips(status)

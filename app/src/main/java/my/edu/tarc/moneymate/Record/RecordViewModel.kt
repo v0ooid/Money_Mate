@@ -68,6 +68,14 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
     fun getAccountNameForRecord(accountId: Long): LiveData<String?> {
         return repository.getAccountNameForRecord(accountId)
     }
+    fun getRecordsForMonth(month: Int): LiveData<List<Record>> {
+        return getAllRecord.map { records ->
+            records.filter {
+                val recordMonth = it.date.split("-")[1].toInt()
+                recordMonth == month
+            }
+        }
+    }
 
 
 }

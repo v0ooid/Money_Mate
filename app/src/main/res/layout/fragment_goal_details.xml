@@ -69,17 +69,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:progressDrawable="@drawable/circular_progress_bar"
-                android:indeterminate="false"
-                app:layout_constraintEnd_toEndOf="parent"
+            <RelativeLayout
+                android:id="@+id/progressBarLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:progressDrawable="@drawable/circular_progress_bar"
+                    android:indeterminate="false"/>
+
+                <TextView
+                    android:id="@+id/progressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="0/0"
+                    android:textSize="30sp"
+                    android:textColor="#000000" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/goalTitleTitle"
@@ -91,7 +108,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/progressBar" />
+                app:layout_constraintTop_toBottomOf="@id/progressBarLayout" />
 
             <TextView
                 android:id="@+id/goalTitle"

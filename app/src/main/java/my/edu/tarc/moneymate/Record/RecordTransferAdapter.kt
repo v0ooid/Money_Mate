@@ -33,7 +33,7 @@ class RecordTransferAdapter constructor(
 ) : RecyclerView.Adapter<RecordTransferAdapter.RecordViewHolder>() {
 
     private var monetaryAccounts = mutableListOf<MonetaryAccount>()
-
+    private val originalList = mutableListOf<Transfer>().apply { addAll(recordList) }
     class RecordViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val sourceAccount: TextView = itemView.findViewById(R.id.transferSourceAccount)
         val destAccount: TextView = itemView.findViewById(R.id.transferDestAccount)
@@ -99,6 +99,7 @@ class RecordTransferAdapter constructor(
         }
     }
 
+
     private fun editItem(position: Int) {
         val editExpense = recordList[position]
 
@@ -123,8 +124,24 @@ class RecordTransferAdapter constructor(
     }
 
     fun updateList(newList: List<Transfer>) {
+        originalList.clear()
+        originalList.addAll(newList)
+
         recordList.clear()
         recordList.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    fun filterByMonth(selectedMonth: Int) {
+        val filteredList = if (selectedMonth == 0) {
+            originalList
+        } else {
+            originalList.filter {
+                it.transferDate.split("-")[1].toInt() == selectedMonth
+            }
+        }
+        recordList.clear()
+        recordList.addAll(filteredList)
         notifyDataSetChanged()
     }
 
