@@ -363,7 +363,9 @@ class TransactionFragment : Fragment() {
             // Check if the user has recorded 5 incomes
             val updatedRecordedIncomes = sharedPreferences.getInt("RecordedIncomes", 0)
             if (updatedRecordedIncomes >= 5) {
-                GamificationHelper.checkTasksAndLevelUp(sharedPreferences)
+                GamificationHelper.checkTasksAndLevelUp(sharedPreferences, requireContext())
+
+                Toast.makeText(requireContext(), "Nice! You have recorded 5 Incomes", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -387,7 +389,9 @@ class TransactionFragment : Fragment() {
             // Check if the user has recorded 5 expenses
             val updatedRecordedExpenses = sharedPreferences.getInt("RecordedExpenses", 0)
             if (updatedRecordedExpenses >= 5) {
-                GamificationHelper.checkTasksAndLevelUp(sharedPreferences)
+                GamificationHelper.checkTasksAndLevelUp(sharedPreferences, requireContext())
+
+                Toast.makeText(requireContext(), "Nice! You have recorded 5 Expenses", Toast.LENGTH_SHORT).show()
             }
         }
     }

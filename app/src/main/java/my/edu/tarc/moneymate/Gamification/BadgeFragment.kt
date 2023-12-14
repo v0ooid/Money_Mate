@@ -1,6 +1,7 @@
 package my.edu.tarc.moneymate.Gamification
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -32,9 +33,13 @@ class BadgeFragment : Fragment() {
 
         }
 
-        val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userLevel = sharedPreferences.getInt("Level", 1)
+        val sharedPreferences = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
+        val userLevel = sharedPreferences.getInt("Level", 0)
+
         showBadgesForLevel(userLevel)
+
+        showEquippedBadge(sharedPreferences)
+
 
         binding.contraintLevel1.setOnClickListener {
             if (userLevel >= 1) {
@@ -59,6 +64,33 @@ class BadgeFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun showEquippedBadge(sharedPreferences: SharedPreferences) {
+        val equippedBadge = sharedPreferences.getInt("BadgeEquiped", 0)
+
+        when (equippedBadge) {
+            R.drawable.lv1 -> {
+                binding.tvLevel1Equip.text = "Equipped"
+                binding.tvLevel2Equip.text = "Equip"
+                binding.tvLevel3Equip.text = "Equip"
+            }
+            R.drawable.lv2 -> {
+                binding.tvLevel1Equip.text = "Equip"
+                binding.tvLevel2Equip.text = "Equipped"
+                binding.tvLevel3Equip.text = "Equip"
+            }
+            R.drawable.lv3 -> {
+                binding.tvLevel1Equip.text = "Equip"
+                binding.tvLevel2Equip.text = "Equip"
+                binding.tvLevel3Equip.text = "Equipped"
+            }
+            else -> {
+                binding.tvLevel1Equip.text = "Equip"
+                binding.tvLevel2Equip.text = "Equip"
+                binding.tvLevel3Equip.text = "Equip"
+            }
+        }
     }
 
     private fun setBadgeStatus(badgeLevel: Int) {

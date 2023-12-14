@@ -123,7 +123,7 @@ class ProfileFragment : Fragment() {
         val userId = sharedPreferences.getString("userId", "")
         val gamePref = requireContext().getSharedPreferences("GamificationPref", Context.MODE_PRIVATE)
 
-        var level = gamePref.getInt("Level", 1)
+        var level = gamePref.getInt("Level", 0)
 
         binding.tvLevel.text = "LV $level"
 

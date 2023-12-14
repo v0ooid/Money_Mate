@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Gamification.DailyTaskFragment" >
 
+    <View
+        android:id="@+id/view8"
+        android:layout_width="0dp"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView47" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/incomeConstraint"
         android:layout_width="0dp"
@@ -93,12 +103,13 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/frame_income_record"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar6">
+        app:layout_constraintTop_toTopOf="@+id/view8">
 
         <TextView
             android:id="@+id/tvDailyLogin"
@@ -180,5 +191,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView47"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Complete tasks below to Level Up! Task will be reset once levelled up."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
