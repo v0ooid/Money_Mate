@@ -299,6 +299,7 @@ class ReportFragment : Fragment() {
 
         val barDataSet = BarDataSet(entries, "Categories")
         barDataSet.setColors(listOf(Color.GREEN, Color.RED, Color.BLUE)) // Colors for Income, Expense, Goal
+        barDataSet.valueTextSize = 15f
         val barData = BarData(barDataSet)
 
         binding.barChart.data = barData
@@ -329,6 +330,8 @@ class ReportFragment : Fragment() {
 
         val dataSet = PieDataSet(entries, "Categories")
         dataSet.setColors(listOf(Color.GREEN, Color.RED, Color.BLUE)) // Set specific colors for Income, Expense, Goal
+        dataSet.valueTextSize = 15f
+        dataSet.valueTextColor = Color.WHITE
         val pieData = PieData(dataSet)
 
         binding.pieChart.data = pieData
@@ -364,7 +367,6 @@ class ReportFragment : Fragment() {
         dataSet.selectionShift = 5f
         dataSet.valueTextColor = Color.WHITE
         dataSet.valueTextSize = 10f
-
         val pieData = PieData(dataSet)
 
         // Customize the pie chart
@@ -500,6 +502,8 @@ class ReportFragment : Fragment() {
 
         val barDataSet = BarDataSet(entries, "Income Categories")
         barDataSet.colors = listOf(ContextCompat.getColor(requireContext(), R.color.color1)) // Customize colors
+        barDataSet.valueTextSize = 15f
+
         val barData = BarData(barDataSet)
 
         binding.barChart.data = barData
@@ -518,6 +522,8 @@ class ReportFragment : Fragment() {
 
         val barDataSet = BarDataSet(entries, "Expense Categories")
         barDataSet.colors = listOf(ContextCompat.getColor(requireContext(), R.color.color2)) // Customize colors
+        barDataSet.valueTextSize = 15f
+
         val barData = BarData(barDataSet)
 
         binding.barChart.data = barData
@@ -534,7 +540,9 @@ class ReportFragment : Fragment() {
 
         val barDataSet = BarDataSet(entries, "Goal Summary")
         barDataSet.colors = listOf(ContextCompat.getColor(requireContext(), R.color.color3)) // Customize colors
-        val barData = BarData(barDataSet)
+
+        barDataSet.valueTextSize = 15f
+         val barData = BarData(barDataSet)
 
         binding.barChart.data = barData
         customizeBarChartAppearance("Goal Progress")
@@ -542,6 +550,8 @@ class ReportFragment : Fragment() {
     private fun customizeBarChartAppearance(chartTitle: String) {
         binding.barChart.apply {
             description.isEnabled = false
+            xAxis.setDrawLabels(false)
+
             setDrawBarShadow(false)
             setDrawValueAboveBar(true)
             xAxis.position = XAxis.XAxisPosition.BOTTOM

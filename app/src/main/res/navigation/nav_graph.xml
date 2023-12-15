@@ -345,6 +345,13 @@
         <argument
             android:name="goalId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_goalDetailsFragment_to_goalCreateFragment"
+            app:destination="@id/goalCreateFragment" >
+            <argument
+                android:name="goalId"
+                app:argType="long" />
+        </action>
     </fragment>
 
 

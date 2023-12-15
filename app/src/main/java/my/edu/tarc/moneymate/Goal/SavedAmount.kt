@@ -9,5 +9,5 @@ data class SavedAmount(
     val id: Long = 0,
     val goalId: Long,
     val amount: Int,
-    val date: Long // Unix timestamp representing the date when the amount was saved
+    val date: Long
 )

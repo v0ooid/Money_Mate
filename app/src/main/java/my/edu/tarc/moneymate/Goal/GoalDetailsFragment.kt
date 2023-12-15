@@ -48,6 +48,11 @@ class GoalDetailsFragment : Fragment() {
         binding.backIcon.setOnClickListener{
             findNavController().navigateUp()
         }
+        binding.ivGoalEdit.setOnClickListener {
+            val goalId = GoalDetailsFragmentArgs.fromBundle(requireArguments()).goalId
+            val action = GoalDetailsFragmentDirections.actionGoalDetailsFragmentToGoalCreateFragment(goalId)
+            findNavController().navigate(action)
+        }
     }
     private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
         observe(viewLifecycleOwner, object : Observer<T> {

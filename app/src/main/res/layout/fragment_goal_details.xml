@@ -39,7 +39,7 @@
 
 
             <ImageView
-                android:id="@+id/ivGoalDelete"
+                android:id="@+id/ivGoalEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -47,9 +47,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_toStartOf="@id/ivGoalOk"
-                android:visibility="gone"
-                android:src="@drawable/round_delete_24" />
+                android:layout_alignParentEnd="true"
+                android:visibility="visible"
+                android:src="@drawable/round_edit_24" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -82,18 +82,19 @@
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
                     android:progressDrawable="@drawable/circular_progress_bar"
                     android:indeterminate="false"/>
 
                 <TextView
                     android:id="@+id/progressText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:textAlignment="center"
                     android:text="0/0"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:textColor="#000000" />
 
             </RelativeLayout>

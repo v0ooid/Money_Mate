@@ -68,6 +68,8 @@ class GoalCreateFragment : Fragment() {
     private fun populateFields(goal: Goal) {
         binding.title.setText("Edit Goal")
         binding.ivGoalDelete.visibility = View.VISIBLE
+        binding.tvGoalSaved.visibility = View.GONE
+        binding.etGoalSaved.visibility = View.GONE
         binding.etGoalName.setText(goal.title)
         binding.etGoalDesc.setText(goal.description)
         binding.etGoalTargetAmount.setText(goal.targetAmount.toString())
@@ -154,28 +156,5 @@ class GoalCreateFragment : Fragment() {
             .show() // This line is necessary to display the dialog
     }
 
-//    var goalName = binding.etGoalName.text.toString()
-//    var goalDesc = binding.etGoalDesc.text.toString()
-//    var targetAmount = binding.etGoalTargetAmount.text.toString()
-//    var savedAmount = binding.etGoalSaved.text.toString()
-//    var desiredDate = binding.etGoalDate.text.toString()
-//
-//    goalViewModel.insert(
-//    Goal(
-//    0,
-//    goalName,
-//    goalDesc,
-//    targetAmount.toInt(),
-//    savedAmount.toInt(),
-//    desiredDate
-//    )
-//    )
-//
-//
-//    goalViewModel.allGoals.observe(viewLifecycleOwner) { data ->
-//        Log.d("test goal view model", data.toString())
-//    }
-//    findNavController().navigateUp()
-//    Toast.makeText(context, "Goal have successfully created", Toast.LENGTH_SHORT).show()
 
 }
