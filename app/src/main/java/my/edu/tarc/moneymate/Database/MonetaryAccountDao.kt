@@ -40,7 +40,6 @@ interface MonetaryAccountDao {
     @Query("SELECT SUM(accountBalance) FROM monetary_accounts")
     fun getTotalAmount(): LiveData<Double>
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(dataList: List<MonetaryAccount>)
 

@@ -23,6 +23,11 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        binding.fabBack2.setOnClickListener{
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.tvSignInForgotPass.setOnClickListener{
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)

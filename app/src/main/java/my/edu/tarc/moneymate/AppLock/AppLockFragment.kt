@@ -134,6 +134,7 @@ class AppLockFragment : Fragment() {
             }
 
             builder.setNegativeButton("No") { dialog, which ->
+                binding.appLockSwitch.isChecked = true
                 dialog.dismiss()
             }
 

@@ -27,7 +27,8 @@ object GamificationHelper {
         var level = sharedPreferences.getInt("Level", 0) // Get the current level
         level++
 
-        Toast.makeText(context.applicationContext, "Congratulations!\nYou've reached Level $level!", Toast.LENGTH_LONG).show()
+        Toast.makeText(context.applicationContext, "Congratulations!\nYou've reached Level $level!",
+            Toast.LENGTH_LONG).show()
 
         // Reset task completion counts to 0
         sharedPreferences.edit {

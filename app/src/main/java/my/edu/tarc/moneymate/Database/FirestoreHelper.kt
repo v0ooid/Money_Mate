@@ -414,8 +414,6 @@ class FirestoreHelper(private val db: FirebaseFirestore, private val context: Co
 
                 }
             }
-
-
             .addOnFailureListener { e ->
                 println("Error fetching MonetaryAccount data: ${e.message}")
             }

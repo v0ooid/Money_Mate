@@ -56,14 +56,15 @@ class MainActivity : AppCompatActivity() {
         Log.e("status",appLockUnlock.toString())
 
         if (!isLoggedIn()) {
-
             // User is not logged in, navigate to the login screen
             navigateToLogin()
 
-        } else {
+        }
+        else {
             if (!appLockUnlock) {
                 checkAppLockStatus()
-            } else {
+            }
+            else {
                 onUserLogin()
 
                 val navView: BottomNavigationView = binding.navView
@@ -158,7 +159,6 @@ class MainActivity : AppCompatActivity() {
         // Example: Launch a new LoginActivity
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
-//        finish() // Optional: Finish the MainActivity to prevent going back to it after logging in
     }
 
     private fun checkAppLockStatus() {

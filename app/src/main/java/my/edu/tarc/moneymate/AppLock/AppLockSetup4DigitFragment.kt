@@ -75,7 +75,8 @@ class AppLockSetup4DigitFragment : Fragment() {
                     if (confirmPin == enteredPin) {
                         savePin(confirmPin)
                         val navController = findNavController()
-                        navController.navigate(R.id.action_appLockSetup4DigitFragment_to_appLockFragment)
+                        navController
+                            .navigate(R.id.action_appLockSetup4DigitFragment_to_appLockFragment)
 
                     } else {
                         // Clear entered PINs for re-entry
